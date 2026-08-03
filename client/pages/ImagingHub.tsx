@@ -218,7 +218,7 @@ export default function ImagingHub() {
               <div className="relative h-96 w-full rounded-xl bg-slate-950 border border-slate-800 overflow-hidden flex items-center justify-center">
                 {/* HUD Overlay Info */}
                 <div className="absolute top-3 left-3 font-mono text-[10px] text-sky-400 bg-slate-900/80 px-2.5 py-1 rounded border border-slate-800 space-y-0.5 pointer-events-none">
-                  <p>UCHICAGO MEDICINE RADIOLOGY</p>
+                  <p>BEACON MEDICAL RADIOLOGY</p>
                   <p>ACC: {study?.accessionNumber}</p>
                   <p>SLICE: {sliceIndex} / 240</p>
                   <p>WL: {windowLevel} / WW: {windowWidth}</p>

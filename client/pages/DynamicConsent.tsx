@@ -164,7 +164,7 @@ export default function DynamicConsent() {
               </span>
             </div>
             <Badge className="bg-sky-950 text-sky-300 border-sky-800 text-[10px]">
-              IRB Protocol IRB23-0941-UCHICAGO
+              IRB Protocol IRB-DEMO-0000
             </Badge>
           </div>
         </div>
@@ -201,7 +201,7 @@ export default function DynamicConsent() {
                       <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-[10px]">Active</Badge>
                     </div>
                     <p className="text-xs text-slate-400">
-                      Allows UChicago Medicine oncologists to analyze your de-identified clinical records to advance cancer treatments.
+                      Allows Beacon Comprehensive Cancer Center oncologists to analyze your de-identified clinical records to advance cancer treatments.
                     </p>
                     <span className="text-[10px] text-slate-500 font-mono block">
                       IRB Clause §3.1: Academic non-profit observational studies.
@@ -381,7 +381,7 @@ export default function DynamicConsent() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleCopyText(`package uchicago.beacon.consent...`)}
+                onClick={() => handleCopyText(`package beacon.consent...`)}
                 className="border-slate-700 bg-slate-950 text-xs text-slate-300"
               >
                 {copied ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
@@ -390,7 +390,7 @@ export default function DynamicConsent() {
             </div>
 
             <pre className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs font-mono text-sky-300 overflow-auto h-80">
-{`package uchicago.beacon.consent
+{`package beacon.consent
 
 default allow = false
 
@@ -468,7 +468,7 @@ deny {
             </DialogHeader>
 
             <p className="text-xs text-slate-300 leading-relaxed pt-2">
-              Withdrawing consent will trigger an immediate OPA policy update across all 6 connected spokes. Downstream research workspaces will be purged within 24 hours per IRB23-0941-UCHICAGO.
+              Withdrawing consent will trigger an immediate OPA policy update across all 6 connected spokes. Downstream research workspaces will be purged within 24 hours per IRB-DEMO-0000.
             </p>
 
             <div className="flex justify-end gap-3 pt-4">

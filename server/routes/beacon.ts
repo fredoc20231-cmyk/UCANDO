@@ -56,7 +56,7 @@ export const handleGetSpokes: RequestHandler = (_req, res) => {
     {
       id: "ehr",
       name: "EHR (Epic Cadence)",
-      subtitle: "UChicago Medicine EHR Core",
+      subtitle: "Beacon EHR Core",
       integrationMode: "HL7 v2 Feeds + FHIR R4 + SMART on FHIR",
       status: "connected",
       latencyMs: 12,
@@ -162,15 +162,15 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
       primaryDiagnosis: "Invasive Ductal Carcinoma of Breast",
       stage: "Stage IIIB (pT3, pN2a, cM0)",
       oncoSubtype: "Triple-Negative Breast Cancer (TNBC) - High Risk",
-      attendingPhysician: "Dr. Fred, MD, PhD (Oncology)",
-      primaryCenter: "UChicago Comprehensive Cancer Center",
+      attendingPhysician: "Dr. Alex Rivera, MD, PhD (Oncology)",
+      primaryCenter: "Beacon Comprehensive Cancer Center",
       consentStatus: "Consented"
     },
     consent: {
       status: "Active",
       effectiveDate: "2023-08-14",
       lastVerified: "2024-02-10 (OPA Policy #UC-CONSENT-9942)",
-      opaPolicyId: "opa:policy:uchicago:cancer:beacon:consent_v2_4",
+      opaPolicyId: "opa:policy:beacon:cancer:beacon:consent_v2_4",
       permissions: {
         researchUse: true,
         recontactGranted: true,
@@ -266,7 +266,7 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         pathogenicity: "Pathogenic",
         readDepth: 1240,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.uchicago.edu/bco/BCO-2023-BRCA1-094",
+        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-BRCA1-094",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       },
       {
@@ -279,7 +279,7 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         pathogenicity: "Pathogenic",
         readDepth: 980,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.uchicago.edu/bco/BCO-2023-TP53-112",
+        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-TP53-112",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       },
       {
@@ -292,7 +292,7 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         pathogenicity: "Likely Pathogenic",
         readDepth: 850,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.uchicago.edu/bco/BCO-2023-PIK3-004",
+        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-PIK3-004",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       }
     ],
@@ -304,8 +304,8 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         studyDate: "2023-11-20",
         bodyPart: "Chest/Abdomen/Pelvis",
         instancesCount: 480,
-        dicomWebEndpoint: "https://imaging.uchicago.edu/dicomweb/studies/1.2.840.113619.2.55.3.28",
-        ohifViewerUrl: "https://beacon.uchicago.edu/viewer?studyInstanceUID=1.2.840.113619.2.55.3.28&token=signed_ctx_9941",
+        dicomWebEndpoint: "https://imaging.demo-cancercenter.org/dicomweb/studies/1.2.840.113619.2.55.3.28",
+        ohifViewerUrl: "https://beacon.demo-cancercenter.org/viewer?studyInstanceUID=1.2.840.113619.2.55.3.28&token=signed_ctx_9941",
         aiAnnotationsCount: 3,
         findingsSummary: "No FDG-avid residual tumor in primary bed. Axillary lymphadenopathy resolved."
       },
@@ -316,8 +316,8 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         studyDate: "2023-08-01",
         bodyPart: "Bilateral Breast with Contrast",
         instancesCount: 320,
-        dicomWebEndpoint: "https://imaging.uchicago.edu/dicomweb/studies/1.2.840.113619.2.55.3.10",
-        ohifViewerUrl: "https://beacon.uchicago.edu/viewer?studyInstanceUID=1.2.840.113619.2.55.3.10&token=signed_ctx_8102",
+        dicomWebEndpoint: "https://imaging.demo-cancercenter.org/dicomweb/studies/1.2.840.113619.2.55.3.10",
+        ohifViewerUrl: "https://beacon.demo-cancercenter.org/viewer?studyInstanceUID=1.2.840.113619.2.55.3.10&token=signed_ctx_8102",
         aiAnnotationsCount: 5,
         findingsSummary: "4.2 cm lobulated heterogeneously enhancing mass in right upper outer quadrant."
       },
@@ -328,8 +328,8 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
         studyDate: "2023-08-05",
         bodyPart: "Surgical Specimen Histology",
         instancesCount: 12,
-        dicomWebEndpoint: "https://pathology.uchicago.edu/dicomweb/studies/1.3.6.1.4.1.59973.1",
-        ohifViewerUrl: "https://beacon.uchicago.edu/viewer/wsi?studyUID=1.3.6.1.4.1.59973.1",
+        dicomWebEndpoint: "https://pathology.demo-cancercenter.org/dicomweb/studies/1.3.6.1.4.1.59973.1",
+        ohifViewerUrl: "https://beacon.demo-cancercenter.org/viewer/wsi?studyUID=1.3.6.1.4.1.59973.1",
         aiAnnotationsCount: 18,
         findingsSummary: "Whole slide pathology 40x scan. Tumor infiltrating lymphocytes (TILs) elevated at 45%."
       }
@@ -422,9 +422,9 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
       {
         noteId: "NOTE-2023-8820",
         date: "2023-08-20",
-        authorRole: "Attending Oncologist (Dr. Fred)",
+        authorRole: "Attending Oncologist (Dr. Alex Rivera)",
         noteType: "Oncology Progress Note",
-        deIdentifiedContent: "54-year-old female patient presented with Stage IIIB TNBC. Germline panel positive for pathogenic [REDACTED_GENE_MUTATION]. Multidisciplinary tumor board recommended dose-dense AC-T regimen combined with neoadjuvant pembrolizumab immunotherapy. Patient consented for UChicago Beacon Data Commons biobanking under protocol [REDACTED_IRB].",
+        deIdentifiedContent: "54-year-old female patient presented with Stage IIIB TNBC. Germline panel positive for pathogenic [REDACTED_GENE_MUTATION]. Multidisciplinary tumor board recommended dose-dense AC-T regimen combined with neoadjuvant pembrolizumab immunotherapy. Patient consented for Beacon Data Commons biobanking under protocol [REDACTED_IRB].",
         safeHarborRedactionsCount: 4
       },
       {
@@ -494,7 +494,7 @@ export const handleGetApiContracts: RequestHandler = (_req, res) => {
                   }
                 ]
               },
-              biocompute_object: "https://beacon.uchicago.edu/bco/BCO-2024-00129"
+              biocompute_object: "https://beacon.demo-cancercenter.org/bco/BCO-2024-00129"
             },
             null,
             2
@@ -567,14 +567,14 @@ export const handleGetApiContracts: RequestHandler = (_req, res) => {
 
 export const handleGetIRBCharter: RequestHandler = (_req, res) => {
   const charter: IRBCharterDoc = {
-    title: "UChicago Cancer Data Commons 'Beacon' — Governance Charter & Consent Framework",
-    irbApprovalNumber: "IRB23-0941-UCHICAGO",
+    title: "Beacon Cancer Data Commons — Governance Charter & Consent Framework",
+    irbApprovalNumber: "IRB-DEMO-0000",
     version: "v3.1",
     effectiveDate: "2024-01-01",
     sections: [
       {
         heading: "1. Scope & Primary Mandate",
-        content: "The UChicago Cancer Data Commons ('Beacon') serves as the unified, HIPAA-compliant integration spine for all cancer center patient data (EHR, multiomics, digital radiology, digital pathology WSI, biospecimens, tumor registry, and PROs). Every consented patient record is ingested, harmonized under OMOP CDM v5.4 and mCODE FHIR, and governed strictly by dynamic consent preferences."
+        content: "The Beacon Cancer Data Commons serves as the unified, HIPAA-compliant integration spine for all cancer center patient data (EHR, multiomics, digital radiology, digital pathology WSI, biospecimens, tumor registry, and PROs). Every consented patient record is ingested, harmonized under OMOP CDM v5.4 and mCODE FHIR, and governed strictly by dynamic consent preferences."
       },
       {
         heading: "2. Builder.io PHI-Free Architectural Invariant",
@@ -657,7 +657,7 @@ export const handleCohortQuery: RequestHandler = (req, res) => {
     ga4ghBeaconQueryJson: JSON.stringify(
       {
         $schema: "https://json-schema.org/draft/2020-12/schema",
-        meta: { beaconId: "org.uchicago.cancer.beacon", apiVersion: "v2.0.0" },
+        meta: { beaconId: "org.beacon.cancer.beacon", apiVersion: "v2.0.0" },
         query: {
           requestParameters: {
             g_variant: {
@@ -692,7 +692,7 @@ export const handleGetMultiomics: RequestHandler = (_req, res) => {
         pathogenicity: "Pathogenic",
         readDepth: 420,
         pipelineVersion: "BioCompute-Dragen-v4.2",
-        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8841",
+        bioComputeObject: "https://bco.demo-cancercenter.org/objects/BCO-2024-8841",
         multiomicsPlatformJobId: "job_seq_99201"
       },
       {
@@ -705,7 +705,7 @@ export const handleGetMultiomics: RequestHandler = (_req, res) => {
         pathogenicity: "Pathogenic",
         readDepth: 512,
         pipelineVersion: "BioCompute-Dragen-v4.2",
-        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8842",
+        bioComputeObject: "https://bco.demo-cancercenter.org/objects/BCO-2024-8842",
         multiomicsPlatformJobId: "job_seq_99202"
       },
       {
@@ -718,7 +718,7 @@ export const handleGetMultiomics: RequestHandler = (_req, res) => {
         pathogenicity: "Pathogenic",
         readDepth: 380,
         pipelineVersion: "BioCompute-Dragen-v4.2",
-        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8843",
+        bioComputeObject: "https://bco.demo-cancercenter.org/objects/BCO-2024-8843",
         multiomicsPlatformJobId: "job_seq_99203"
       },
       {
@@ -731,7 +731,7 @@ export const handleGetMultiomics: RequestHandler = (_req, res) => {
         pathogenicity: "Likely Pathogenic",
         readDepth: 610,
         pipelineVersion: "BioCompute-Dragen-v4.2",
-        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8844",
+        bioComputeObject: "https://bco.demo-cancercenter.org/objects/BCO-2024-8844",
         multiomicsPlatformJobId: "job_seq_99204"
       }
     ],
@@ -762,12 +762,12 @@ export const handleGetMultiomics: RequestHandler = (_req, res) => {
 export const handleGetImagingDetails: RequestHandler = (_req, res) => {
   res.json({
     studyId: "std_rad_881",
-    accessionNumber: "ACC-UCH-2024-9910",
+    accessionNumber: "ACC-BEACON-2024-9910",
     modality: "PET/CT",
     studyDate: "2024-01-20",
     bodyPart: "Chest/Abdomen/Pelvis",
     instancesCount: 480,
-    dicomWebEndpoint: "https://dicom.uchicago.edu/dicomweb/studies/std_rad_881",
+    dicomWebEndpoint: "https://dicom.demo-cancercenter.org/dicomweb/studies/std_rad_881",
     ohifViewerUrl: "/viewer?study=std_rad_881",
     aiAnnotationsCount: 14,
     findingsSummary: "Right upper lobe pulmonary mass (3.2 x 2.8 cm) with SUVmax 11.4, consistent with primary non-small cell lung neoplasm. Subcarinal lymphadenopathy noted.",
@@ -815,9 +815,9 @@ export const handleGetTrialMatches: RequestHandler = (_req, res) => {
       nctId: "NCT05214820",
       title: "Phase II Study of Olaparib + Pembrolizumab in BRCA1-Mutated Advanced Solid Tumors",
       phase: "Phase II",
-      sponsor: "University of Chicago Comprehensive Cancer Center",
+      sponsor: "Beacon Comprehensive Cancer Center",
       status: "Recruiting",
-      primaryLocation: "UChicago Medicine Hyde Park Main Center",
+      primaryLocation: "Beacon Main Medical Center",
       matchScorePercent: 96,
       matchingBiomarkers: ["BRCA1 Pathogenic Variant", "PD-L1 CPS >= 10", "Prior Platinum Chemotherapy"],
       inclusionCriteria: [
@@ -831,16 +831,16 @@ export const handleGetTrialMatches: RequestHandler = (_req, res) => {
         "Active brain metastases without local control",
         "Severe active infection or autoimmune flare"
       ],
-      contactEmail: "trials@uchicago.edu",
-      principalInvestigator: "Dr. Olufunmilayo Olopade, MD, FACP"
+      contactEmail: "trials@demo-cancercenter.org",
+      principalInvestigator: "Dr. Elena Vance, MD, FACP"
     },
     {
       nctId: "NCT04882194",
       title: "Targeted Alpha Therapy (225Ac-PSMA) for Advanced Metastatic Cancer",
       phase: "Phase I/II",
-      sponsor: "UChicago Comprehensive Cancer Center / NIH NCI",
+      sponsor: "Beacon Comprehensive Cancer Center / NIH NCI",
       status: "Recruiting",
-      primaryLocation: "UChicago Medicine Duchossois Center",
+      primaryLocation: "Beacon Specialty Care Center",
       matchScorePercent: 88,
       matchingBiomarkers: ["High SUVmax on PET/CT", "Refractory to Standard Regimen"],
       inclusionCriteria: [
@@ -852,16 +852,16 @@ export const handleGetTrialMatches: RequestHandler = (_req, res) => {
         "Platelet count < 75,000/mcL",
         "Prior total body irradiation"
       ],
-      contactEmail: "radiotheranostics@uchicago.edu",
-      principalInvestigator: "Dr. Daniel C. Catenacci, MD"
+      contactEmail: "radiotheranostics@demo-cancercenter.org",
+      principalInvestigator: "Dr. Marcus Thorne, MD"
     },
     {
       nctId: "NCT05102941",
       title: "Neoadjuvant mRNA Neoantigen Vaccine Combined with Nivolumab in Stage III Malignancy",
       phase: "Phase I",
-      sponsor: "UChicago Center for Personalized Therapeutics",
+      sponsor: "Beacon Center for Personalized Therapeutics",
       status: "Enrolling by invitation",
-      primaryLocation: "UChicago Medicine Orland Park",
+      primaryLocation: "Beacon Regional Center",
       matchScorePercent: 82,
       matchingBiomarkers: ["High Tumor Mutational Burden (TMB > 10 mut/Mb)", "HLA-A*02:01 Positive"],
       inclusionCriteria: [
@@ -872,8 +872,8 @@ export const handleGetTrialMatches: RequestHandler = (_req, res) => {
         "Concurrent immunosuppressive therapy",
         "Active solid organ transplant"
       ],
-      contactEmail: "cpt-trials@uchicago.edu",
-      principalInvestigator: "Dr. Thomas F. Gajewski, MD, PhD"
+      contactEmail: "cpt-trials@demo-cancercenter.org",
+      principalInvestigator: "Dr. Sarah Chen, MD, PhD"
     }
   ]);
 };
@@ -883,7 +883,7 @@ export const handleGetAuditLogs: RequestHandler = (_req, res) => {
     {
       id: "worm_88401",
       timestamp: new Date().toISOString(),
-      actor: "dr.olopade@uchicago.edu",
+      actor: "dr.vance@demo-cancercenter.org",
       actorRole: "Attending Oncologist / PI",
       action: "DATA_READ",
       resource: "Patient 360 Record UC-BEACON-89421",
@@ -894,7 +894,7 @@ export const handleGetAuditLogs: RequestHandler = (_req, res) => {
     {
       id: "worm_88400",
       timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-      actor: "researcher_agent_88@uchicago.edu",
+      actor: "researcher_agent_88@demo-cancercenter.org",
       actorRole: "Biostatistician",
       action: "EXPORT_REQUEST",
       resource: "De-identified Cohort #4921 (12,480 patients)",
@@ -905,7 +905,7 @@ export const handleGetAuditLogs: RequestHandler = (_req, res) => {
     {
       id: "worm_88399",
       timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-      actor: "patient_portal_sync@uchicago.edu",
+      actor: "patient_portal_sync@demo-cancercenter.org",
       actorRole: "Dynamic Consent Engine",
       action: "CONSENT_WITHDRAWAL",
       resource: "Commercial Sharing Permission (Patient UC-BEACON-7720)",

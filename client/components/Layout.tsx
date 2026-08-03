@@ -57,7 +57,7 @@ export function Layout({ children }: LayoutProps) {
   const { bgTheme, setBgTheme } = useBackgroundTheme();
   const [contractsOpen, setContractsOpen] = useState(false);
   const [charterOpen, setCharterOpen] = useState(false);
-  const [userRole, setUserRole] = useState<string>("Clinician (Dr. Fred, MD)");
+  const [userRole, setUserRole] = useState<string>("Clinician (Dr. Alex Rivera, MD)");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchQueryFocused] = useState(false);
 
@@ -126,7 +126,7 @@ export function Layout({ children }: LayoutProps) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm tracking-tight text-white group-hover:text-cyan-300 transition-colors">
-                    UChicago Cancer Data Commons
+                    Beacon Cancer Data Commons
                   </span>
                   <Badge variant="outline" className="border-cyan-500/40 bg-cyan-950/50 text-cyan-300 text-[10px] px-1.5 py-0 font-mono">
                     BEACON
@@ -223,8 +223,8 @@ export function Layout({ children }: LayoutProps) {
               <DropdownMenuContent align="end" className="bg-slate-900 border-slate-800 text-slate-200 text-xs">
                 <DropdownMenuLabel className="text-slate-400 text-[10px] uppercase">Switch User Context</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-slate-800" />
-                <DropdownMenuItem onClick={() => setUserRole("Clinician (Dr. Fred, MD)")} className="hover:bg-slate-800 cursor-pointer">
-                  Clinician (Dr. Fred, MD)
+                <DropdownMenuItem onClick={() => setUserRole("Clinician (Dr. Alex Rivera, MD)")} className="hover:bg-slate-800 cursor-pointer">
+                  Clinician (Dr. Alex Rivera, MD)
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setUserRole("Bioinformatics Researcher")} className="hover:bg-slate-800 cursor-pointer">
                   Bioinformatics Researcher
@@ -350,10 +350,10 @@ export function Layout({ children }: LayoutProps) {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <p className="font-semibold text-slate-300">
-              Beacon — UChicago Cancer Data Commons (UCCANDO)
+              Beacon — Cancer Data Commons (UCCANDO)
             </p>
             <p className="text-[11px] text-slate-500">
-              © 2025 The University of Chicago Medicine Comprehensive Cancer Center. All rights reserved. HIPAA Consented Ecosystem.
+              © 2025 The Beacon Comprehensive Cancer Center. All rights reserved. HIPAA Consented Ecosystem.
             </p>
           </div>
           <div className="flex items-center gap-4 text-[11px]">

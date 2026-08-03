@@ -679,7 +679,7 @@ export default function CohortBuilder() {
                 <Download className="w-5 h-5 text-sky-400" /> Export De-identified Cohort Dataset
               </DialogTitle>
               <DialogDescription className="text-xs text-slate-400">
-                Data export request is governed by dynamic OPA policy and IRB23-0941-UCHICAGO.
+                Data export request is governed by dynamic OPA policy and IRB-DEMO-0000.
               </DialogDescription>
             </DialogHeader>
 

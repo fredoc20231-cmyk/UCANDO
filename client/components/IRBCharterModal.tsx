@@ -90,7 +90,7 @@ export function IRBCharterModal({ open, onOpenChange }: IRBCharterModalProps) {
               <div className="text-[11px]">
                 <p className="font-semibold text-rose-300">Mandatory Security Sign-off Gate</p>
                 <p className="text-rose-200/80 mt-0.5">
-                  Standing rule: No platform go-live without formal sign-off from IRB liaison, Chief Information Security Officer (CISO), and UChicago Privacy Officer.
+                  Standing rule: No platform go-live without formal sign-off from IRB liaison, Chief Information Security Officer (CISO), and Beacon Privacy Officer.
                 </p>
               </div>
             </div>

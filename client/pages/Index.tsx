@@ -60,7 +60,7 @@ export default function Index() {
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold px-2.5 py-1 text-xs border border-red-500/40">
-                  UChicago Cancer Data Commons
+                  Beacon Cancer Data Commons
                 </Badge>
                 <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 bg-cyan-950/40 text-xs font-mono">
                   UCCANDO • Beacon

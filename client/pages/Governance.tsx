@@ -51,7 +51,7 @@ export default function Governance() {
             </div>
 
             <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-xs py-1 px-3">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> IRB Protocol {charter?.irbApprovalNumber || "IRB23-0941"} Active
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> IRB Protocol {charter?.irbApprovalNumber || "IRB-DEMO-0000"} Active
             </Badge>
           </div>
         </div>
@@ -113,7 +113,7 @@ export default function Governance() {
                     <td className="py-3 px-3 text-emerald-400">PERMIT</td>
                   </tr>
                   <tr className="hover:bg-slate-950/60">
-                    <td className="py-3 px-3 font-bold text-white">UChicago Faculty Researcher</td>
+                    <td className="py-3 px-3 font-bold text-white">Beacon Faculty Researcher</td>
                     <td className="py-3 px-3 text-red-400 font-bold">DENIED</td>
                     <td className="py-3 px-3 text-amber-300">IRB DUC REQUIRED</td>
                     <td className="py-3 px-3 text-emerald-400 font-bold">PERMIT (SAFE HARBOR)</td>
