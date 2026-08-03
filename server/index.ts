@@ -14,7 +14,8 @@ import {
   handleGetTrialMatches,
   handleGetAuditLogs,
   handleGetDataQuality,
-  handleUpdateConsent
+  handleUpdateConsent,
+  handleGeminiCopilot
 } from "./routes/beacon";
 
 export function createServer() {
@@ -48,6 +49,7 @@ export function createServer() {
   app.get("/api/beacon/audit", handleGetAuditLogs);
   app.get("/api/beacon/data-quality", handleGetDataQuality);
   app.post("/api/beacon/consent/update", handleUpdateConsent);
+  app.post("/api/beacon/gemini-copilot", handleGeminiCopilot);
 
   return app;
 }

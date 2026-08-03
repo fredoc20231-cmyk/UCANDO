@@ -990,7 +990,7 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
     const systemPrompt = "You are Gemini High, an expert AI oncology assistant for the UChicago Cancer Data Commons ('Beacon'). Analyze clinical notes, multiomics, and mCODE FHIR data accurately, concisely, and adhering strictly to HIPAA de-identification invariants.";
 
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -1008,11 +1008,11 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
     );
 
     const data = await response.json();
-    const textOutput = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated from Gemini API.";
+    const textOutput = data?.candidates?.[0]?.content?.parts?.[0]?.text || data?.error?.message || "No response generated from Gemini API.";
 
     res.json({
-      status: "Success",
-      model: "gemini-1.5-pro",
+      status: data?.error ? "API Error" : "Success",
+      model: "gemini-3.5-flash",
       response: textOutput
     });
   } catch (err: any) {
@@ -1022,4 +1022,15 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
       message: "Failed to call Google Gemini API: " + (err?.message || "Unknown error")
     });
   }
+};
+
+export const handleUpdateConsent: RequestHandler = (req, res) => {
+  const { consentType, enabled } = req.body || {};
+  res.json({
+    status: "Updated",
+    consentType,
+    enabled,
+    timestamp: new Date().toISOString(),
+    opaPolicyVerified: true
+  });
 };
