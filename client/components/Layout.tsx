@@ -116,15 +116,19 @@ export function Layout({ children }: LayoutProps) {
           {/* Brand Logo & Codename */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-uchicago-maroon to-red-950 border border-red-700/50 flex items-center justify-center shadow-lg shadow-red-950/40 group-hover:scale-105 transition-transform">
-                <span className="font-bold text-white text-base tracking-tighter font-serif">UC</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-cyan-500/50 bg-slate-950 flex items-center justify-center shadow-lg shadow-cyan-950/60 group-hover:scale-105 group-hover:border-cyan-400 transition-all shrink-0">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F6c93a00ff3d8421e8f02c6b51df084cb?format=webp&width=800&height=1200"
+                  alt="UCCANDO Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-sm tracking-tight text-white group-hover:text-red-300 transition-colors">
+                  <span className="font-bold text-sm tracking-tight text-white group-hover:text-cyan-300 transition-colors">
                     UChicago Cancer Data Commons
                   </span>
-                  <Badge variant="outline" className="border-red-500/40 bg-red-950/50 text-red-300 text-[10px] px-1.5 py-0 font-mono">
+                  <Badge variant="outline" className="border-cyan-500/40 bg-cyan-950/50 text-cyan-300 text-[10px] px-1.5 py-0 font-mono">
                     BEACON
                   </Badge>
                 </div>

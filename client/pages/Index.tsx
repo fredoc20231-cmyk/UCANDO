@@ -56,40 +56,54 @@ export default function Index() {
           <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
 
-          <div className="relative z-10 max-w-4xl space-y-4">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold px-2.5 py-1 text-xs border border-red-500/40">
-                UChicago Cancer Data Commons
-              </Badge>
-              <Badge variant="outline" className="border-sky-500/40 text-sky-300 bg-sky-950/40 text-xs">
-                Codename: “Beacon”
-              </Badge>
-              <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40 text-xs">
-                <ShieldCheck className="w-3 h-3 mr-1" /> HIPAA Consented Ecosystem
-              </Badge>
+          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="max-w-3xl space-y-4">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold px-2.5 py-1 text-xs border border-red-500/40">
+                  UChicago Cancer Data Commons
+                </Badge>
+                <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 bg-cyan-950/40 text-xs font-mono">
+                  UCCANDO • Beacon
+                </Badge>
+                <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40 text-xs">
+                  <ShieldCheck className="w-3 h-3 mr-1" /> HIPAA Consented Ecosystem
+                </Badge>
+              </div>
+
+              <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
+                Central Oncology Integration Hub & Governed Data Commons
+              </h1>
+
+              <p className="text-sm md:text-base text-slate-300 leading-relaxed">
+                Beacon connects every consented UChicago Cancer Center patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link to="/patient-360?id=UC-BEACON-89421">
+                  <Button className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs h-10 px-5 shadow-lg shadow-red-950/50">
+                    <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
+                    <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
+                </Link>
+
+                <Link to="/cohort-builder">
+                  <Button variant="outline" className="border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs h-10 px-4">
+                    <SlidersHorizontal className="w-4 h-4 mr-2 text-sky-400" /> Visual Cohort Query Builder
+                  </Button>
+                </Link>
+              </div>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight">
-              Central Oncology Integration Hub & Governed Data Commons
-            </h1>
-
-            <p className="text-sm md:text-base text-slate-300 leading-relaxed">
-              Beacon connects every consented UChicago Cancer Center patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <Link to="/patient-360?id=UC-BEACON-89421">
-                <Button className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs h-10 px-5 shadow-lg shadow-red-950/50">
-                  <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
-                  <ArrowRight className="w-4 h-4 ml-1.5" />
-                </Button>
-              </Link>
-
-              <Link to="/cohort-builder">
-                <Button variant="outline" className="border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs h-10 px-4">
-                  <SlidersHorizontal className="w-4 h-4 mr-2 text-sky-400" /> Visual Cohort Query Builder
-                </Button>
-              </Link>
+            {/* Featured UCCANDO DNA Orb Logo Badge */}
+            <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-950/80 border border-cyan-500/30 shadow-2xl shadow-cyan-950/50 shrink-0">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F6c93a00ff3d8421e8f02c6b51df084cb?format=webp&width=800&height=1200"
+                alt="UCCANDO Logo"
+                className="w-32 h-32 object-cover rounded-xl shadow-lg border border-cyan-400/20"
+              />
+              <span className="text-[11px] font-bold text-cyan-300 font-mono mt-2 tracking-widest uppercase">
+                UCCANDO
+              </span>
             </div>
           </div>
         </div>
