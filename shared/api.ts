@@ -208,3 +208,134 @@ export interface IRBCharterDoc {
     content: string;
   }[];
 }
+
+// --- COHORT BUILDER TYPES ---
+export interface CohortFilterCriteria {
+  gender?: string;
+  ageRange?: [number, number];
+  diagnoses?: string[];
+  stages?: string[];
+  genes?: string[];
+  pathogenicity?: string[];
+  treatmentTypes?: string[];
+  hasBiospecimen?: boolean;
+}
+
+export interface KaplanMeierPoint {
+  month: number;
+  survivalRate: number;
+  atRisk: number;
+  lower: number;
+  upper: number;
+}
+
+export interface CohortQueryResponse {
+  totalPatients: number;
+  filteredCount: number;
+  privacyBudgetRemainingEpsilon: number;
+  kaplanMeier: KaplanMeierPoint[];
+  stageDistribution: { stage: string; count: number; percentage: number }[];
+  mutationFrequencies: { gene: string; percentage: number; count: number }[];
+  mcodeQueryJson: string;
+  ga4ghBeaconQueryJson: string;
+}
+
+// --- MULTIOMICS TYPES ---
+export interface OncoPrintSample {
+  sampleId: string;
+  patientId: string;
+  tumorType: string;
+  variants: Record<string, "somatic_snv" | "germline_snv" | "cnv_amp" | "cnv_del" | "fusion" | "none">;
+}
+
+export interface PathwayEnrichment {
+  pathway: string;
+  geneCount: number;
+  pValue: number;
+  fdr: number;
+  enrichmentScore: number;
+}
+
+export interface MultiomicsDataset {
+  variants: GenomicVariant[];
+  oncoPrintSamples: OncoPrintSample[];
+  pathways: PathwayEnrichment[];
+  expressionMatrix: { gene: string; meanTpm: number; log2FC: number; pValue: number }[];
+}
+
+// --- IMAGING & PATHOLOGY TYPES ---
+export interface DetailedImagingStudy extends ImagingStudy {
+  seriesList: {
+    seriesId: string;
+    description: string;
+    numSlices: number;
+    sliceUrls: string[];
+  }[];
+  pathologySlide?: {
+    slideId: string;
+    stain: "H&E" | "IHC ER" | "IHC PR" | "IHC HER2";
+    magnification: string;
+    tumorPurityPercent: number;
+    stromaPercent: number;
+    necrosisPercent: number;
+    aiTumorMaskUrl: string;
+  };
+  radiomicsFeatures: {
+    featureName: string;
+    category: "Shape" | "First Order Texture" | "GLCM" | "GLRLM";
+    value: number;
+    normalZScore: number;
+  }[];
+}
+
+// --- TRIAL MATCHING TYPES ---
+export interface ClinicalTrialMatch {
+  nctId: string;
+  title: string;
+  phase: "Phase I" | "Phase II" | "Phase III" | "Phase IV" | "Phase I/II";
+  sponsor: string;
+  status: "Recruiting" | "Active, not recruiting" | "Enrolling by invitation";
+  primaryLocation: string;
+  matchScorePercent: number;
+  matchingBiomarkers: string[];
+  inclusionCriteria: string[];
+  exclusionCriteria: string[];
+  contactEmail: string;
+  principalInvestigator: string;
+}
+
+// --- GOVERNANCE & AUDIT TYPES ---
+export interface WORMAuditLog {
+  id: string;
+  timestamp: string;
+  actor: string;
+  actorRole: string;
+  action: "DATA_READ" | "EXPORT_REQUEST" | "CONSENT_WITHDRAWAL" | "POLICY_UPDATE" | "PII_DEIDENTIFICATION";
+  resource: string;
+  opaPolicyResult: "PERMIT" | "DENY" | "REDACTED";
+  sha256Hash: string;
+  ipAddress: string;
+}
+
+export interface DataQualityReport {
+  overallScore: number;
+  omopConformanceScore: number;
+  mcodeCompletenessScore: number;
+  bioComputeObjectValidCount: number;
+  bioComputeObjectTotalCount: number;
+  dataCompletenessByModalities: {
+    modality: string;
+    completenessPercent: number;
+    recordCount: number;
+    missingFieldsCount: number;
+  }[];
+  recentMappingErrors: {
+    id: string;
+    timestamp: string;
+    sourceSystem: string;
+    rawCode: string;
+    mappedConcept: string;
+    status: "Resolved" | "Pending Review" | "Failed";
+    errorReason: string;
+  }[];
+}

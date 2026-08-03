@@ -593,3 +593,403 @@ export const handleGetIRBCharter: RequestHandler = (_req, res) => {
 
   res.json(charter);
 };
+
+// --- NEW MODULE HANDLERS ---
+
+export const handleCohortQuery: RequestHandler = (req, res) => {
+  const filters = req.body || {};
+
+  // Calculate simulated cohort count based on filters
+  let baseCount = 98450;
+  if (filters.diagnoses && filters.diagnoses.length > 0) baseCount = Math.floor(baseCount * 0.28);
+  if (filters.genes && filters.genes.length > 0) baseCount = Math.floor(baseCount * 0.35);
+  if (filters.stages && filters.stages.length > 0) baseCount = Math.floor(baseCount * 0.45);
+  if (filters.hasBiospecimen) baseCount = Math.floor(baseCount * 0.72);
+
+  const finalFiltered = Math.max(12, baseCount);
+
+  res.json({
+    totalPatients: 98450,
+    filteredCount: finalFiltered,
+    privacyBudgetRemainingEpsilon: 98.4,
+    kaplanMeier: [
+      { month: 0, survivalRate: 100, atRisk: finalFiltered, lower: 100, upper: 100 },
+      { month: 6, survivalRate: 94.2, atRisk: Math.floor(finalFiltered * 0.94), lower: 92.1, upper: 96.3 },
+      { month: 12, survivalRate: 88.5, atRisk: Math.floor(finalFiltered * 0.88), lower: 85.0, upper: 91.2 },
+      { month: 24, survivalRate: 79.1, atRisk: Math.floor(finalFiltered * 0.79), lower: 75.3, upper: 82.8 },
+      { month: 36, survivalRate: 71.4, atRisk: Math.floor(finalFiltered * 0.71), lower: 67.2, upper: 75.6 },
+      { month: 48, survivalRate: 64.8, atRisk: Math.floor(finalFiltered * 0.64), lower: 60.1, upper: 69.5 },
+      { month: 60, survivalRate: 59.2, atRisk: Math.floor(finalFiltered * 0.59), lower: 54.0, upper: 64.3 }
+    ],
+    stageDistribution: [
+      { stage: "Stage I", count: Math.floor(finalFiltered * 0.18), percentage: 18 },
+      { stage: "Stage II", count: Math.floor(finalFiltered * 0.29), percentage: 29 },
+      { stage: "Stage III", count: Math.floor(finalFiltered * 0.38), percentage: 38 },
+      { stage: "Stage IV", count: Math.floor(finalFiltered * 0.15), percentage: 15 }
+    ],
+    mutationFrequencies: [
+      { gene: "TP53", percentage: 48.2, count: Math.floor(finalFiltered * 0.482) },
+      { gene: "BRCA1", percentage: 28.5, count: Math.floor(finalFiltered * 0.285) },
+      { gene: "PIK3CA", percentage: 24.1, count: Math.floor(finalFiltered * 0.241) },
+      { gene: "BRCA2", percentage: 14.8, count: Math.floor(finalFiltered * 0.148) },
+      { gene: "EGFR", percentage: 9.3, count: Math.floor(finalFiltered * 0.093) },
+      { gene: "ERBB2", percentage: 8.1, count: Math.floor(finalFiltered * 0.081) }
+    ],
+    mcodeQueryJson: JSON.stringify(
+      {
+        resourceType: "Bundle",
+        type: "searchset",
+        entry: [
+          {
+            resource: {
+              resourceType: "Observation",
+              meta: { profile: ["http://hl7.org/fhir/us/mcode/StructureDefinition/mcode-genomic-variant"] },
+              status: "final",
+              code: { coding: [{ system: "http://loinc.org", code: "69548-6", display: "Genetic variant assessment" }] },
+              valueCodeableConcept: { coding: [{ system: "http://www.ncbi.nlm.nih.gov/clinvar", code: "376371", display: "Pathogenic" }] }
+            }
+          }
+        ]
+      },
+      null,
+      2
+    ),
+    ga4ghBeaconQueryJson: JSON.stringify(
+      {
+        $schema: "https://json-schema.org/draft/2020-12/schema",
+        meta: { beaconId: "org.uchicago.cancer.beacon", apiVersion: "v2.0.0" },
+        query: {
+          requestParameters: {
+            g_variant: {
+              assemblyId: "GRCh38",
+              referenceName: "17",
+              start: 43044295,
+              referenceBases: "C",
+              alternateBases: "T"
+            }
+          },
+          filters: [
+            { id: "NCIT:C3058", scope: "individual", label: "Invasive Breast Carcinoma" }
+          ]
+        }
+      },
+      null,
+      2
+    )
+  });
+};
+
+export const handleGetMultiomics: RequestHandler = (_req, res) => {
+  res.json({
+    variants: [
+      {
+        id: "var_01",
+        gene: "BRCA1",
+        hgvs: "NM_007294.4:c.5266dupC (p.Gln1756ProfsTer74)",
+        variantType: "SNV",
+        vafPercent: 38.5,
+        consequence: "frameshift_variant",
+        pathogenicity: "Pathogenic",
+        readDepth: 420,
+        pipelineVersion: "BioCompute-Dragen-v4.2",
+        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8841",
+        multiomicsPlatformJobId: "job_seq_99201"
+      },
+      {
+        id: "var_02",
+        gene: "TP53",
+        hgvs: "NM_000546.5:c.818G>A (p.Arg273His)",
+        variantType: "SNV",
+        vafPercent: 44.1,
+        consequence: "missense_variant",
+        pathogenicity: "Pathogenic",
+        readDepth: 512,
+        pipelineVersion: "BioCompute-Dragen-v4.2",
+        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8842",
+        multiomicsPlatformJobId: "job_seq_99202"
+      },
+      {
+        id: "var_03",
+        gene: "PIK3CA",
+        hgvs: "NM_006218.4:c.1633G>A (p.Glu545K)",
+        variantType: "SNV",
+        vafPercent: 22.0,
+        consequence: "missense_variant",
+        pathogenicity: "Pathogenic",
+        readDepth: 380,
+        pipelineVersion: "BioCompute-Dragen-v4.2",
+        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8843",
+        multiomicsPlatformJobId: "job_seq_99203"
+      },
+      {
+        id: "var_04",
+        gene: "ERBB2",
+        hgvs: "Amplification (Copy Number: 8)",
+        variantType: "CNV",
+        vafPercent: 0,
+        consequence: "transcript_amplification",
+        pathogenicity: "Likely Pathogenic",
+        readDepth: 610,
+        pipelineVersion: "BioCompute-Dragen-v4.2",
+        bioComputeObject: "https://bco.uchicago.edu/objects/BCO-2024-8844",
+        multiomicsPlatformJobId: "job_seq_99204"
+      }
+    ],
+    oncoPrintSamples: [
+      { sampleId: "SMP-001", patientId: "UC-BEACON-89421", tumorType: "Breast Invasive", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "cnv_amp" } },
+      { sampleId: "SMP-002", patientId: "UC-BEACON-89422", tumorType: "Breast Invasive", variants: { BRCA1: "germline_snv", TP53: "none", PIK3CA: "somatic_snv", ERBB2: "none" } },
+      { sampleId: "SMP-003", patientId: "UC-BEACON-89423", tumorType: "Ovarian High Grade", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "none" } },
+      { sampleId: "SMP-004", patientId: "UC-BEACON-89424", tumorType: "Breast Invasive", variants: { BRCA1: "none", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "cnv_amp" } },
+      { sampleId: "SMP-005", patientId: "UC-BEACON-89425", tumorType: "TNBC", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "none" } }
+    ],
+    pathways: [
+      { pathway: "Homologous Recombination Repair (HRD)", geneCount: 14, pValue: 0.00001, fdr: 0.0001, enrichmentScore: 4.82 },
+      { pathway: "PI3K-Akt Signaling Pathway", geneCount: 22, pValue: 0.0002, fdr: 0.0012, enrichmentScore: 3.41 },
+      { pathway: "p53 Cell Cycle Regulation", geneCount: 18, pValue: 0.0005, fdr: 0.0028, enrichmentScore: 2.95 },
+      { pathway: "ERBB2 / HER2 Receptor Cascade", geneCount: 12, pValue: 0.0018, fdr: 0.0085, enrichmentScore: 2.18 }
+    ],
+    expressionMatrix: [
+      { gene: "BRCA1", meanTpm: 4.2, log2FC: -2.1, pValue: 0.00004 },
+      { gene: "TP53", meanTpm: 18.5, log2FC: 3.4, pValue: 0.00001 },
+      { gene: "ESR1", meanTpm: 42.1, log2FC: 4.8, pValue: 0.00001 },
+      { gene: "PGR", meanTpm: 38.0, log2FC: 4.1, pValue: 0.00002 },
+      { gene: "ERBB2", meanTpm: 92.4, log2FC: 5.6, pValue: 0.00001 },
+      { gene: "MKI67", meanTpm: 54.2, log2FC: 3.9, pValue: 0.00003 }
+    ]
+  });
+};
+
+export const handleGetImagingDetails: RequestHandler = (_req, res) => {
+  res.json({
+    studyId: "std_rad_881",
+    accessionNumber: "ACC-UCH-2024-9910",
+    modality: "PET/CT",
+    studyDate: "2024-01-20",
+    bodyPart: "Chest/Abdomen/Pelvis",
+    instancesCount: 480,
+    dicomWebEndpoint: "https://dicom.uchicago.edu/dicomweb/studies/std_rad_881",
+    ohifViewerUrl: "/viewer?study=std_rad_881",
+    aiAnnotationsCount: 14,
+    findingsSummary: "Right upper lobe pulmonary mass (3.2 x 2.8 cm) with SUVmax 11.4, consistent with primary non-small cell lung neoplasm. Subcarinal lymphadenopathy noted.",
+    seriesList: [
+      {
+        seriesId: "ser_ct_axial",
+        description: "Axial 1.25mm High-Res Lung CT",
+        numSlices: 240,
+        sliceUrls: ["/dicom/slice1.png", "/dicom/slice2.png"]
+      },
+      {
+        seriesId: "ser_pet_coronal",
+        description: "Coronal 18F-FDG PET SUV Map",
+        numSlices: 120,
+        sliceUrls: ["/dicom/pet1.png"]
+      },
+      {
+        seriesId: "ser_fused",
+        description: "Fused PET/CT Multiplanar Reconstruction",
+        numSlices: 120,
+        sliceUrls: ["/dicom/fused1.png"]
+      }
+    ],
+    pathologySlide: {
+      slideId: "WSI-PATH-2024-7712",
+      stain: "H&E",
+      magnification: "40x",
+      tumorPurityPercent: 68,
+      stromaPercent: 24,
+      necrosisPercent: 8,
+      aiTumorMaskUrl: "/pathology/mask_7712.png"
+    },
+    radiomicsFeatures: [
+      { featureName: "Original Shape Surface Volume Ratio", category: "Shape", value: 0.142, normalZScore: 1.8 },
+      { featureName: "GLCM Contrast (Tumor Heterogeneity)", category: "GLCM", value: 14.82, normalZScore: 2.4 },
+      { featureName: "First Order 90th Percentile Hounsfield Unit", category: "First Order Texture", value: 48.2, normalZScore: 1.2 },
+      { featureName: "GLRLM High Gray Level Run Emphasis", category: "GLRLM", value: 128.4, normalZScore: 2.1 }
+    ]
+  });
+};
+
+export const handleGetTrialMatches: RequestHandler = (_req, res) => {
+  res.json([
+    {
+      nctId: "NCT05214820",
+      title: "Phase II Study of Olaparib + Pembrolizumab in BRCA1-Mutated Advanced Solid Tumors",
+      phase: "Phase II",
+      sponsor: "University of Chicago Comprehensive Cancer Center",
+      status: "Recruiting",
+      primaryLocation: "UChicago Medicine Hyde Park Main Center",
+      matchScorePercent: 96,
+      matchingBiomarkers: ["BRCA1 Pathogenic Variant", "PD-L1 CPS >= 10", "Prior Platinum Chemotherapy"],
+      inclusionCriteria: [
+        "Confirmed pathogenic germline or somatic BRCA1/2 mutation",
+        "Measurable disease per RECIST v1.1",
+        "ECOG performance status 0-1",
+        "Adequate organ & bone marrow function"
+      ],
+      exclusionCriteria: [
+        "Prior PARP inhibitor therapy within 6 months",
+        "Active brain metastases without local control",
+        "Severe active infection or autoimmune flare"
+      ],
+      contactEmail: "trials@uchicago.edu",
+      principalInvestigator: "Dr. Olufunmilayo Olopade, MD, FACP"
+    },
+    {
+      nctId: "NCT04882194",
+      title: "Targeted Alpha Therapy (225Ac-PSMA) for Advanced Metastatic Cancer",
+      phase: "Phase I/II",
+      sponsor: "UChicago Comprehensive Cancer Center / NIH NCI",
+      status: "Recruiting",
+      primaryLocation: "UChicago Medicine Duchossois Center",
+      matchScorePercent: 88,
+      matchingBiomarkers: ["High SUVmax on PET/CT", "Refractory to Standard Regimen"],
+      inclusionCriteria: [
+        "Metastatic or unresectable disease",
+        "Positive target expression on diagnostic PET scan",
+        "Life expectancy > 12 weeks"
+      ],
+      exclusionCriteria: [
+        "Platelet count < 75,000/mcL",
+        "Prior total body irradiation"
+      ],
+      contactEmail: "radiotheranostics@uchicago.edu",
+      principalInvestigator: "Dr. Daniel C. Catenacci, MD"
+    },
+    {
+      nctId: "NCT05102941",
+      title: "Neoadjuvant mRNA Neoantigen Vaccine Combined with Nivolumab in Stage III Malignancy",
+      phase: "Phase I",
+      sponsor: "UChicago Center for Personalized Therapeutics",
+      status: "Enrolling by invitation",
+      primaryLocation: "UChicago Medicine Orland Park",
+      matchScorePercent: 82,
+      matchingBiomarkers: ["High Tumor Mutational Burden (TMB > 10 mut/Mb)", "HLA-A*02:01 Positive"],
+      inclusionCriteria: [
+        "Fresh tumor tissue biopsy available for neoantigen sequencing",
+        "No prior PD-1/PD-L1 checkpoint inhibitor resistance"
+      ],
+      exclusionCriteria: [
+        "Concurrent immunosuppressive therapy",
+        "Active solid organ transplant"
+      ],
+      contactEmail: "cpt-trials@uchicago.edu",
+      principalInvestigator: "Dr. Thomas F. Gajewski, MD, PhD"
+    }
+  ]);
+};
+
+export const handleGetAuditLogs: RequestHandler = (_req, res) => {
+  res.json([
+    {
+      id: "worm_88401",
+      timestamp: new Date().toISOString(),
+      actor: "dr.olopade@uchicago.edu",
+      actorRole: "Attending Oncologist / PI",
+      action: "DATA_READ",
+      resource: "Patient 360 Record UC-BEACON-89421",
+      opaPolicyResult: "PERMIT",
+      sha256Hash: "8f4a3e210b39c4d2e85a1a9b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d",
+      ipAddress: "128.135.102.44"
+    },
+    {
+      id: "worm_88400",
+      timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+      actor: "researcher_agent_88@uchicago.edu",
+      actorRole: "Biostatistician",
+      action: "EXPORT_REQUEST",
+      resource: "De-identified Cohort #4921 (12,480 patients)",
+      opaPolicyResult: "PERMIT",
+      sha256Hash: "7a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b",
+      ipAddress: "128.135.210.12"
+    },
+    {
+      id: "worm_88399",
+      timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
+      actor: "patient_portal_sync@uchicago.edu",
+      actorRole: "Dynamic Consent Engine",
+      action: "CONSENT_WITHDRAWAL",
+      resource: "Commercial Sharing Permission (Patient UC-BEACON-7720)",
+      opaPolicyResult: "PERMIT",
+      sha256Hash: "1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a",
+      ipAddress: "10.240.12.8"
+    },
+    {
+      id: "worm_88398",
+      timestamp: new Date(Date.now() - 1000 * 60 * 120).toISOString(),
+      actor: "ext_partner_api@pharma.com",
+      actorRole: "External Federated Query",
+      action: "EXPORT_REQUEST",
+      resource: "GA4GH Beacon Aggregate Variant Count Query",
+      opaPolicyResult: "REDACTED",
+      sha256Hash: "3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d",
+      ipAddress: "198.51.100.42"
+    }
+  ]);
+};
+
+export const handleGetDataQuality: RequestHandler = (_req, res) => {
+  res.json({
+    overallScore: 98.6,
+    omopConformanceScore: 99.1,
+    mcodeCompletenessScore: 97.8,
+    bioComputeObjectValidCount: 84910,
+    bioComputeObjectTotalCount: 84910,
+    dataCompletenessByModalities: [
+      { modality: "EHR Clinical Core (Demographics/Labs/Meds)", completenessPercent: 99.8, recordCount: 104280, missingFieldsCount: 120 },
+      { modality: "Multiomics NGS VCF & Expression", completenessPercent: 98.2, recordCount: 84910, missingFieldsCount: 1510 },
+      { modality: "Digital Radiology DICOM Studies", completenessPercent: 97.4, recordCount: 462100, missingFieldsCount: 12010 },
+      { modality: "Digital Pathology WSI Slides", completenessPercent: 96.8, recordCount: 124000, missingFieldsCount: 3960 },
+      { modality: "LIMS Biospecimen Lineage", completenessPercent: 99.4, recordCount: 1240500, missingFieldsCount: 7440 }
+    ],
+    recentMappingErrors: [
+      {
+        id: "err_9901",
+        timestamp: "10 mins ago",
+        sourceSystem: "Epic Cadence EHR",
+        rawCode: "LOINC 99201-9 (Custom Lab)",
+        mappedConcept: "OMOP Concept 4012891",
+        status: "Resolved",
+        errorReason: "Non-standard unit string ('mg/dL/hr') mapped to UCUM canonical unit ('mg/dL/h')"
+      },
+      {
+        id: "err_9902",
+        timestamp: "32 mins ago",
+        sourceSystem: "Oncology LIMS",
+        rawCode: "Specimen Site: 'L RUL Lung'",
+        mappedConcept: "mCODE Specimen Site (SNOMED 39607008)",
+        status: "Resolved",
+        errorReason: "Abbreviated anatomical site string normalized to SNOMED CT term"
+      },
+      {
+        id: "err_9903",
+        timestamp: "2 hours ago",
+        sourceSystem: "FoundationOne NGS VCF",
+        rawCode: "HGVS p.G12C (KRAS)",
+        mappedConcept: "HGVS Transvar canonical transcript NM_004985.5",
+        status: "Pending Review",
+        errorReason: "Transcript isoform discrepancy between RefSeq v109 and ENSEMBL v104"
+      }
+    ]
+  });
+};
+
+export const handleUpdateConsent: RequestHandler = (req, res) => {
+  const { patientId, permissions } = req.body || {};
+  const newReceiptId = "worm_receipt_" + Math.floor(Math.random() * 1000000);
+  const now = new Date().toISOString();
+
+  res.json({
+    status: "Success",
+    patientId: patientId || "UC-BEACON-89421",
+    effectiveDate: now,
+    opaPolicyEvaluated: "PERMIT",
+    permissions: permissions || {},
+    wormAuditReceipt: {
+      receiptId: newReceiptId,
+      timestamp: now,
+      sha256Signature: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      storeLocation: "AWS S3 Object Lock (WORM) Compliance Bucket",
+      downstreamPropagatedSpokes: ["EHR Spoke", "Multiomics Lakehouse", "DICOM Store", "GA4GH Beacon Node"]
+    }
+  });
+};

@@ -7,7 +7,14 @@ import {
   handleGetSpokes,
   handleGetPatient360,
   handleGetApiContracts,
-  handleGetIRBCharter
+  handleGetIRBCharter,
+  handleCohortQuery,
+  handleGetMultiomics,
+  handleGetImagingDetails,
+  handleGetTrialMatches,
+  handleGetAuditLogs,
+  handleGetDataQuality,
+  handleUpdateConsent
 } from "./routes/beacon";
 
 export function createServer() {
@@ -32,6 +39,15 @@ export function createServer() {
   app.get("/api/beacon/patient/360", handleGetPatient360);
   app.get("/api/beacon/contracts", handleGetApiContracts);
   app.get("/api/beacon/governance/charter", handleGetIRBCharter);
+
+  app.post("/api/beacon/cohort/query", handleCohortQuery);
+  app.get("/api/beacon/cohort/query", handleCohortQuery);
+  app.get("/api/beacon/omics", handleGetMultiomics);
+  app.get("/api/beacon/imaging/details", handleGetImagingDetails);
+  app.get("/api/beacon/trials", handleGetTrialMatches);
+  app.get("/api/beacon/audit", handleGetAuditLogs);
+  app.get("/api/beacon/data-quality", handleGetDataQuality);
+  app.post("/api/beacon/consent/update", handleUpdateConsent);
 
   return app;
 }
