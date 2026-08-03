@@ -1,0 +1,515 @@
+import { useState, useEffect } from "react";
+import { useSearchParams, Link } from "react-router-dom";
+import { Layout } from "@/components/Layout";
+import { Patient360Record } from "@shared/api";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip as RechartsTooltip,
+  CartesianGrid,
+  Legend
+} from "recharts";
+import {
+  User,
+  Activity,
+  ShieldCheck,
+  Dna,
+  Image as ImageIcon,
+  FlaskConical,
+  FileText,
+  ExternalLink,
+  Zap,
+  Lock,
+  Stethoscope,
+  Pill,
+  Clock,
+  AlertCircle,
+  CheckCircle2,
+  Calendar,
+  Layers,
+  Sparkles,
+  Play
+} from "lucide-react";
+
+export default function Patient360() {
+  const [searchParams] = useSearchParams();
+  const patientId = searchParams.get("id") || "UC-BEACON-89421";
+
+  const [record, setRecord] = useState<Patient360Record | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("timeline");
+  const [smartLaunching, setSmartLaunching] = useState<string | null>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetch(`/api/beacon/patient/360?id=${encodeURIComponent(patientId)}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRecord(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load patient 360:", err);
+        setLoading(false);
+      });
+  }, [patientId]);
+
+  const triggerSmartLaunch = (platform: "omics" | "imaging") => {
+    setSmartLaunching(platform);
+    setTimeout(() => {
+      setSmartLaunching(null);
+      alert(
+        platform === "omics"
+          ? "SMART-on-FHIR launch context created for Multiomics Platform. Context token: eyJhbGciOiJSUzI1NiIs... [Patient: DEID-BEACON-772910]"
+          : "OHIF DICOMweb viewer opened with signed context token. Launching accession ACC-2023-9941..."
+      );
+    }, 1200);
+  };
+
+  if (loading || !record) {
+    return (
+      <Layout>
+        <div className="p-12 text-center text-slate-400 bg-slate-900 rounded-2xl border border-slate-800">
+          Loading Clinician Patient 360 record...
+        </div>
+      </Layout>
+    );
+  }
+
+  const { demographics, consent, timeline, genomics, imaging, labs, infusions, biospecimens, notes } = record;
+
+  // Format lab data for Recharts CA 15-3 trend
+  const ca153Data = labs
+    .filter((l) => l.marker === "CA 15-3")
+    .map((l) => ({ date: l.date, value: l.value, cutoff: 30 }));
+
+  return (
+    <Layout>
+      <div className="space-y-6 pb-12">
+        {/* Top Demographics Header & Consent Banner */}
+        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 shadow-xl space-y-4">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold text-xs">
+                  {demographics.consentStatus} Patient
+                </Badge>
+                <span className="font-mono text-xs text-sky-400">MRN: {demographics.mrn}</span>
+                <span className="text-slate-600">•</span>
+                <span className="font-mono text-xs text-emerald-400">Tokenized ID: {demographics.deIdentifiedId}</span>
+              </div>
+
+              <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+                <User className="w-6 h-6 text-red-500" />
+                Patient 360: {demographics.id}
+              </h1>
+
+              <p className="text-xs text-slate-300">
+                {demographics.age} y/o {demographics.gender} • {demographics.ethnicity} • <strong className="text-white">{demographics.primaryDiagnosis}</strong> ({demographics.stage})
+              </p>
+            </div>
+
+            {/* SMART Launch Action Toolbar */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                size="sm"
+                onClick={() => triggerSmartLaunch("omics")}
+                disabled={smartLaunching === "omics"}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-9"
+              >
+                <Zap className="w-3.5 h-3.5 mr-1.5" />
+                {smartLaunching === "omics" ? "Launching SMART Context..." : "SMART Launch: Multiomics"}
+              </Button>
+
+              <Button
+                size="sm"
+                onClick={() => triggerSmartLaunch("imaging")}
+                disabled={smartLaunching === "imaging"}
+                className="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs h-9"
+              >
+                <ImageIcon className="w-3.5 h-3.5 mr-1.5" />
+                {smartLaunching === "imaging" ? "Launching OHIF..." : "Launch Imaging (OHIF)"}
+              </Button>
+            </div>
+          </div>
+
+          {/* Dynamic Consent Banner */}
+          <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/30 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div>
+                <span className="font-semibold text-emerald-300">Dynamic Consent Active: </span>
+                <span className="text-slate-300">Verified via OPA Policy Engine ({consent.lastVerified})</span>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2 text-[10px]">
+              <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40">
+                <CheckCircle2 className="w-3 h-3 mr-1" /> Research Use
+              </Badge>
+              <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40">
+                <CheckCircle2 className="w-3 h-3 mr-1" /> Biospecimens
+              </Badge>
+              <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40">
+                <CheckCircle2 className="w-3 h-3 mr-1" /> AI Training
+              </Badge>
+              <Badge variant="outline" className="border-amber-500/40 text-amber-300 bg-amber-950/40">
+                Commercial Sharing Restricted
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabbed Clinical Explorer */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+          <TabsList className="bg-slate-900 border border-slate-800 p-1 overflow-x-auto flex flex-wrap">
+            <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-uchicago-maroon data-[state=active]:text-white">
+              <Clock className="w-3.5 h-3.5 mr-1.5" /> Longitudinal Timeline
+            </TabsTrigger>
+            <TabsTrigger value="genomics" className="text-xs data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+              <Dna className="w-3.5 h-3.5 mr-1.5" /> Multiomics ({genomics.length})
+            </TabsTrigger>
+            <TabsTrigger value="imaging" className="text-xs data-[state=active]:bg-sky-600 data-[state=active]:text-white">
+              <ImageIcon className="w-3.5 h-3.5 mr-1.5" /> Imaging Studies ({imaging.length})
+            </TabsTrigger>
+            <TabsTrigger value="labs" className="text-xs data-[state=active]:bg-purple-600 data-[state=active]:text-white">
+              <Activity className="w-3.5 h-3.5 mr-1.5" /> Labs & Biomarkers
+            </TabsTrigger>
+            <TabsTrigger value="infusions" className="text-xs data-[state=active]:bg-amber-600 data-[state=active]:text-white">
+              <Pill className="w-3.5 h-3.5 mr-1.5" /> Meds & Infusions ({infusions.length})
+            </TabsTrigger>
+            <TabsTrigger value="biospecimens" className="text-xs data-[state=active]:bg-teal-600 data-[state=active]:text-white">
+              <FlaskConical className="w-3.5 h-3.5 mr-1.5" /> Biospecimen Lineage ({biospecimens.length})
+            </TabsTrigger>
+            <TabsTrigger value="notes" className="text-xs data-[state=active]:bg-rose-600 data-[state=active]:text-white">
+              <FileText className="w-3.5 h-3.5 mr-1.5" /> De-ID Notes ({notes.length})
+            </TabsTrigger>
+          </TabsList>
+
+          {/* TAB 1: Longitudinal Timeline */}
+          <TabsContent value="timeline" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-red-400" />
+                  Longitudinal Patient Journey (Diagnosis → Treatment → Recurrence → Survival)
+                </h3>
+                <span className="text-[11px] text-slate-400">Events chronologically mapped from Epic, Multiomics & PACS</span>
+              </div>
+
+              <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+                {timeline.map((evt) => (
+                  <div key={evt.id} className="relative group">
+                    {/* Timeline Node Dot */}
+                    <div
+                      className={`absolute -left-6 top-1 w-3.5 h-3.5 rounded-full border-2 border-slate-950 ${
+                        evt.severity === "critical"
+                          ? "bg-red-500 shadow-lg shadow-red-500/50 animate-pulse"
+                          : evt.severity === "severe"
+                          ? "bg-amber-500"
+                          : "bg-sky-500"
+                      }`}
+                    />
+
+                    <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5 hover:border-slate-700 transition-colors">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs text-sky-400">{evt.date}</span>
+                          <Badge variant="outline" className="border-slate-700 text-slate-300 text-[10px]">
+                            {evt.category}
+                          </Badge>
+                          <Badge className="bg-slate-800 text-slate-300 text-[10px]">
+                            Spoke: {evt.sourceSpoke.toUpperCase()}
+                          </Badge>
+                        </div>
+                        {evt.smartLaunchAvailable && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => triggerSmartLaunch(evt.type === "imaging" ? "imaging" : "omics")}
+                            className="h-6 text-[10px] text-emerald-400 hover:text-emerald-300 hover:bg-emerald-950/50"
+                          >
+                            <Zap className="w-3 h-3 mr-1" /> SMART Launch
+                          </Button>
+                        )}
+                      </div>
+
+                      <h4 className="font-bold text-sm text-white">{evt.title}</h4>
+                      <p className="text-xs text-slate-300 leading-relaxed">{evt.description}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 2: Multiomics Summary */}
+          <TabsContent value="genomics" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Dna className="w-4 h-4 text-emerald-400" />
+                    Called Genomic Variants & BioCompute Provenance
+                  </h3>
+                  <p className="text-xs text-slate-400">Written back from Multiomics Analysis Platform into FHIR MolecularSequence</p>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => triggerSmartLaunch("omics")}
+                  className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs h-8"
+                >
+                  <Zap className="w-3.5 h-3.5 mr-1" /> Open Multiomics Workspace
+                </Button>
+              </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs text-slate-300">
+                  <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-mono border-b border-slate-800">
+                    <tr>
+                      <th className="p-3">Gene</th>
+                      <th className="p-3">HGVS Variant</th>
+                      <th className="p-3">Type</th>
+                      <th className="p-3">VAF %</th>
+                      <th className="p-3">Pathogenicity</th>
+                      <th className="p-3">Read Depth</th>
+                      <th className="p-3">Pipeline</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {genomics.map((v) => (
+                      <tr key={v.id} className="hover:bg-slate-800/50 transition-colors">
+                        <td className="p-3 font-bold text-white font-mono text-xs">{v.gene}</td>
+                        <td className="p-3 font-mono text-sky-300">{v.hgvs}</td>
+                        <td className="p-3">{v.variantType}</td>
+                        <td className="p-3 font-mono font-bold text-emerald-400">{v.vafPercent}%</td>
+                        <td className="p-3">
+                          <Badge
+                            className={
+                              v.pathogenicity === "Pathogenic"
+                                ? "bg-red-950 text-red-300 border-red-800/60"
+                                : "bg-amber-950 text-amber-300 border-amber-800/60"
+                            }
+                          >
+                            {v.pathogenicity}
+                          </Badge>
+                        </td>
+                        <td className="p-3 font-mono text-slate-400">{v.readDepth}x</td>
+                        <td className="p-3 font-mono text-[10px] text-slate-400">{v.pipelineVersion}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 3: Imaging Studies */}
+          <TabsContent value="imaging" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <ImageIcon className="w-4 h-4 text-sky-400" />
+                    Digital Radiology & Whole Slide Pathology Studies
+                  </h3>
+                  <p className="text-xs text-slate-400">DICOMweb QIDO/WADO indexed studies with integrated OHIF viewer</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {imaging.map((img) => (
+                  <div key={img.studyId} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Badge className="bg-sky-950 text-sky-300 border-sky-800">
+                          {img.modality}
+                        </Badge>
+                        <span className="text-[10px] text-slate-500 font-mono">{img.studyDate}</span>
+                      </div>
+                      <h4 className="font-bold text-xs text-white">{img.bodyPart}</h4>
+                      <p className="text-[11px] text-slate-400 leading-snug">{img.findingsSummary}</p>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                      <span className="text-[10px] text-slate-500 font-mono">{img.instancesCount} instances</span>
+                      <Button
+                        size="sm"
+                        onClick={() => triggerSmartLaunch("imaging")}
+                        className="h-7 text-[11px] bg-sky-600 hover:bg-sky-700 text-white"
+                      >
+                        <Play className="w-3 h-3 mr-1" /> OHIF Viewer
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 4: Labs & Biomarkers */}
+          <TabsContent value="labs" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-purple-400" />
+                  Biomarker Longitudinal Response Chart (CA 15-3)
+                </h3>
+                <span className="text-[11px] text-slate-400">Reference Cutoff: &lt; 30.0 U/mL</span>
+              </div>
+
+              {/* Recharts Chart */}
+              <div className="h-64 w-full pt-2">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={ca153Data}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                    <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} />
+                    <YAxis stroke="#94a3b8" fontSize={11} domain={[0, 80]} />
+                    <RechartsTooltip contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", color: "#f8fafc" }} />
+                    <Legend />
+                    <Line type="monotone" dataKey="value" name="CA 15-3 (U/mL)" stroke="#38bdf8" strokeWidth={3} dot={{ r: 5, fill: "#38bdf8" }} />
+                    <Line type="monotone" dataKey="cutoff" name="Normal Upper Limit" stroke="#ef4444" strokeDasharray="5 5" strokeWidth={1.5} />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Labs Table */}
+              <div className="overflow-x-auto pt-2">
+                <table className="w-full text-left text-xs text-slate-300">
+                  <thead className="bg-slate-950 text-slate-400 uppercase text-[10px] font-mono border-b border-slate-800">
+                    <tr>
+                      <th className="p-2.5">Date</th>
+                      <th className="p-2.5">Lab Marker</th>
+                      <th className="p-2.5">Result Value</th>
+                      <th className="p-2.5">Reference Range</th>
+                      <th className="p-2.5">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800/60">
+                    {labs.map((l, idx) => (
+                      <tr key={idx} className="hover:bg-slate-800/40">
+                        <td className="p-2.5 font-mono text-slate-400">{l.date}</td>
+                        <td className="p-2.5 font-semibold text-white">{l.marker}</td>
+                        <td className="p-2.5 font-mono font-bold text-sky-300">{l.value} {l.unit}</td>
+                        <td className="p-2.5 font-mono text-slate-400">{l.referenceRange}</td>
+                        <td className="p-2.5">
+                          <Badge
+                            className={
+                              l.status === "Normal"
+                                ? "bg-emerald-950 text-emerald-300 border-emerald-800"
+                                : l.status === "High Risk"
+                                ? "bg-red-950 text-red-300 border-red-800 animate-pulse"
+                                : "bg-amber-950 text-amber-300 border-amber-800"
+                            }
+                          >
+                            {l.status}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 5: Meds & Infusions */}
+          <TabsContent value="infusions" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <Pill className="w-4 h-4 text-amber-400" />
+                Chemotherapy & Immunotherapy Regimens
+              </h3>
+
+              <div className="space-y-3">
+                {infusions.map((inf) => (
+                  <div key={inf.id} className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-white text-sm">{inf.drugName}</span>
+                        <Badge className="bg-slate-800 text-slate-300">{inf.dose}</Badge>
+                      </div>
+                      <Badge className={inf.status === "Active" ? "bg-emerald-600 text-white" : "bg-slate-700 text-slate-300"}>
+                        {inf.status}
+                      </Badge>
+                    </div>
+
+                    <p className="text-slate-400">{inf.cycle} • {inf.route}</p>
+                    {inf.toxicityNotes && (
+                      <p className="text-amber-400 text-[11px] font-medium flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {inf.toxicityNotes}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 6: Biospecimens */}
+          <TabsContent value="biospecimens" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <FlaskConical className="w-4 h-4 text-teal-400" />
+                Human Tissue Resource Center (HTRC) Biospecimen Lineage
+              </h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {biospecimens.map((spec) => (
+                  <div key={spec.specimenId} className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-2 text-xs">
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-teal-400 font-bold">{spec.specimenId}</span>
+                      <Badge variant="outline" className="border-teal-500/30 text-teal-300 bg-teal-950/40">
+                        {spec.storageTemp}
+                      </Badge>
+                    </div>
+
+                    <p className="font-bold text-white">{spec.type}</p>
+                    <p className="text-slate-400">{spec.anatomicSite} • {spec.volume}</p>
+                    <div className="pt-2 border-t border-slate-800 text-[11px] text-slate-500 flex justify-between">
+                      <span>LIMS: {spec.limsBarcode}</span>
+                      <span className="text-emerald-400">{spec.lineageStage}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB 7: De-identified Notes */}
+          <TabsContent value="notes" className="space-y-4">
+            <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+              <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                <FileText className="w-4 h-4 text-rose-400" />
+                NLP De-identified Clinical Notes & Safe Harbor Token Inspection
+              </h3>
+
+              <div className="space-y-3">
+                {notes.map((n) => (
+                  <div key={n.noteId} className="p-4 rounded-xl bg-slate-950 border border-slate-800 text-xs space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-white">{n.noteType} — {n.authorRole}</span>
+                      <span className="text-slate-500 font-mono text-[10px]">{n.date}</span>
+                    </div>
+
+                    <p className="text-slate-300 leading-relaxed font-sans">{n.deIdentifiedContent}</p>
+
+                    <div className="pt-2 text-[10px] text-emerald-400 flex items-center gap-1 font-mono">
+                      <ShieldCheck className="w-3 h-3" /> Safe Harbor Scrubbed ({n.safeHarborRedactionsCount} tokens redacted)
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </Layout>
+  );
+}

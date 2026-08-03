@@ -2,6 +2,13 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
+import {
+  handleGetHubStats,
+  handleGetSpokes,
+  handleGetPatient360,
+  handleGetApiContracts,
+  handleGetIRBCharter
+} from "./routes/beacon";
 
 export function createServer() {
   const app = express();
@@ -11,13 +18,20 @@ export function createServer() {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  // Example API routes
+  // API routes
   app.get("/api/ping", (_req, res) => {
     const ping = process.env.PING_MESSAGE ?? "ping";
     res.json({ message: ping });
   });
 
   app.get("/api/demo", handleDemo);
+
+  // Beacon Oncology Data Commons API
+  app.get("/api/beacon/stats", handleGetHubStats);
+  app.get("/api/beacon/spokes", handleGetSpokes);
+  app.get("/api/beacon/patient/360", handleGetPatient360);
+  app.get("/api/beacon/contracts", handleGetApiContracts);
+  app.get("/api/beacon/governance/charter", handleGetIRBCharter);
 
   return app;
 }
