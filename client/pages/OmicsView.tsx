@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
+import { SmartLaunchModal } from "@/components/SmartLaunchModal";
 import { MultiomicsDataset, GenomicVariant } from "@shared/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   Dna,
+  Zap,
   Search,
   Filter,
   BarChart3,
@@ -35,6 +37,7 @@ export default function OmicsView() {
   const [loading, setLoading] = useState(true);
   const [searchGene, setSearchGene] = useState("");
   const [filterPathogenicOnly, setFilterPathogenicOnly] = useState(false);
+  const [smartModalOpen, setSmartModalOpen] = useState(false);
 
   useEffect(() => {
     fetch("/api/beacon/omics")
@@ -78,9 +81,19 @@ export default function OmicsView() {
               </div>
             </div>
 
-            <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-xs py-1 px-3">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Pipeline: Dragen v4.2 GRCh38
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                onClick={() => setSmartModalOpen(true)}
+                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-8 shadow-md"
+              >
+                <Zap className="w-3.5 h-3.5 mr-1.5" />
+                SMART Launch: Cronus Multiomics
+              </Button>
+              <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-xs py-1 px-3">
+                <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Pipeline: Dragen v4.2 GRCh38
+              </Badge>
+            </div>
           </div>
 
           {/* Quick Filter Bar */}

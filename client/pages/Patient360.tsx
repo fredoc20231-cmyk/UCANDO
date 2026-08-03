@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
+import { SmartLaunchModal } from "@/components/SmartLaunchModal";
 import { Patient360Record } from "@shared/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,6 +46,9 @@ export default function Patient360() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("timeline");
   const [smartLaunching, setSmartLaunching] = useState<string | null>(null);
+  const [smartModalOpen, setSmartModalOpen] = useState(false);
+  const [smartPlatform, setSmartPlatform] = useState<"omics" | "imaging">("omics");
+  const [smartTargetUrl, setSmartTargetUrl] = useState("https://cronus.life/");
 
   useEffect(() => {
     setLoading(true);
@@ -62,14 +66,12 @@ export default function Patient360() {
 
   const triggerSmartLaunch = (platform: "omics" | "imaging") => {
     setSmartLaunching(platform);
+    setSmartPlatform(platform);
+    setSmartTargetUrl(platform === "omics" ? "https://cronus.life/" : "https://cronus.life/");
     setTimeout(() => {
       setSmartLaunching(null);
-      alert(
-        platform === "omics"
-          ? "SMART-on-FHIR launch context created for Multiomics Platform. Context token: eyJhbGciOiJSUzI1NiIs... [Patient: DEID-BEACON-772910]"
-          : "OHIF DICOMweb viewer opened with signed context token. Launching accession ACC-2023-9941..."
-      );
-    }, 1200);
+      setSmartModalOpen(true);
+    }, 400);
   };
 
   if (loading || !record) {
@@ -510,6 +512,15 @@ export default function Patient360() {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* SMART Launch Multiomics & Imaging Frame Modal */}
+      <SmartLaunchModal
+        isOpen={smartModalOpen}
+        onClose={() => setSmartModalOpen(false)}
+        patientId={demographics?.id || patientId}
+        platformName={smartPlatform === "omics" ? "Cronus Multiomics Platform" : "OHIF DICOMweb Imaging Viewer"}
+        targetUrl={smartTargetUrl}
+      />
     </Layout>
   );
 }
