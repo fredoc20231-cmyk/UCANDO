@@ -116,11 +116,11 @@ export function Layout({ children }: LayoutProps) {
           {/* Brand Logo & Codename */}
           <div className="flex items-center gap-3">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 rounded-xl overflow-hidden border border-cyan-500/50 bg-slate-950 flex items-center justify-center shadow-lg shadow-cyan-950/60 group-hover:scale-105 group-hover:border-cyan-400 transition-all shrink-0">
+              <div className="h-11 px-1.5 py-1 rounded-xl border border-cyan-500/50 bg-slate-950/90 flex items-center justify-center shadow-lg shadow-cyan-950/60 group-hover:scale-105 group-hover:border-cyan-400 transition-all shrink-0">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F6c93a00ff3d8421e8f02c6b51df084cb?format=webp&width=800&height=1200"
+                  src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
                   alt="UCCANDO Logo"
-                  className="w-full h-full object-cover"
+                  className="h-full w-auto object-contain rounded"
                 />
               </div>
               <div>

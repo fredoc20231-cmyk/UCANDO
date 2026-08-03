@@ -97,9 +97,9 @@ export default function Index() {
             {/* Featured UCCANDO DNA Orb Logo Badge */}
             <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-950/80 border border-cyan-500/30 shadow-2xl shadow-cyan-950/50 shrink-0">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F6c93a00ff3d8421e8f02c6b51df084cb?format=webp&width=800&height=1200"
+                src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
                 alt="UCCANDO Logo"
-                className="w-32 h-32 object-cover rounded-xl shadow-lg border border-cyan-400/20"
+                className="h-44 w-auto max-w-[200px] object-contain rounded-xl shadow-lg border border-cyan-400/20 bg-slate-950/60 p-1"
               />
               <span className="text-[11px] font-bold text-cyan-300 font-mono mt-2 tracking-widest uppercase">
                 UCCANDO
