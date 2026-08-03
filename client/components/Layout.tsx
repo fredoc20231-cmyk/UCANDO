@@ -15,6 +15,8 @@ import {
 import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
 import { SyntheticDataBanner } from "./SyntheticDataBanner";
+import { LoginModal } from "./LoginModal";
+import { useAuth } from "@/context/AuthContext";
 import {
   Activity,
   ShieldCheck,
@@ -37,7 +39,8 @@ import {
   Moon,
   Sparkles,
   ExternalLink,
-  Layers
+  Layers,
+  LogIn
 } from "lucide-react";
 
 function CloudIcon({ className }: { className?: string }) {
@@ -56,8 +59,10 @@ export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { bgTheme, setBgTheme } = useBackgroundTheme();
+  const { isAuthenticated } = useAuth();
   const [contractsOpen, setContractsOpen] = useState(false);
   const [charterOpen, setCharterOpen] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
   const [userRole, setUserRole] = useState<string>("Clinician (Dr. Alex Rivera, MD)");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchQueryFocused] = useState(false);
@@ -211,6 +216,31 @@ export function Layout({ children }: LayoutProps) {
             >
               <Landmark className="w-3.5 h-3.5 mr-1.5 text-rose-400" />
               <span className="hidden sm:inline">IRB Charter</span>
+            </Button>
+
+            {/* Auth Sign-In Button */}
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setLoginOpen(true)}
+              className={cn(
+                "h-8 text-xs font-semibold border transition-colors",
+                isAuthenticated
+                  ? "border-emerald-600/60 bg-emerald-950/40 text-emerald-300 hover:bg-emerald-900/60"
+                  : "border-amber-500/50 bg-amber-950/40 text-amber-300 hover:bg-amber-900/60"
+              )}
+            >
+              {isAuthenticated ? (
+                <>
+                  <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" />
+                  <span className="hidden md:inline">Authenticated</span>
+                </>
+              ) : (
+                <>
+                  <LogIn className="w-3.5 h-3.5 mr-1 text-amber-400" />
+                  <span>Sign In</span>
+                </>
+              )}
             </Button>
 
             {/* Role Switcher */}
@@ -375,6 +405,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Modals */}
       <ApiContractsModal open={contractsOpen} onOpenChange={setContractsOpen} />
       <IRBCharterModal open={charterOpen} onOpenChange={setCharterOpen} />
+      <LoginModal open={loginOpen} onOpenChange={setLoginOpen} />
     </div>
   );
 }
