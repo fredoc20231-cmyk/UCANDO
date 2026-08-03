@@ -1,7 +1,9 @@
-import { ReactNode, useState, useEffect } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { useBackgroundTheme } from "@/context/BackgroundContext";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -37,6 +39,14 @@ import {
   Layers
 } from "lucide-react";
 
+function CloudIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+    </svg>
+  );
+}
+
 interface LayoutProps {
   children: ReactNode;
 }
@@ -44,26 +54,12 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
+  const { bgTheme, setBgTheme } = useBackgroundTheme();
   const [contractsOpen, setContractsOpen] = useState(false);
   const [charterOpen, setCharterOpen] = useState(false);
   const [userRole, setUserRole] = useState<string>("Clinician (Dr. Fred, MD)");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchQueryFocused] = useState(false);
-
-  // Sync theme class on <html>
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
 
   const navItems = [
     { label: "Hub Command Center", path: "/", icon: LayoutDashboard },
@@ -87,7 +83,33 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 dark:bg-slate-950 dark:text-slate-100">
+    <div
+      className={cn(
+        "min-h-screen flex flex-col relative transition-colors duration-300",
+        bgTheme === "day" && "bg-slate-100 text-slate-900",
+        bgTheme === "night" && "bg-slate-950 text-slate-100",
+        bgTheme === "sky" && "bg-slate-950 text-slate-100"
+      )}
+    >
+      {/* Decorative Background Elements */}
+      {bgTheme === "day" && (
+        <div className="fixed top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-amber-200/25 via-sky-100/30 to-transparent blur-3xl pointer-events-none -z-10" />
+      )}
+      {bgTheme === "night" && (
+        <div className="fixed top-0 right-1/4 w-[600px] h-[300px] bg-gradient-to-b from-indigo-950/40 via-purple-950/20 to-transparent blur-3xl pointer-events-none -z-10" />
+      )}
+      {bgTheme === "sky" && (
+        <div className="fixed top-0 left-0 right-0 h-[450px] overflow-hidden pointer-events-none -z-10">
+          <div className="absolute top-[-100px] left-[15%] w-[600px] h-[350px] bg-sky-500/20 blur-[100px] rounded-full" />
+          <div className="absolute top-[-50px] right-[10%] w-[500px] h-[300px] bg-cyan-400/15 blur-[90px] rounded-full" />
+          <div className="absolute top-12 left-10 opacity-20 text-sky-200 animate-cloud-float">
+            <CloudIcon className="w-32 h-32" />
+          </div>
+          <div className="absolute top-24 right-20 opacity-15 text-cyan-100 animate-cloud-float" style={{ animationDelay: "4s" }}>
+            <CloudIcon className="w-48 h-48" />
+          </div>
+        </div>
+      )}
       {/* Top Enterprise Header */}
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
@@ -212,16 +234,53 @@ export function Layout({ children }: LayoutProps) {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            {/* Dark / Light Mode Toggle */}
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={toggleTheme}
-              className="w-8 h-8 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
-              title="Toggle Theme"
-            >
-              {theme === "dark" ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-700" />}
-            </Button>
+            {/* Background Theme Selector: Day / Night / Sky */}
+            <div className="flex items-center p-0.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs shadow-inner gap-0.5">
+              <button
+                type="button"
+                onClick={() => setBgTheme("day")}
+                className={cn(
+                  "flex items-center gap-1 px-2.5 py-1 rounded-md transition-all text-xs font-semibold",
+                  bgTheme === "day"
+                    ? "bg-amber-400 text-amber-950 shadow-sm"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+                )}
+                title="Switch to Day Background (Light Daylight)"
+              >
+                <Sun className={cn("w-3.5 h-3.5", bgTheme === "day" ? "text-amber-950 fill-amber-950/20" : "text-amber-400")} />
+                <span>Day</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setBgTheme("night")}
+                className={cn(
+                  "flex items-center gap-1 px-2.5 py-1 rounded-md transition-all text-xs font-semibold",
+                  bgTheme === "night"
+                    ? "bg-indigo-600 text-white shadow-sm"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+                )}
+                title="Switch to Night Background (Deep Midnight Space)"
+              >
+                <Moon className={cn("w-3.5 h-3.5", bgTheme === "night" ? "text-white fill-white/20" : "text-indigo-400")} />
+                <span>Night</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setBgTheme("sky")}
+                className={cn(
+                  "flex items-center gap-1 px-2.5 py-1 rounded-md transition-all text-xs font-semibold",
+                  bgTheme === "sky"
+                    ? "bg-sky-500 text-slate-950 font-bold shadow-sm"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/80"
+                )}
+                title="Switch to Sky Background (Azure Atmosphere)"
+              >
+                <CloudIcon className={cn("w-3.5 h-3.5", bgTheme === "sky" ? "text-slate-950" : "text-sky-400")} />
+                <span>Sky</span>
+              </button>
+            </div>
           </div>
         </div>
 
