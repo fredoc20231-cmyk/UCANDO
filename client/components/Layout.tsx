@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
+import { SyntheticDataBanner } from "./SyntheticDataBanner";
 import {
   Activity,
   ShieldCheck,
@@ -112,6 +113,7 @@ export function Layout({ children }: LayoutProps) {
       )}
       {/* Top Enterprise Header */}
       <header className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/95 backdrop-blur-md">
+        <SyntheticDataBanner />
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
           {/* Brand Logo & Codename */}
           <div className="flex items-center gap-3">
