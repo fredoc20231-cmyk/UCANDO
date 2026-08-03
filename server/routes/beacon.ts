@@ -973,23 +973,53 @@ export const handleGetDataQuality: RequestHandler = (_req, res) => {
   });
 };
 
-export const handleUpdateConsent: RequestHandler = (req, res) => {
-  const { patientId, permissions } = req.body || {};
-  const newReceiptId = "worm_receipt_" + Math.floor(Math.random() * 1000000);
-  const now = new Date().toISOString();
+export const handleGeminiCopilot: RequestHandler = async (req, res) => {
+  const { prompt, patientContext } = req.body || {};
+  const apiKey = process.env.GEMINI_API_KEY;
 
-  res.json({
-    status: "Success",
-    patientId: patientId || "UC-BEACON-89421",
-    effectiveDate: now,
-    opaPolicyEvaluated: "PERMIT",
-    permissions: permissions || {},
-    wormAuditReceipt: {
-      receiptId: newReceiptId,
-      timestamp: now,
-      sha256Signature: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      storeLocation: "AWS S3 Object Lock (WORM) Compliance Bucket",
-      downstreamPropagatedSpokes: ["EHR Spoke", "Multiomics Lakehouse", "DICOM Store", "GA4GH Beacon Node"]
-    }
-  });
+  if (!apiKey || apiKey === "YOUR_GEMINI_API_KEY_HERE") {
+    res.json({
+      status: "Config Required",
+      message: "GEMINI_API_KEY is currently set to placeholder. Please confirm your API key value in environment settings.",
+      response: `[Gemini High Copilot Simulation]: Analyzed query "${prompt || "Oncology Summary"}" against UChicago Cancer Data Commons mCODE records. Found 3 matching high-confidence pathogenic biomarkers (BRCA1, TP53, PD-L1).`
+    });
+    return;
+  }
+
+  try {
+    const systemPrompt = "You are Gemini High, an expert AI oncology assistant for the UChicago Cancer Data Commons ('Beacon'). Analyze clinical notes, multiomics, and mCODE FHIR data accurately, concisely, and adhering strictly to HIPAA de-identification invariants.";
+
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [
+                { text: `${systemPrompt}\n\nPatient Context:\n${patientContext || "De-identified Stage III Breast Cancer patient UC-BEACON-89421 with BRCA1 pathogenic variant"}\n\nUser Question:\n${prompt}` }
+              ]
+            }
+          ]
+        })
+      }
+    );
+
+    const data = await response.json();
+    const textOutput = data?.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated from Gemini API.";
+
+    res.json({
+      status: "Success",
+      model: "gemini-1.5-pro",
+      response: textOutput
+    });
+  } catch (err: any) {
+    console.error("Gemini API Error:", err);
+    res.status(500).json({
+      status: "Error",
+      message: "Failed to call Google Gemini API: " + (err?.message || "Unknown error")
+    });
+  }
 };
