@@ -142,7 +142,7 @@ export default function Governance() {
                     <span className="font-bold text-white">DUC-2024-881: Multiomics PARP Resistance Study</span>
                     <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-[10px]">Approved</Badge>
                   </div>
-                  <p className="text-slate-400">PI: Dr. Olufunmilayo Olopade • Dataset: Controlled Omics (5,240 samples)</p>
+                  <p className="text-slate-400">PI: Dr. Elena Vance • Dataset: Controlled Omics (5,240 samples)</p>
                 </div>
                 <Button size="sm" variant="outline" className="border-slate-800 text-xs">View DTA Agreement</Button>
               </div>

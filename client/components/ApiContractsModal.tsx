@@ -69,7 +69,7 @@ export function ApiContractsModal({ open, onOpenChange }: ApiContractsModalProps
             <TabsList className="bg-slate-900 border border-slate-800 p-1">
               <TabsTrigger
                 value="multiomics"
-                className="flex items-center gap-2 text-xs data-[state=active]:bg-uchicago-maroon data-[state=active]:text-white"
+                className="flex items-center gap-2 text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white"
               >
                 <Cpu className="w-3.5 h-3.5" />
                 G1. Multiomics Platform

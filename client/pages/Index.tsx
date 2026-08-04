@@ -51,22 +51,22 @@ export default function Index() {
     <Layout>
       <div className="space-y-8 pb-10">
         {/* Master Hero Banner */}
-        <div className="relative rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-uchicago-dark-maroon/90 border border-slate-800 p-6 md:p-8 overflow-hidden shadow-2xl">
+        <div className="relative rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 border-2 border-slate-700 p-6 md:p-8 overflow-hidden shadow-2xl">
           {/* Subtle Glow & Background Deco */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-sky-500/10 rounded-full blur-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-sky-500/15 rounded-full blur-2xl pointer-events-none" />
 
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold px-2.5 py-1 text-xs border border-red-500/40">
+                <Badge className="bg-red-700 hover:bg-red-600 text-white font-bold px-3 py-1 text-xs border border-red-400 shadow-md">
                   Beacon Cancer Data Commons
                 </Badge>
-                <Badge variant="outline" className="border-cyan-500/40 text-cyan-300 bg-cyan-950/40 text-xs font-mono">
+                <Badge variant="outline" className="border-cyan-400 text-cyan-200 bg-cyan-950/90 text-xs font-mono font-bold shadow-md">
                   UCCANDO • Beacon
                 </Badge>
-                <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/40 text-xs">
-                  <ShieldCheck className="w-3 h-3 mr-1" /> HIPAA Consented Ecosystem
+                <Badge variant="outline" className="border-emerald-400 text-emerald-200 bg-emerald-950/90 text-xs font-bold shadow-md">
+                  <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-400" /> HIPAA Consented Ecosystem
                 </Badge>
               </div>
 
@@ -74,20 +74,20 @@ export default function Index() {
                 Central Oncology Integration Hub & Governed Data Commons
               </h1>
 
-              <p className="text-sm md:text-base text-slate-300 leading-relaxed">
+              <p className="text-sm md:text-base text-slate-100 font-medium leading-relaxed">
                 Beacon connects every consented UChicago Cancer Center patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link to="/patient-360?id=UC-BEACON-89421">
-                  <Button className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs h-10 px-5 shadow-lg shadow-red-950/50">
+                  <Button className="bg-red-700 hover:bg-red-600 text-white font-bold text-xs h-10 px-5 shadow-lg shadow-red-950/80 border border-red-500/50">
                     <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                 </Link>
 
                 <Link to="/cohort-builder">
-                  <Button variant="outline" className="border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-200 text-xs h-10 px-4">
+                  <Button variant="outline" className="border-slate-600 bg-slate-950 hover:bg-slate-800 text-sky-300 font-bold text-xs h-10 px-4 shadow-md">
                     <SlidersHorizontal className="w-4 h-4 mr-2 text-sky-400" /> Visual Cohort Query Builder
                   </Button>
                 </Link>
@@ -207,7 +207,7 @@ export default function Index() {
             <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 flex flex-col justify-between hover:border-red-500/50 transition-all shadow-lg group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-uchicago-maroon text-white">
+                  <div className="p-2.5 rounded-xl bg-brand-maroon text-white">
                     <Users className="w-5 h-5" />
                   </div>
                   <Badge className="bg-red-950 text-red-300 border-red-800/60 text-[10px]">

@@ -57,9 +57,15 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        brand: {
+          maroon: "hsl(var(--brand-maroon))",
+          dark: "hsl(var(--brand-dark-maroon))",
+        },
+        "brand-maroon": "hsl(var(--brand-maroon))",
+        "brand-dark-maroon": "hsl(var(--brand-dark-maroon))",
         uchicago: {
-          maroon: "hsl(var(--uchicago-maroon))",
-          dark: "hsl(var(--uchicago-dark-maroon))",
+          maroon: "hsl(var(--brand-maroon))",
+          dark: "hsl(var(--brand-dark-maroon))",
         },
         beacon: {
           cyan: "hsl(var(--beacon-cyan))",

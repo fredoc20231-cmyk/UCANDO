@@ -44,6 +44,9 @@ export const LoginModal: React.FC<LoginModalProps> = ({ open, onOpenChange }) =>
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-400">
             Placeholder authentication gate for Beacon Clinical & Audit Data Access.
+            <span className="block text-[11px] text-amber-300/90 font-mono mt-1">
+              No password required — this demo login does not verify identity.
+            </span>
           </DialogDescription>
         </DialogHeader>
 

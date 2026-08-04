@@ -321,7 +321,7 @@ export function Layout({ children }: LayoutProps) {
         </div>
 
         {/* Builder.io PHI-Free Notice Bar */}
-        <div className="bg-gradient-to-r from-uchicago-dark-maroon via-slate-900 to-slate-950 border-t border-slate-800/80 py-1 px-4 text-[11px] text-slate-300 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-brand-dark-maroon via-slate-900 to-slate-950 border-t border-slate-800/80 py-1 px-4 text-[11px] text-slate-300 flex items-center justify-between">
           <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between gap-4">
             <div className="flex items-center gap-2 truncate">
               <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
@@ -357,7 +357,7 @@ export function Layout({ children }: LayoutProps) {
                   to={item.path}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
                     isActive
-                      ? "bg-uchicago-maroon text-white shadow-sm shadow-red-900/50"
+                      ? "bg-brand-maroon text-white shadow-sm shadow-red-900/50"
                       : item.highlight
                       ? "text-sky-300 hover:bg-slate-900 hover:text-white"
                       : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"

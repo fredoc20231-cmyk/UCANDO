@@ -52,6 +52,8 @@
     --sidebar-ring: 199 89% 48%;
 
     /* Enterprise Clinical Custom Colors */
+    --brand-maroon: 350 100% 25%;
+    --brand-dark-maroon: 350 100% 18%;
     --uchicago-maroon: 350 100% 25%;
     --uchicago-dark-maroon: 350 100% 18%;
     --beacon-cyan: 199 89% 48%;
@@ -99,6 +101,8 @@
     --sidebar-border: 217 32% 14%;
     --sidebar-ring: 199 89% 48%;
 
+    --brand-maroon: 350 85% 38%;
+    --brand-dark-maroon: 350 90% 25%;
     --uchicago-maroon: 350 85% 38%;
     --uchicago-dark-maroon: 350 90% 25%;
     --beacon-cyan: 199 89% 48%;

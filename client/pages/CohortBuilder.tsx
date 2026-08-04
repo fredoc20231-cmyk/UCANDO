@@ -197,7 +197,7 @@ export default function CohortBuilder() {
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-uchicago-maroon text-white border border-red-700/50 shadow-md">
+              <div className="p-3 rounded-xl bg-brand-maroon text-white border border-red-700/50 shadow-md">
                 <SlidersHorizontal className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -237,7 +237,7 @@ export default function CohortBuilder() {
                   setExportModalOpenFormat("csv");
                   setExportModalOpen(true);
                 }}
-                className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
               >
                 <Download className="w-3.5 h-3.5 mr-1.5" /> Export De-ID Cohort
               </Button>
@@ -360,7 +360,7 @@ export default function CohortBuilder() {
                       onClick={() => toggleStage(stg)}
                       className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                         isChecked
-                          ? "bg-uchicago-maroon border-red-600 text-white shadow-md shadow-red-950/40"
+                          ? "bg-brand-maroon border-red-600 text-white shadow-md shadow-red-950/40"
                           : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
                       }`}
                     >
@@ -560,7 +560,7 @@ export default function CohortBuilder() {
                           </div>
                           <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
                             <div
-                              className="bg-uchicago-maroon h-full rounded-full"
+                              className="bg-brand-maroon h-full rounded-full"
                               style={{ width: `${stg.percentage}%` }}
                             />
                           </div>
@@ -716,7 +716,7 @@ export default function CohortBuilder() {
                     handleCopyText(cohortData?.mcodeQueryJson || "");
                     setExportModalOpen(false);
                   }}
-                  className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                  className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
                 >
                   Confirm & Download Dataset
                 </Button>

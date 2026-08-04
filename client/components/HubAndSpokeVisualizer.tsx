@@ -93,7 +93,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
                 >
                   <div className="absolute top-0 right-0 w-2 h-full bg-emerald-500 rounded-r-xl" />
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-slate-800 text-sky-400 group-hover:bg-uchicago-maroon group-hover:text-white transition-colors">
+                    <div className="p-2 rounded-lg bg-slate-800 text-sky-400 group-hover:bg-brand-maroon group-hover:text-white transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
           {/* Center Hub Core (Data Zones & Governance) */}
           <div className="lg:col-span-6 relative p-6 rounded-2xl bg-slate-900/90 border-2 border-red-900/60 shadow-2xl shadow-red-950/30 text-center space-y-5">
             {/* Hub Header Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-uchicago-maroon text-white text-xs font-bold shadow-lg shadow-red-900/40 border border-red-500/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-maroon text-white text-xs font-bold shadow-lg shadow-red-900/40 border border-red-500/30">
               <ShieldCheck className="w-4 h-4 text-emerald-300" />
               <span>BEACON HUB — Single Governed Point of Truth</span>
             </div>

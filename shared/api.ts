@@ -1,5 +1,5 @@
 /**
- * Shared API types for Beacon — UChicago Cancer Data Commons ("UCCANDO")
+ * Shared API types for Beacon Cancer Data Commons ("UCCANDO")
  */
 
 export interface DemoResponse {
