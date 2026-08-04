@@ -4,11 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useBackgroundTheme } from "@/context/BackgroundContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
 import { SyntheticDataBanner } from "./SyntheticDataBanner";
 import { LoginModal } from "./LoginModal";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth, DEMO_USERS } from "@/context/AuthContext";
 import {
   Activity,
   ShieldCheck,
@@ -26,6 +34,7 @@ import {
   Shield,
   FileSpreadsheet,
   CheckCircle2,
+  ChevronDown,
   Sun,
   Moon,
   Sparkles,
@@ -50,7 +59,7 @@ export function Layout({ children }: LayoutProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const { bgTheme, setBgTheme } = useBackgroundTheme();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user, switchUser } = useAuth();
   const [contractsOpen, setContractsOpen] = useState(false);
   const [charterOpen, setCharterOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
@@ -185,14 +194,59 @@ export function Layout({ children }: LayoutProps) {
               )}
             </div>
 
-            {/* User Profile (Pic & Name) next to search box */}
+            {/* User Profile (Pic & Name) next to search box with Persona Selector Dropdown */}
             <div className="flex items-center gap-2 pl-2.5 border-l border-slate-800 text-xs shrink-0">
-              <div className="w-7 h-7 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold text-xs shrink-0 shadow-sm">
-                <User className="w-3.5 h-3.5 text-cyan-300" />
-              </div>
-              <span className="font-semibold text-slate-200 text-xs truncate max-w-[150px]">
-                Dr. Alex Rivera, MD
-              </span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-2 p-1 px-2.5 rounded-lg bg-slate-950 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-900 text-left transition-all"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold text-[10px] shrink-0 shadow-sm">
+                      {user?.avatarInitial || "AR"}
+                    </div>
+                    <div className="hidden sm:block truncate max-w-[150px]">
+                      <p className="font-semibold text-slate-200 text-[11px] truncate leading-tight">
+                        {user?.name || "Dr. Alex Rivera, MD"}
+                      </p>
+                      <p className="text-[9px] text-cyan-400 font-mono truncate leading-tight">
+                        {user?.role || "Attending Oncologist (MD)"}
+                      </p>
+                    </div>
+                    <ChevronDown className="w-3 h-3 text-slate-400 shrink-0" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="bg-slate-900 border-slate-800 text-slate-200 text-xs w-64 p-2 shadow-2xl z-50">
+                  <DropdownMenuLabel className="text-slate-400 text-[10px] uppercase font-mono px-2 py-1">
+                    Select User Persona
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-slate-800 my-1" />
+                  {DEMO_USERS.map((persona) => (
+                    <DropdownMenuItem
+                      key={persona.id}
+                      onClick={() => switchUser(persona)}
+                      className={`hover:bg-slate-800 cursor-pointer p-2 rounded-lg my-0.5 flex items-start justify-between ${
+                        user?.id === persona.id ? "bg-slate-950 border border-cyan-500/40" : ""
+                      }`}
+                    >
+                      <div>
+                        <p className="font-bold text-white text-xs">{persona.name}</p>
+                        <p className="text-[10px] text-cyan-300">{persona.role}</p>
+                      </div>
+                      {user?.id === persona.id && (
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                      )}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator className="bg-slate-800 my-1" />
+                  <DropdownMenuItem
+                    onClick={() => setLoginOpen(true)}
+                    className="hover:bg-slate-800 cursor-pointer text-amber-300 font-semibold p-2"
+                  >
+                    Manage Auth Session & Roles...
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 
