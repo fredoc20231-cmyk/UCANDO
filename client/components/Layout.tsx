@@ -4,14 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { useBackgroundTheme } from "@/context/BackgroundContext";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
 import { SyntheticDataBanner } from "./SyntheticDataBanner";
@@ -34,7 +26,6 @@ import {
   Shield,
   FileSpreadsheet,
   CheckCircle2,
-  ChevronDown,
   Sun,
   Moon,
   Sparkles,
@@ -68,7 +59,7 @@ export function Layout({ children }: LayoutProps) {
   const [searchFocused, setSearchQueryFocused] = useState(false);
 
   const navItems = [
-    { label: "Hub Command Center", path: "/", icon: LayoutDashboard },
+    { label: "Integration Hub", path: "/", icon: LayoutDashboard },
     { label: "Clinician Patient 360", path: "/patient-360", icon: Users, highlight: true },
     { label: "Researcher Portal", path: "/researcher-portal", icon: Layers },
     { label: "Cohort Builder", path: "/cohort-builder", icon: SlidersHorizontal },
@@ -159,43 +150,53 @@ export function Layout({ children }: LayoutProps) {
             </div>
           </div>
 
-          {/* Center Search Input */}
-          <div className="relative flex-1 max-w-md hidden md:block">
-            <div className="relative">
-              <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+          {/* Center Search Input & User Profile */}
+          <div className="flex items-center gap-3 hidden md:flex">
+            <div className="relative w-48 lg:w-56">
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setSearchQueryFocused(true)}
                 onBlur={() => setTimeout(() => setSearchQueryFocused(false), 200)}
-                placeholder="Search patient ID, variant (e.g. BRCA1), study, or cohort..."
-                className="w-full pl-9 pr-4 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all"
+                placeholder="Search patient ID, variant..."
+                className="w-full pl-8 pr-3 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all"
               />
+
+              {/* Quick Search Autocomplete Popup */}
+              {searchFocused && (
+                <div className="absolute top-full left-0 right-0 mt-1 p-2 rounded-lg bg-slate-900 border border-slate-800 shadow-xl z-50 text-xs space-y-1">
+                  <div className="text-[10px] font-semibold text-slate-500 uppercase px-2 py-1">Quick Search Matches</div>
+                  {searchSuggestions.map((s, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => {
+                        setSearchQuery("");
+                        navigate(s.path);
+                      }}
+                      className="w-full text-left px-2 py-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-between transition-colors"
+                    >
+                      <span>{s.label}</span>
+                      <ExternalLink className="w-3 h-3 text-slate-500" />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Quick Search Autocomplete Popup */}
-            {searchFocused && (
-              <div className="absolute top-full left-0 right-0 mt-1 p-2 rounded-lg bg-slate-900 border border-slate-800 shadow-xl z-50 text-xs space-y-1">
-                <div className="text-[10px] font-semibold text-slate-500 uppercase px-2 py-1">Quick Search Matches</div>
-                {searchSuggestions.map((s, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      setSearchQuery("");
-                      navigate(s.path);
-                    }}
-                    className="w-full text-left px-2 py-1.5 rounded hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-between transition-colors"
-                  >
-                    <span>{s.label}</span>
-                    <ExternalLink className="w-3 h-3 text-slate-500" />
-                  </button>
-                ))}
+            {/* User Profile (Pic & Name) next to search box */}
+            <div className="flex items-center gap-2 pl-2.5 border-l border-slate-800 text-xs shrink-0">
+              <div className="w-7 h-7 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold text-xs shrink-0 shadow-sm">
+                <User className="w-3.5 h-3.5 text-cyan-300" />
               </div>
-            )}
+              <span className="font-semibold text-slate-200 text-xs truncate max-w-[150px]">
+                Dr. Alex Rivera, MD
+              </span>
+            </div>
           </div>
 
-          {/* Right Action Tools & Role Selector */}
+          {/* Right Action Tools & Theme Selector */}
           <div className="flex items-center gap-2">
             {/* Modal Triggers */}
             <Button
@@ -243,32 +244,11 @@ export function Layout({ children }: LayoutProps) {
               )}
             </Button>
 
-            {/* Role Switcher */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="ghost" className="h-8 text-xs text-slate-300 hover:text-white border border-slate-800 bg-slate-900">
-                  <User className="w-3.5 h-3.5 mr-1 text-sky-400" />
-                  <span className="truncate max-w-[120px]">{userRole}</span>
-                  <ChevronDown className="w-3 h-3 ml-1 text-slate-500" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-slate-900 border-slate-800 text-slate-200 text-xs">
-                <DropdownMenuLabel className="text-slate-400 text-[10px] uppercase">Switch User Context</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-slate-800" />
-                <DropdownMenuItem onClick={() => setUserRole("Clinician (Dr. Alex Rivera, MD)")} className="hover:bg-slate-800 cursor-pointer">
-                  Clinician (Dr. Alex Rivera, MD)
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setUserRole("Bioinformatics Researcher")} className="hover:bg-slate-800 cursor-pointer">
-                  Bioinformatics Researcher
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setUserRole("Compliance Officer")} className="hover:bg-slate-800 cursor-pointer">
-                  Compliance & Safety Officer
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setUserRole("Data Steward (IRB)")} className="hover:bg-slate-800 cursor-pointer">
-                  Data Steward & IRB
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Orchestration Rule Label */}
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-xs">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span className="font-semibold text-slate-200 text-xs">Orchestration Rule:</span>
+            </div>
 
             {/* Background Theme Selector: Day / Night / Sky */}
             <div className="flex items-center p-0.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs shadow-inner gap-0.5">
@@ -316,31 +296,6 @@ export function Layout({ children }: LayoutProps) {
                 <CloudIcon className={cn("w-3.5 h-3.5", bgTheme === "sky" ? "text-slate-950" : "text-sky-400")} />
                 <span>Sky</span>
               </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Builder.io PHI-Free Notice Bar */}
-        <div className="bg-gradient-to-r from-brand-dark-maroon via-slate-900 to-slate-950 border-t border-slate-800/80 py-1 px-4 text-[11px] text-slate-300 flex items-center justify-between">
-          <div className="max-w-[1600px] mx-auto w-full flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2 truncate">
-              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>
-                <strong className="text-white font-semibold">Builder.io Orchestration Rule:</strong> PHI-free visual CMS layer. Patient data renders strictly from authenticated API props.
-              </span>
-            </div>
-            <div className="hidden md:flex items-center gap-3 text-[10px] text-slate-400 shrink-0">
-              <span className="flex items-center gap-1 text-emerald-400">
-                <CheckCircle2 className="w-3 h-3" /> OMOP v5.4
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1 text-emerald-400">
-                <CheckCircle2 className="w-3 h-3" /> mCODE FHIR R4
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1 text-emerald-400">
-                <CheckCircle2 className="w-3 h-3" /> GA4GH Beacon v2
-              </span>
             </div>
           </div>
         </div>
