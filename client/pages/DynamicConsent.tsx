@@ -64,6 +64,17 @@ export default function DynamicConsent() {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<"patient" | "admin" | "ledger">("patient");
 
+  useEffect(() => {
+    fetch(`/api/beacon/patient/360?id=${patientId}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.consent?.permissions) {
+          setPermissions(data.consent.permissions);
+        }
+      })
+      .catch((err) => console.error("Failed to load initial consent:", err));
+  }, [patientId]);
+
   const handleToggle = (key: keyof ConsentState) => {
     setPermissions((prev) => ({ ...prev, [key]: !prev[key] }));
   };

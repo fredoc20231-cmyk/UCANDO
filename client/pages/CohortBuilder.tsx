@@ -448,13 +448,22 @@ export default function CohortBuilder() {
             {/* Tabs for Kaplan-Meier & Mutation Frequency & Standards Spec */}
             <Tabs defaultValue="survival" className="space-y-4">
               <TabsList className="bg-slate-900 border border-slate-800 p-1 rounded-xl">
-                <TabsTrigger value="survival" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+                <TabsTrigger
+                  value="survival"
+                  className="text-xs data-[state=active]:bg-sky-600 data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-md text-slate-300 hover:text-white transition-all"
+                >
                   <TrendingDown className="w-3.5 h-3.5 mr-1.5" /> Kaplan-Meier Survival Curve
                 </TabsTrigger>
-                <TabsTrigger value="breakdown" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+                <TabsTrigger
+                  value="breakdown"
+                  className="text-xs data-[state=active]:bg-sky-600 data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-md text-slate-300 hover:text-white transition-all"
+                >
                   <BarChart3 className="w-3.5 h-3.5 mr-1.5" /> Mutations & Subtypes
                 </TabsTrigger>
-                <TabsTrigger value="inspector" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+                <TabsTrigger
+                  value="inspector"
+                  className="text-xs data-[state=active]:bg-sky-600 data-[state=active]:text-white data-[state=active]:font-bold data-[state=active]:shadow-md text-slate-300 hover:text-white transition-all"
+                >
                   <FileCode className="w-3.5 h-3.5 mr-1.5" /> mCODE & GA4GH Query Spec
                 </TabsTrigger>
               </TabsList>
@@ -582,14 +591,14 @@ export default function CohortBuilder() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <span className="text-[11px] font-mono text-sky-400 uppercase">HL7 mCODE FHIR Bundle Query</span>
-                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 h-64 overflow-auto">
+                    <span className="text-[11px] font-mono text-sky-300 font-bold uppercase">HL7 mCODE FHIR Bundle Query</span>
+                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-200 h-64 overflow-auto shadow-inner">
                       {cohortData?.mcodeQueryJson}
                     </pre>
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[11px] font-mono text-emerald-400 uppercase">GA4GH Beacon v2 Specification Query</span>
-                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-slate-300 h-64 overflow-auto">
+                    <span className="text-[11px] font-mono text-emerald-400 font-bold uppercase">GA4GH Beacon v2 Specification Query</span>
+                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-200 h-64 overflow-auto shadow-inner">
                       {cohortData?.ga4ghBeaconQueryJson}
                     </pre>
                   </div>
