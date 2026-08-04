@@ -89,7 +89,14 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen flex flex-col relative transition-colors duration-300 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+    <div
+      className={cn(
+        "min-h-screen flex flex-col relative transition-colors duration-500",
+        bgTheme === "day" && "bg-white text-slate-900",
+        bgTheme === "night" && "bg-slate-950 text-slate-100",
+        bgTheme === "sky" && "bg-transparent text-slate-100"
+      )}
+    >
       {/* Decorative Background Elements */}
       {bgTheme === "day" && (
         <div className="fixed top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-amber-200/25 via-sky-100/30 to-transparent blur-3xl pointer-events-none -z-10" />
@@ -98,14 +105,18 @@ export function Layout({ children }: LayoutProps) {
         <div className="fixed top-0 right-1/4 w-[600px] h-[300px] bg-gradient-to-b from-indigo-950/40 via-purple-950/20 to-transparent blur-3xl pointer-events-none -z-10" />
       )}
       {bgTheme === "sky" && (
-        <div className="fixed top-0 left-0 right-0 h-[450px] overflow-hidden pointer-events-none -z-10">
-          <div className="absolute top-[-100px] left-[15%] w-[600px] h-[350px] bg-sky-500/20 blur-[100px] rounded-full" />
-          <div className="absolute top-[-50px] right-[10%] w-[500px] h-[300px] bg-cyan-400/15 blur-[90px] rounded-full" />
-          <div className="absolute top-12 left-10 opacity-20 text-sky-200 animate-cloud-float">
-            <CloudIcon className="w-32 h-32" />
+        <div className="fixed top-0 left-0 right-0 h-[650px] overflow-hidden pointer-events-none -z-10">
+          <div className="absolute top-[-100px] left-[10%] w-[800px] h-[450px] bg-sky-400/35 blur-[120px] rounded-full" />
+          <div className="absolute top-[-50px] right-[5%] w-[700px] h-[400px] bg-cyan-300/30 blur-[100px] rounded-full" />
+          <div className="absolute top-20 left-1/3 w-[600px] h-[300px] bg-blue-500/25 blur-[110px] rounded-full" />
+          <div className="absolute top-10 left-12 opacity-50 text-sky-100 animate-cloud-float">
+            <CloudIcon className="w-36 h-36" />
           </div>
-          <div className="absolute top-24 right-20 opacity-15 text-cyan-100 animate-cloud-float" style={{ animationDelay: "4s" }}>
-            <CloudIcon className="w-48 h-48" />
+          <div className="absolute top-20 right-24 opacity-45 text-cyan-100 animate-cloud-float" style={{ animationDelay: "3s" }}>
+            <CloudIcon className="w-52 h-52" />
+          </div>
+          <div className="absolute top-44 left-1/3 opacity-35 text-sky-200 animate-cloud-float" style={{ animationDelay: "6s" }}>
+            <CloudIcon className="w-40 h-40" />
           </div>
         </div>
       )}

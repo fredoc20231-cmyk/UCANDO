@@ -244,42 +244,65 @@
 }
 
 [data-bg-theme="sky"] body {
-  background: linear-gradient(170deg, #0284c7 0%, #0369a1 20%, #0c4a6e 45%, #0f172a 75%, #020617 100%) !important;
+  background: linear-gradient(170deg, #0284c7 0%, #0369a1 18%, #075985 38%, #0f172a 70%, #020617 100%) !important;
   color: #f0f9ff !important;
   background-attachment: fixed !important;
 }
 
-[data-bg-theme="sky"] .bg-slate-950 {
-  background-color: rgba(12, 74, 110, 0.45) !important;
+[data-bg-theme="sky"] .bg-slate-950,
+[data-bg-theme="sky"] .bg-white {
+  background-color: rgba(12, 74, 110, 0.5) !important;
   backdrop-filter: blur(12px) !important;
   border-color: rgba(56, 189, 248, 0.35) !important;
+  color: #f0f9ff !important;
 }
 
 [data-bg-theme="sky"] .bg-slate-900 {
-  background-color: rgba(15, 23, 42, 0.78) !important;
+  background-color: rgba(15, 23, 42, 0.75) !important;
   backdrop-filter: blur(12px) !important;
   border-color: rgba(56, 189, 248, 0.38) !important;
-  box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.25) !important;
+  box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.3) !important;
+  color: #f0f9ff !important;
 }
 
 [data-bg-theme="sky"] .bg-slate-900\/95,
-[data-bg-theme="sky"] .bg-slate-950\/80 {
+[data-bg-theme="sky"] .bg-slate-950\/80,
+[data-bg-theme="sky"] header {
   background-color: rgba(8, 47, 73, 0.88) !important;
   backdrop-filter: blur(16px) !important;
   border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
 [data-bg-theme="sky"] .border-slate-800,
-[data-bg-theme="sky"] .border-slate-700 {
-  border-color: rgba(56, 189, 248, 0.3) !important;
+[data-bg-theme="sky"] .border-slate-700,
+[data-bg-theme="sky"] .border-slate-200 {
+  border-color: rgba(56, 189, 248, 0.35) !important;
 }
 
-[data-bg-theme="sky"] .text-slate-400 {
-  color: #7dd3fc !important;
+[data-bg-theme="sky"] .text-slate-900,
+[data-bg-theme="sky"] .text-white,
+[data-bg-theme="sky"] .text-slate-100,
+[data-bg-theme="sky"] .text-slate-200 {
+  color: #ffffff !important;
 }
 
-[data-bg-theme="sky"] .text-slate-300 {
+[data-bg-theme="sky"] .text-slate-300,
+[data-bg-theme="sky"] .text-slate-400,
+[data-bg-theme="sky"] .text-slate-500,
+[data-bg-theme="sky"] .text-slate-600 {
   color: #bae6fd !important;
+}
+
+[data-bg-theme="sky"] input,
+[data-bg-theme="sky"] select,
+[data-bg-theme="sky"] textarea {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  color: #ffffff !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+
+[data-bg-theme="sky"] input::placeholder {
+  color: #7dd3fc !important;
 }
 
 /* Cloud keyframe animation for Sky mode decorative background */
