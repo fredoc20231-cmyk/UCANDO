@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { SmartLaunchModal } from "@/components/SmartLaunchModal";
 import { MultiomicsDataset, GenomicVariant } from "@shared/api";
@@ -19,7 +19,11 @@ import {
   Info,
   Activity,
   FileCode,
-  ArrowUpRight
+  ArrowUpRight,
+  GripHorizontal,
+  ArrowUpDown,
+  Globe,
+  Maximize2
 } from "lucide-react";
 import {
   BarChart,
@@ -38,6 +42,43 @@ export default function OmicsView() {
   const [searchGene, setSearchGene] = useState("");
   const [filterPathogenicOnly, setFilterPathogenicOnly] = useState(false);
   const [smartModalOpen, setSmartModalOpen] = useState(false);
+  const [frameHeight, setFrameHeight] = useState<number>(540);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  const startYRef = useRef<number>(0);
+  const startHeightRef = useRef<number>(540);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+    startYRef.current = e.clientY;
+    startHeightRef.current = frameHeight;
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDragging) return;
+      const deltaY = e.clientY - startYRef.current;
+      const newHeight = Math.min(1000, Math.max(260, startHeightRef.current + deltaY));
+      setFrameHeight(newHeight);
+    };
+
+    const handleMouseUp = () => {
+      if (isDragging) {
+        setIsDragging(false);
+      }
+    };
+
+    if (isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
 
   useEffect(() => {
     fetch("/api/beacon/omics")
@@ -88,7 +129,7 @@ export default function OmicsView() {
                 className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-8 shadow-md"
               >
                 <Zap className="w-3.5 h-3.5 mr-1.5" />
-                SMART Launch: Cronus Multiomics
+                SMART Launch: Cronos.life Multiomics
               </Button>
               <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-xs py-1 px-3">
                 <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Pipeline: Dragen v4.2 GRCh38
@@ -137,6 +178,9 @@ export default function OmicsView() {
             </TabsTrigger>
             <TabsTrigger value="igv" className="text-xs data-[state=active]:bg-purple-800 text-slate-300">
               <BarChart3 className="w-3.5 h-3.5 mr-1.5" /> IGV Browser Preview
+            </TabsTrigger>
+            <TabsTrigger value="cronos" className="text-xs data-[state=active]:bg-sky-700 text-slate-300">
+              <Globe className="w-3.5 h-3.5 mr-1.5 text-sky-300" /> Cronos.life Frame
             </TabsTrigger>
           </TabsList>
 
@@ -336,6 +380,84 @@ export default function OmicsView() {
               <div className="p-3 rounded bg-slate-900 border border-slate-800 text-[11px] text-slate-300 flex items-center justify-between">
                 <span>RefSeq Gene Track: BRCA1 (Exon 11 duplication locus)</span>
                 <span className="text-emerald-400 font-bold">c.5266dupC (Pathogenic)</span>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Cronos.life Resizable Embedded Frame Tab */}
+          <TabsContent value="cronos" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-sky-500" />
+                    Cronos.life Multiomics Embedded Workspace
+                  </h3>
+                  <Badge className="bg-sky-950 text-sky-300 border-sky-800 text-[10px]">
+                    SMART-on-FHIR v2.0 Frame
+                  </Badge>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400">
+                  Drag the horizontal separator line at the bottom up or down to expand or shrink the frame height.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setSmartModalOpen(true)}
+                  className="text-xs border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-sky-600 dark:text-sky-300"
+                >
+                  <Maximize2 className="w-3.5 h-3.5 mr-1" /> Open Modal Launch
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => window.open("https://cronos.life/", "_blank")}
+                  className="text-xs border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-emerald-600 dark:text-emerald-300"
+                >
+                  <ExternalLink className="w-3.5 h-3.5 mr-1" /> Open in New Tab
+                </Button>
+              </div>
+            </div>
+
+            {/* Embedded Resizable Frame */}
+            <div className="flex flex-col w-full rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-950">
+              <div
+                className="relative w-full overflow-hidden transition-all duration-75"
+                style={{ height: `${frameHeight}px` }}
+              >
+                {isDragging && <div className="absolute inset-0 z-30 bg-transparent cursor-ns-resize" />}
+                <iframe
+                  src="https://cronos.life/"
+                  title="Cronos.life Multiomics Workspace"
+                  className="w-full h-full border-0 bg-white"
+                  allow="camera; microphone; clipboard-write; encrypted-media; fullscreen"
+                />
+              </div>
+
+              {/* Draggable Horizontal Separator Line */}
+              <div
+                onMouseDown={handleMouseDown}
+                className={`group w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800/90 cursor-ns-resize select-none flex items-center justify-between gap-3 transition-colors ${
+                  isDragging ? "bg-slate-200 dark:bg-slate-800 border-sky-500/60 ring-1 ring-sky-500/50" : ""
+                }`}
+                title="Drag line up or down to expand or shrink frame"
+              >
+                <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                  <ArrowUpDown className="w-3.5 h-3.5 text-sky-500 dark:text-sky-400" />
+                  <span>Drag horizontal separator line to expand or shrink frame</span>
+                </span>
+
+                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 group-hover:border-sky-500 shadow-md text-xs font-mono font-bold text-sky-600 dark:text-sky-300">
+                  <GripHorizontal className="w-4 h-4 text-sky-500 animate-pulse shrink-0" />
+                  <span>Height: {frameHeight}px</span>
+                </div>
+
+                <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate hidden sm:inline">
+                  Cronos.life Frame Drag Separator
+                </span>
               </div>
             </div>
           </TabsContent>

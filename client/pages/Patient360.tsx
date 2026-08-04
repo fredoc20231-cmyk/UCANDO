@@ -48,7 +48,7 @@ export default function Patient360() {
   const [smartLaunching, setSmartLaunching] = useState<string | null>(null);
   const [smartModalOpen, setSmartModalOpen] = useState(false);
   const [smartPlatform, setSmartPlatform] = useState<"omics" | "imaging">("omics");
-  const [smartTargetUrl, setSmartTargetUrl] = useState("https://cronus.life/");
+  const [smartTargetUrl, setSmartTargetUrl] = useState("https://cronos.life/");
 
   useEffect(() => {
     setLoading(true);
@@ -67,7 +67,7 @@ export default function Patient360() {
   const triggerSmartLaunch = (platform: "omics" | "imaging") => {
     setSmartLaunching(platform);
     setSmartPlatform(platform);
-    setSmartTargetUrl(platform === "omics" ? "https://cronus.life/" : "https://cronus.life/");
+    setSmartTargetUrl(platform === "omics" ? "https://cronos.life/" : "https://cronos.life/");
     setTimeout(() => {
       setSmartLaunching(null);
       setSmartModalOpen(true);
