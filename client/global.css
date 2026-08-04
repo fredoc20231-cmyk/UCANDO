@@ -20,7 +20,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
 
-    /* UChicago Maroon / Navy Header Primary */
+    /* Beacon Brand Maroon / Primary */
     --primary: 350 100% 25%;
     --primary-foreground: 210 40% 98%;
 
@@ -54,8 +54,6 @@
     /* Enterprise Clinical Custom Colors */
     --brand-maroon: 350 100% 25%;
     --brand-dark-maroon: 350 100% 18%;
-    --uchicago-maroon: 350 100% 25%;
-    --uchicago-dark-maroon: 350 100% 18%;
     --beacon-cyan: 199 89% 48%;
     --beacon-teal: 173 80% 40%;
     --beacon-emerald: 160 84% 39%;
@@ -103,8 +101,6 @@
 
     --brand-maroon: 350 85% 38%;
     --brand-dark-maroon: 350 90% 25%;
-    --uchicago-maroon: 350 85% 38%;
-    --uchicago-dark-maroon: 350 90% 25%;
     --beacon-cyan: 199 89% 48%;
     --beacon-teal: 173 80% 40%;
     --beacon-emerald: 160 84% 39%;

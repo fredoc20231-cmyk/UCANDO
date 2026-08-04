@@ -63,10 +63,6 @@ export default {
         },
         "brand-maroon": "hsl(var(--brand-maroon))",
         "brand-dark-maroon": "hsl(var(--brand-dark-maroon))",
-        uchicago: {
-          maroon: "hsl(var(--brand-maroon))",
-          dark: "hsl(var(--brand-dark-maroon))",
-        },
         beacon: {
           cyan: "hsl(var(--beacon-cyan))",
           teal: "hsl(var(--beacon-teal))",

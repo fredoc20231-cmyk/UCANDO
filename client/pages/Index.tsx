@@ -75,7 +75,7 @@ export default function Index() {
               </h1>
 
               <p className="text-sm md:text-base text-slate-100 font-medium leading-relaxed">
-                Beacon connects every consented UChicago Cancer Center patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
+                Beacon connects every consented Beacon Cancer Center patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">

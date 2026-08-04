@@ -208,7 +208,7 @@ export default function CohortBuilder() {
                   </Badge>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Federated cross-modal cohort discovery across 98,450 consented UChicago Cancer Center patients.
+                  Federated cross-modal cohort discovery across 98,450 consented Beacon Cancer Data Commons patients.
                 </p>
               </div>
             </div>

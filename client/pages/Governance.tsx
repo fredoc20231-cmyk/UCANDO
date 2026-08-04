@@ -34,7 +34,7 @@ export default function Governance() {
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-uchicago-maroon text-white border border-red-700/50 shadow-md">
+              <div className="p-3 rounded-xl bg-brand-maroon text-white border border-red-700/50 shadow-md">
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -59,13 +59,13 @@ export default function Governance() {
         {/* Governance Tabs */}
         <Tabs defaultValue="charter" className="space-y-6">
           <TabsList className="bg-slate-900 border border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="charter" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+            <TabsTrigger value="charter" className="text-xs data-[state=active]:bg-brand-maroon text-slate-300">
               <FileText className="w-3.5 h-3.5 mr-1.5" /> IRB Governance Charter
             </TabsTrigger>
-            <TabsTrigger value="rbac" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+            <TabsTrigger value="rbac" className="text-xs data-[state=active]:bg-brand-maroon text-slate-300">
               <Key className="w-3.5 h-3.5 mr-1.5" /> Role & Access Matrix (RBAC/ABAC)
             </TabsTrigger>
-            <TabsTrigger value="duc" className="text-xs data-[state=active]:bg-uchicago-maroon text-slate-300">
+            <TabsTrigger value="duc" className="text-xs data-[state=active]:bg-brand-maroon text-slate-300">
               <Users className="w-3.5 h-3.5 mr-1.5" /> Data Use Committee (DUC) Requests
             </TabsTrigger>
           </TabsList>

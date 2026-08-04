@@ -75,7 +75,7 @@ export default function TrialMatching() {
                   </Badge>
                 </div>
                 <p className="text-xs text-slate-400 mt-0.5">
-                  Real-time eligibility matching against active UChicago Comprehensive Cancer Center protocol catalog.
+                  Real-time eligibility matching against active Beacon Comprehensive Cancer Center protocol catalog.
                 </p>
               </div>
             </div>
@@ -165,7 +165,7 @@ export default function TrialMatching() {
                     <Button
                       size="sm"
                       onClick={() => setSelectedTrialForPrescreen(trial)}
-                      className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                      className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
                     >
                       <Send className="w-3.5 h-3.5 mr-1.5" /> Submit IRB Pre-Screen
                     </Button>
@@ -261,7 +261,7 @@ export default function TrialMatching() {
                   </Button>
                   <Button
                     onClick={handleSendPrescreen}
-                    className="bg-uchicago-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                    className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
                   >
                     Confirm Submission
                   </Button>

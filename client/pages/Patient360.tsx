@@ -99,7 +99,7 @@ export default function Patient360() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-uchicago-maroon hover:bg-uchicago-maroon text-white font-bold text-xs">
+                <Badge className="bg-brand-maroon hover:bg-brand-maroon text-white font-bold text-xs">
                   {demographics.consentStatus} Patient
                 </Badge>
                 <span className="font-mono text-xs text-sky-400">MRN: {demographics.mrn}</span>
@@ -171,7 +171,7 @@ export default function Patient360() {
         {/* Tabbed Clinical Explorer */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="bg-slate-900 border border-slate-800 p-1 overflow-x-auto flex flex-wrap">
-            <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-uchicago-maroon data-[state=active]:text-white">
+            <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white">
               <Clock className="w-3.5 h-3.5 mr-1.5" /> Longitudinal Timeline
             </TabsTrigger>
             <TabsTrigger value="genomics" className="text-xs data-[state=active]:bg-emerald-600 data-[state=active]:text-white">

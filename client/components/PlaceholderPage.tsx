@@ -28,7 +28,7 @@ export function PlaceholderPage({
         <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-uchicago-maroon text-white border border-red-700/50 shadow-md">
+              <div className="p-3 rounded-xl bg-brand-maroon text-white border border-red-700/50 shadow-md">
                 {icon}
               </div>
               <div>
