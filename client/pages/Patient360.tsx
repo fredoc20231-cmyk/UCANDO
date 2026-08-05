@@ -171,25 +171,25 @@ export default function Patient360() {
         {/* Tabbed Clinical Explorer */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 overflow-x-auto flex flex-wrap">
-            <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Clock className="w-3.5 h-3.5 mr-1.5" /> Longitudinal Timeline
             </TabsTrigger>
-            <TabsTrigger value="genomics" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="genomics" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Dna className="w-3.5 h-3.5 mr-1.5" /> Multiomics ({genomics.length})
             </TabsTrigger>
-            <TabsTrigger value="imaging" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="imaging" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <ImageIcon className="w-3.5 h-3.5 mr-1.5" /> Imaging Studies ({imaging.length})
             </TabsTrigger>
-            <TabsTrigger value="labs" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="labs" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Activity className="w-3.5 h-3.5 mr-1.5" /> Labs & Biomarkers
             </TabsTrigger>
-            <TabsTrigger value="infusions" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="infusions" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Pill className="w-3.5 h-3.5 mr-1.5" /> Meds & Infusions ({infusions.length})
             </TabsTrigger>
-            <TabsTrigger value="biospecimens" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="biospecimens" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <FlaskConical className="w-3.5 h-3.5 mr-1.5" /> Biospecimen Lineage ({biospecimens.length})
             </TabsTrigger>
-            <TabsTrigger value="notes" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="notes" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <FileText className="w-3.5 h-3.5 mr-1.5" /> De-ID Notes ({notes.length})
             </TabsTrigger>
           </TabsList>
@@ -265,7 +265,7 @@ export default function Patient360() {
                 <Button
                   size="sm"
                   onClick={() => triggerSmartLaunch("omics")}
-                  className="bg-brand-maroon hover:bg-brand-maroon/90 text-white text-xs h-8"
+                  className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white text-xs h-8"
                 >
                   <Zap className="w-3.5 h-3.5 mr-1" /> Open Multiomics Workspace
                 </Button>

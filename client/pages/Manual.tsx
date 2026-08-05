@@ -21,7 +21,7 @@ export default function Manual() {
       <div className="max-w-3xl mx-auto space-y-8 pb-16">
         {/* Header */}
         <div className="space-y-4 text-center border-b border-slate-200 dark:border-slate-800 pb-8">
-          <Badge className="bg-brand-maroon text-white text-xs px-3 py-1 mx-auto">
+          <Badge className="bg-primary dark:bg-brand-maroon text-white text-xs px-3 py-1 mx-auto">
             Documentation & Platform Architecture
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">

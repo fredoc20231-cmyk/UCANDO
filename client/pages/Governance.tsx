@@ -41,7 +41,7 @@ export default function Governance() {
         <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-brand-maroon text-white border border-red-700/50 shadow-md">
+              <div className="p-3 rounded-xl bg-primary dark:bg-brand-maroon text-white shadow-md">
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -61,7 +61,7 @@ export default function Governance() {
               <Button
                 size="sm"
                 onClick={() => setCharterModalOpen(true)}
-                className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
+                className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
               >
                 <FileText className="w-3.5 h-3.5 mr-1.5" /> Inspect IRB Charter
               </Button>
@@ -71,7 +71,7 @@ export default function Governance() {
                 onClick={() => setApiContractsOpen(true)}
                 className="border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 text-xs font-semibold"
               >
-                <FileCode className="w-3.5 h-3.5 mr-1.5 text-brand-maroon dark:text-sky-400" /> API Contracts
+                <FileCode className="w-3.5 h-3.5 mr-1.5 text-primary dark:text-sky-400" /> API Contracts
               </Button>
             </div>
           </div>
@@ -80,13 +80,13 @@ export default function Governance() {
         {/* Governance Tabs */}
         <Tabs defaultValue="charter" className="space-y-6">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="charter" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="charter" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <FileText className="w-3.5 h-3.5 mr-1.5" /> IRB Governance Charter
             </TabsTrigger>
-            <TabsTrigger value="rbac" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="rbac" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Key className="w-3.5 h-3.5 mr-1.5" /> Role & Access Matrix (RBAC/ABAC)
             </TabsTrigger>
-            <TabsTrigger value="duc" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="duc" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Users className="w-3.5 h-3.5 mr-1.5" /> Data Use Committee (DUC) Requests
             </TabsTrigger>
           </TabsList>
@@ -159,7 +159,7 @@ export default function Governance() {
               <Button
                 size="sm"
                 onClick={() => toast.info("DUC Request Submission", { description: "Data Use Committee request form is available in institutional portal." })}
-                className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
+                className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
               >
                 <Plus className="w-3.5 h-3.5 mr-1" /> Submit DUC Request
               </Button>

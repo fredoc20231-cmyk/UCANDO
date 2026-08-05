@@ -165,7 +165,7 @@ export default function TrialMatching() {
                     <Button
                       size="sm"
                       onClick={() => setSelectedTrialForPrescreen(trial)}
-                      className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
+                      className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
                     >
                       <Send className="w-3.5 h-3.5 mr-1.5" /> Submit IRB Pre-Screen
                     </Button>
@@ -261,7 +261,7 @@ export default function TrialMatching() {
                   </Button>
                   <Button
                     onClick={handleSendPrescreen}
-                    className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
+                    className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
                   >
                     Confirm Submission
                   </Button>

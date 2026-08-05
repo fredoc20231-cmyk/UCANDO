@@ -167,19 +167,19 @@ export default function OmicsView() {
         {/* Main Tabs */}
         <Tabs defaultValue="variants" className="space-y-6">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl flex flex-wrap">
-            <TabsTrigger value="variants" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="variants" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Dna className="w-3.5 h-3.5 mr-1.5" /> Genomic Variants Table
             </TabsTrigger>
-            <TabsTrigger value="oncoprint" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="oncoprint" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Layers className="w-3.5 h-3.5 mr-1.5" /> OncoPrint Matrix
             </TabsTrigger>
-            <TabsTrigger value="pathways" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="pathways" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Activity className="w-3.5 h-3.5 mr-1.5" /> Pathway Enrichment
             </TabsTrigger>
-            <TabsTrigger value="igv" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="igv" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <BarChart3 className="w-3.5 h-3.5 mr-1.5" /> IGV Browser Preview
             </TabsTrigger>
-            <TabsTrigger value="cronos" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="cronos" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Globe className="w-3.5 h-3.5 mr-1.5" /> Cronos.life Frame
             </TabsTrigger>
           </TabsList>

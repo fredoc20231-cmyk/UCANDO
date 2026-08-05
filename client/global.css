@@ -12,34 +12,34 @@
   */
   /* THEME CONTRACT: every component MUST pair hardcoded slate/white classes with a dark: variant. Never add bg-slate-900, text-white, text-slate-300/400, or border-slate-700/800 without a corresponding dark: pair. See Patient360.tsx for a correct reference implementation after this fix. */
   :root {
-    --background: 210 40% 98%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%;
+    --foreground: 215 25% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 215 25% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 215 25% 20%;
 
-    /* Beacon Brand Maroon / Primary */
-    --primary: 350 100% 25%;
-    --primary-foreground: 210 40% 98%;
+    /* NCI GDC Blue / Primary for Day Mode */
+    --primary: 205 100% 30%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 93.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 215 25% 20%;
 
-    --muted: 210 40% 94%;
-    --muted-foreground: 215.4 16.3% 42%;
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 15% 45%;
 
-    --accent: 199 89% 48%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 205 90% 40%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 90%;
-    --input: 214.3 31.8% 90%;
-    --ring: 350 100% 25%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 205 100% 30%;
 
     --radius: 0.5rem;
 

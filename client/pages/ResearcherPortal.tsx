@@ -80,7 +80,7 @@ export default function ResearcherPortal() {
 
             <Button
               onClick={() => handleLaunch("JupyterLab")}
-              className="w-full bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
+              className="w-full bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
             >
               <Play className="w-3.5 h-3.5 mr-1.5" />
               {activeWorkspace === "JupyterLab" ? "Workspace Running (Click to Re-open)" : "Launch JupyterLab Environment"}

@@ -69,14 +69,14 @@ export function ApiContractsModal({ open, onOpenChange }: ApiContractsModalProps
             <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1">
               <TabsTrigger
                 value="multiomics"
-                className="flex items-center gap-2 text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300"
+                className="flex items-center gap-2 text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300"
               >
                 <Cpu className="w-3.5 h-3.5" />
                 G1. Multiomics Platform
               </TabsTrigger>
               <TabsTrigger
                 value="imaging"
-                className="flex items-center gap-2 text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300 font-medium"
+                className="flex items-center gap-2 text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300 font-medium"
               >
                 <Image className="w-3.5 h-3.5" />
                 G2. Digital Imaging Platform

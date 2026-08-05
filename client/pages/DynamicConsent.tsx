@@ -153,7 +153,7 @@ export default function DynamicConsent() {
               <Button
                 onClick={handleSaveConsent}
                 disabled={saving}
-                className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs shadow-md"
+                className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs shadow-md"
               >
                 {saving ? (
                   <RefreshCw className="w-3.5 h-3.5 mr-1.5 animate-spin" />
@@ -183,13 +183,13 @@ export default function DynamicConsent() {
         {/* View Switcher Tabs */}
         <Tabs defaultValue="patient" onValueChange={(val) => setActiveTab(val as any)} className="space-y-6">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="patient" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="patient" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <UserCheck className="w-3.5 h-3.5 mr-1.5" /> Patient Plain-Language Wizard
             </TabsTrigger>
-            <TabsTrigger value="admin" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="admin" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Code className="w-3.5 h-3.5 mr-1.5" /> OPA Rego Rule Inspector
             </TabsTrigger>
-            <TabsTrigger value="ledger" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="ledger" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <History className="w-3.5 h-3.5 mr-1.5" /> WORM Cryptographic Ledger
             </TabsTrigger>
           </TabsList>

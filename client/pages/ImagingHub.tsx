@@ -100,13 +100,13 @@ export default function ImagingHub() {
         {/* Viewers Layout */}
         <Tabs defaultValue="radiology" className="space-y-6">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="radiology" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="radiology" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <ImageIcon className="w-3.5 h-3.5 mr-1.5" /> PET/CT DICOM Slice Viewer
             </TabsTrigger>
-            <TabsTrigger value="pathology" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="pathology" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Layers className="w-3.5 h-3.5 mr-1.5" /> Whole Slide Image H&E Pathology
             </TabsTrigger>
-            <TabsTrigger value="radiomics" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+            <TabsTrigger value="radiomics" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Activity className="w-3.5 h-3.5 mr-1.5" /> Radiomics Quantitative Features
             </TabsTrigger>
           </TabsList>
