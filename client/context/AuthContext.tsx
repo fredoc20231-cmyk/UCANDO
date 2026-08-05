@@ -16,7 +16,7 @@ export const DEMO_USERS: User[] = [
   {
     id: "usr-md-001",
     name: "Dr. Alex Rivera, MD",
-    email: "alex.rivera@beacon-health.org",
+    email: "alex.rivera@ucando-health.org",
     role: "Attending Oncologist (MD)",
     title: "Clinician & Lead Medical Oncologist",
     avatarInitial: "AR"
@@ -24,7 +24,7 @@ export const DEMO_USERS: User[] = [
   {
     id: "usr-bio-002",
     name: "Dr. Jordan Chen, PhD",
-    email: "j.chen@beacon-omics.org",
+    email: "j.chen@ucando-omics.org",
     role: "Bioinformatician (PhD)",
     title: "Genomic Pipeline & Multiomics Director",
     avatarInitial: "JC"
@@ -32,7 +32,7 @@ export const DEMO_USERS: User[] = [
   {
     id: "usr-adm-003",
     name: "Elena Vance, JD",
-    email: "elena.vance@beacon-governance.org",
+    email: "elena.vance@ucando-governance.org",
     role: "Compliance & Safety Officer (Admin)",
     title: "Chief Compliance Officer & Security Admin",
     avatarInitial: "EV"
@@ -40,7 +40,7 @@ export const DEMO_USERS: User[] = [
   {
     id: "usr-irb-004",
     name: "Dr. Marcus Vance, IRB Chair",
-    email: "marcus.vance@beacon-irb.org",
+    email: "marcus.vance@ucando-irb.org",
     role: "Data Steward & IRB Chair",
     title: "IRB Protocol & DUC Administrator",
     avatarInitial: "MV"

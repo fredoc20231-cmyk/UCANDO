@@ -79,7 +79,7 @@ export default function Index() {
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Link to="/patient-360?id=UC-BEACON-89421">
+                <Link to="/patient-360?id=UC-CCC-89421">
                   <Button className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-bold text-xs h-10 px-5 shadow-lg border border-primary/50 dark:border-red-500/50">
                     <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
                     <ArrowRight className="w-4 h-4 ml-1.5" />
@@ -223,8 +223,8 @@ export default function Index() {
               </div>
 
               <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-mono text-[11px]">Patient: UC-BEACON-89421</span>
-                <Link to="/patient-360?id=UC-BEACON-89421" className="text-primary dark:text-red-400 font-semibold flex items-center gap-1 hover:underline">
+                <span className="text-slate-500 font-mono text-[11px]">Patient: UC-CCC-89421</span>
+                <Link to="/patient-360?id=UC-CCC-89421" className="text-primary dark:text-red-400 font-semibold flex items-center gap-1 hover:underline">
                   Launch View <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

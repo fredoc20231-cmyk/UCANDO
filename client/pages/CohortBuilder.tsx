@@ -632,13 +632,13 @@ export default function CohortBuilder() {
                   </thead>
                   <tbody className="divide-y divide-slate-800/60 text-slate-300 font-mono">
                     <tr className="hover:bg-slate-950/60">
-                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-BEACON-89421</td>
+                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-UCANDO-89421</td>
                       <td className="py-2.5 px-3">58 / Female</td>
                       <td className="py-2.5 px-3">Invasive Breast Carcinoma</td>
                       <td className="py-2.5 px-3"><Badge className="bg-red-950 text-red-300 border-red-800 text-[10px]">Stage III</Badge></td>
                       <td className="py-2.5 px-3 text-emerald-400">BRCA1 Pathogenic</td>
                       <td className="py-2.5 px-3 text-right">
-                        <Link to="/patient-360?id=UC-BEACON-89421">
+                        <Link to="/patient-360?id=UC-CCC-89421">
                           <Button size="sm" variant="ghost" className="h-7 text-[11px] text-sky-400 hover:text-white px-2">
                             Launch 360 <ChevronRight className="w-3 h-3 ml-1" />
                           </Button>
@@ -646,13 +646,13 @@ export default function CohortBuilder() {
                       </td>
                     </tr>
                     <tr className="hover:bg-slate-950/60">
-                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-BEACON-77102</td>
+                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-UCANDO-77102</td>
                       <td className="py-2.5 px-3">62 / Female</td>
                       <td className="py-2.5 px-3">Invasive Breast Carcinoma</td>
                       <td className="py-2.5 px-3"><Badge className="bg-red-950 text-red-300 border-red-800 text-[10px]">Stage IV</Badge></td>
                       <td className="py-2.5 px-3 text-emerald-400">BRCA2 + TP53</td>
                       <td className="py-2.5 px-3 text-right">
-                        <Link to="/patient-360?id=UC-BEACON-89421">
+                        <Link to="/patient-360?id=UC-CCC-89421">
                           <Button size="sm" variant="ghost" className="h-7 text-[11px] text-sky-400 hover:text-white px-2">
                             Launch 360 <ChevronRight className="w-3 h-3 ml-1" />
                           </Button>
@@ -660,13 +660,13 @@ export default function CohortBuilder() {
                       </td>
                     </tr>
                     <tr className="hover:bg-slate-950/60">
-                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-BEACON-66409</td>
+                      <td className="py-2.5 px-3 text-sky-300 font-bold">DEID-UCANDO-66409</td>
                       <td className="py-2.5 px-3">51 / Female</td>
                       <td className="py-2.5 px-3">High-Grade Serous Ovarian</td>
                       <td className="py-2.5 px-3"><Badge className="bg-red-950 text-red-300 border-red-800 text-[10px]">Stage III</Badge></td>
                       <td className="py-2.5 px-3 text-emerald-400">BRCA1 Pathogenic</td>
                       <td className="py-2.5 px-3 text-right">
-                        <Link to="/patient-360?id=UC-BEACON-89421">
+                        <Link to="/patient-360?id=UC-CCC-89421">
                           <Button size="sm" variant="ghost" className="h-7 text-[11px] text-sky-400 hover:text-white px-2">
                             Launch 360 <ChevronRight className="w-3 h-3 ml-1" />
                           </Button>

@@ -42,7 +42,7 @@ interface WormReceipt {
 }
 
 export default function DynamicConsent() {
-  const [patientId] = useState("UC-BEACON-89421");
+  const [patientId] = useState("UC-CCC-89421");
   const [permissions, setPermissions] = useState<ConsentState>({
     researchUse: true,
     recontactGranted: true,

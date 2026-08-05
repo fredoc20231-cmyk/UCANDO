@@ -41,7 +41,7 @@ import {
 
 export default function Patient360() {
   const [searchParams] = useSearchParams();
-  const patientId = searchParams.get("id") || "UC-BEACON-89421";
+  const patientId = searchParams.get("id") || "UC-CCC-89421";
 
   const [record, setRecord] = useState<Patient360Record | null>(null);
   const [loading, setLoading] = useState(true);

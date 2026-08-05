@@ -12,7 +12,7 @@ const BackgroundContext = createContext<BackgroundContextType | undefined>(undef
 export function BackgroundProvider({ children }: { children: ReactNode }) {
   const [bgTheme, setBgTheme] = useState<BgTheme>(() => {
     if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("beacon_bg_theme") as BgTheme;
+      const saved = localStorage.getItem("ucando_bg_theme") as BgTheme;
       if (saved === "day" || saved === "night" || saved === "sky") return saved;
     }
     return "night";
@@ -28,7 +28,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
       root.classList.add("dark");
     }
 
-    localStorage.setItem("beacon_bg_theme", bgTheme);
+    localStorage.setItem("ucando_bg_theme", bgTheme);
   }, [bgTheme]);
 
   return (

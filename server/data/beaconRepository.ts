@@ -70,7 +70,7 @@ const defaultConsentPermissions: ConsentPermissions = {
 };
 
 const consentStore: Record<string, PatientConsentState> = {
-  "UC-BEACON-89421": {
+  "UC-CCC-89421": {
     status: "Active",
     effectiveDate: "2023-08-14",
     lastVerified: "2024-02-10 (OPA Policy #UC-CONSENT-9942)",
@@ -135,7 +135,7 @@ export function registerPatient(data: {
   gender?: string;
 }): { success: boolean; patientId: string; stats: HubStats } {
   patientCountOffset += 1;
-  const newId = `UC-BEACON-${89421 + patientCountOffset}`;
+  const newId = `UC-CCC-${89421 + patientCountOffset}`;
 
   consentStore[newId] = {
     status: "Active",
@@ -370,7 +370,7 @@ export function getPatient360(patientId: string): Patient360Record {
     demographics: {
       id: patientId,
       person_id: personId,
-      deIdentifiedId: "DEID-BEACON-772910",
+      deIdentifiedId: "DEID-UCANDO-772910",
       mrn: "UC-4892104-A",
       age: 54,
       gender: "Female",
@@ -595,7 +595,7 @@ export function getPatient360(patientId: string): Patient360Record {
 }
 
 export function updateConsent(patientId?: string, consentType?: string, enabled?: boolean, permissions?: Record<string, boolean>) {
-  const targetId = patientId || "UC-BEACON-89421";
+  const targetId = patientId || "UC-CCC-89421";
   if (!consentStore[targetId]) {
     consentStore[targetId] = {
       status: "Active",
@@ -649,7 +649,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
           requestBodySample: JSON.stringify(
             {
               job_id: "JOB-2024-99102",
-              tokenized_patient_id: "DEID-BEACON-772910",
+              tokenized_patient_id: "DEID-UCANDO-772910",
               sample_manifest: {
                 specimen_id: "SPEC-2023-FFPE-904",
                 specimen_type: "FFPE Tumor Tissue",
@@ -670,7 +670,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
           requestBodySample: JSON.stringify(
             {
               job_id: "JOB-2024-99102",
-              tokenized_patient_id: "DEID-BEACON-772910",
+              tokenized_patient_id: "DEID-UCANDO-772910",
               fhir_bundle: {
                 resourceType: "Bundle",
                 type: "transaction",
@@ -701,7 +701,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
               event_id: "evt_om_8820",
               event_type: "omics.result.ready",
               timestamp: "2024-02-14T18:30:00Z",
-              patient_deid: "DEID-BEACON-772910",
+              patient_deid: "DEID-UCANDO-772910",
               variants_count: 3,
               pathogenic_count: 1
             },
@@ -729,7 +729,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
           method: "GET",
           path: "/viewer/launch?studyInstanceUID={uid}&token={jwt}",
           summary: "OHIF Viewer Embedded Launch Deep Link",
-          description: "Launches OHIF viewer inside Beacon UI shell using a 15-minute short-lived signed context token.",
+          description: "Launches OHIF viewer inside UCANDO UI shell using a 15-minute short-lived signed context token.",
           responseBodySample: `Redirects to embedded OHIF iframe with zero-PHI viewer canvas.`
         }
       ],
@@ -743,7 +743,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
               event_type: "imaging.study.completed",
               study_instance_uid: "1.2.840.113619.2.55.3.28",
               modality: "PET/CT",
-              patient_deid: "DEID-BEACON-772910"
+              patient_deid: "DEID-UCANDO-772910"
             },
             null,
             2
@@ -1068,7 +1068,7 @@ export function getAuditLogs() {
       actor: "dr.vance@demo-cancercenter.org",
       actorRole: "Attending Oncologist / PI",
       action: "DATA_READ",
-      resource: "Patient 360 Record UC-BEACON-89421",
+      resource: "Patient 360 Record UC-CCC-89421",
       opaPolicyResult: "PERMIT",
       sha256Hash: "8f4a3e210b39c4d2e85a1a9b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d",
       ipAddress: "128.135.102.44"
@@ -1090,7 +1090,7 @@ export function getAuditLogs() {
       actor: "patient_portal_sync@demo-cancercenter.org",
       actorRole: "Dynamic Consent Engine",
       action: "CONSENT_WITHDRAWAL",
-      resource: "Commercial Sharing Permission (Patient UC-BEACON-7720)",
+      resource: "Commercial Sharing Permission (Patient UC-CCC-7720)",
       opaPolicyResult: "PERMIT",
       sha256Hash: "1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a",
       ipAddress: "10.240.12.8"

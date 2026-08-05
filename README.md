@@ -7,7 +7,7 @@
 [![OMOP](https://img.shields.io/badge/OMOP_CDM-v5.4-navy.svg)](https://ohdsi.github.io/CommonDataModels/)
 [![GA4GH](https://img.shields.io/badge/GA4GH-Beacon_v2-purple.svg)](https://ga4gh-beacon.github.io/)
 
-Beacon is an enterprise precision oncology integration hub and federated data commons for the **Beacon Cancer Data Commons (UCCANDO)**. It unifies clinical EHR records, multiomics sequencing, digital radiology DICOMweb studies, pathology Whole Slide Images (WSI), LIMS biospecimen lineages, and clinical trial matching under a strict zero-PHI dynamic consent framework.
+UCANDO is an enterprise precision oncology integration hub and federated data commons for the **University of Chicago Comprehensive Cancer Center (UC-CCC)**. It unifies clinical EHR records, multiomics sequencing, digital radiology DICOMweb studies, pathology Whole Slide Images (WSI), LIMS biospecimen lineages, and clinical trial matching under a strict zero-PHI dynamic consent framework.
 
 ---
 

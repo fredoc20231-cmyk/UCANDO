@@ -88,8 +88,8 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   const searchSuggestions = [
-    { label: "UC-BEACON-89421 (Stage IIIB Breast Cancer)", path: "/patient-360?id=UC-BEACON-89421" },
-    { label: "BRCA1 c.5266dupC pathogenic variant", path: "/patient-360?id=UC-BEACON-89421" },
+    { label: "UC-CCC-89421 (Stage IIIB Breast Cancer)", path: "/patient-360?id=UC-CCC-89421" },
+    { label: "BRCA1 c.5266dupC pathogenic variant", path: "/patient-360?id=UC-CCC-89421" },
     { label: "ACC-2023-9941 (PET/CT Restaging Study)", path: "/imaging-hub" },
     { label: "TNBC Cohort (Stage III + Immunotherapy)", path: "/cohort-builder" }
   ];

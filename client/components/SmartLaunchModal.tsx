@@ -35,7 +35,7 @@ interface SmartLaunchModalProps {
 export function SmartLaunchModal({
   isOpen,
   onClose,
-  patientId = "UC-BEACON-89421",
+  patientId = "UC-CCC-89421",
   platformName = "PhoenixMO Multiomics Platform",
   targetUrl = "https://cronus.life/"
 }: SmartLaunchModalProps) {

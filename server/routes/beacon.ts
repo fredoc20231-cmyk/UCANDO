@@ -28,7 +28,7 @@ export const handleGetSpokes: RequestHandler = (_req, res) => {
 };
 
 export const handleGetPatient360: RequestHandler = (req, res) => {
-  const patientId = (req.query.id as string) || "UC-BEACON-89421";
+  const patientId = (req.query.id as string) || "UC-CCC-89421";
   res.json(beaconRepo.getPatient360(patientId));
 };
 
