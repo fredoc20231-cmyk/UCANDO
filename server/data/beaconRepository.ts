@@ -241,7 +241,7 @@ export function getSpokes(): SpokeConnection[] {
       latencyMs: 52,
       throughputTps: 110,
       lastSync: "3 mins ago",
-      protocol: "Beacon v2 Specification / OAuth2 OIDC",
+      protocol: "GA4GH Beacon v2 Specification / OAuth2 OIDC",
       eventsCountToday: 8930,
       description: "Enables zero-PHI genomic and phenotypic discovery queries for international precision oncology trial matching."
     }

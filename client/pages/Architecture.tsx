@@ -93,91 +93,40 @@ export default function Architecture() {
           </div>
         </section>
 
-        {/* Section 3: Advanced Capabilities */}
+        {/* Section 3: Live in Prototype Today */}
         <section className="space-y-4 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary dark:text-sky-400" /> 3. Advanced Capabilities
-            </h2>
-            <span className="text-xs text-slate-500 font-mono">
-              Honesty Tiered Architecture Matrix
-            </span>
-          </div>
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-emerald-600 dark:text-emerald-400" /> 3. Live in Prototype Today
+          </h2>
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            UCANDO differentiates itself from conventional download-and-query repositories by embedding active intelligence and multi-modal synthesis directly into the user experience, while maintaining clear transparency regarding current prototype features versus planned research capabilities.
+            UCANDO differentiates itself from conventional download-and-query repositories by embedding active intelligence and multi-modal synthesis directly into the user experience today.
           </p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-            {/* Live in Prototype 1 */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    AI-Native Interface
-                  </h3>
-                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/80 text-[10px] font-mono shrink-0">
-                    Live in Prototype
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  iUCANDO, an embedded conversational assistant available on every page (not a bolt-on chatbot).
-                </p>
+          <div className="space-y-3 text-sm pt-1">
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+                <Sparkles className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>AI-Native Interface</span>
+                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px] font-mono ml-auto">
+                  Live in Prototype
+                </Badge>
               </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                iUCANDO is embedded across every page as a conversational assistant, not a bolt-on chatbot — ask questions about any patient, cohort, or trial in context.
+              </p>
             </div>
 
-            {/* Live in Prototype 2 */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-                    Unified Multi-Modal Record
-                  </h3>
-                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/80 text-[10px] font-mono shrink-0">
-                    Live in Prototype
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  A single Patient 360 view spanning demographics, omics, imaging, labs, treatment response, and recovery in one interface.
-                </p>
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
+              <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-white">
+                <Layers className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                <span>Unified Multi-Modal Record</span>
+                <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-950 text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px] font-mono ml-auto">
+                  Live in Prototype
+                </Badge>
               </div>
-            </div>
-
-            {/* Planned 1 */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Cpu className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                    Predictive Relapse & Response Modeling
-                  </h3>
-                  <Badge variant="outline" className="border-amber-300 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 bg-amber-50/50 dark:bg-amber-950/30 text-[10px] font-mono shrink-0">
-                    Planned
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Models trained on longitudinal outcomes to flag early relapse risk and predict treatment response, pending validation framework and IRB approval for model deployment.
-                </p>
-              </div>
-            </div>
-
-            {/* Planned 2 */}
-            <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-2 flex flex-col justify-between">
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-                    Federated Cross-Institution Learning
-                  </h3>
-                  <Badge variant="outline" className="border-amber-300 dark:border-amber-800/80 text-amber-700 dark:text-amber-300 bg-amber-50/50 dark:bg-amber-950/30 text-[10px] font-mono shrink-0">
-                    Planned
-                  </Badge>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Privacy-preserving model training across UCANDO spoke sites without moving patient-level data off-site, modeled on federated learning architectures.
-                </p>
-              </div>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Patient 360 combines demographics, genomics, imaging, labs, treatment response, and recovery data in a single view, structured on the OMOP Common Data Model.
+              </p>
             </div>
           </div>
         </section>
