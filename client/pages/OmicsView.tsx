@@ -423,7 +423,7 @@ export default function OmicsView() {
             </div>
 
             {/* Embedded Resizable Frame */}
-            <div className="flex flex-col w-full rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-950">
+            <div className="flex flex-col w-full rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden bg-slate-100 dark:bg-slate-950">
               <div
                 className="relative w-full overflow-hidden transition-all duration-75"
                 style={{ height: `${frameHeight}px` }}

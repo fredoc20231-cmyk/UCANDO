@@ -181,8 +181,8 @@ export default function Index() {
 
         {/* Interactive Hub-and-Spoke Visual Architecture Diagram */}
         {loading ? (
-          <div className="p-12 text-center text-slate-400 bg-slate-900 rounded-2xl border border-slate-800">
-            Initializing Beacon Architecture Visualizer...
+          <div className="p-12 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+            Initializing UCANDO Architecture Visualizer...
           </div>
         ) : (
           <HubAndSpokeVisualizer spokes={spokes} dataZones={stats ? stats.dataZones : []} />
@@ -194,7 +194,7 @@ export default function Index() {
             <div>
               <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400" />
-                Beacon Clinical & Research Portals
+                UCANDO Clinical & Research Portals
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400">
                 Custom React components registered inside Builder.io layout composition layer.
@@ -308,38 +308,38 @@ export default function Index() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-              <p className="font-bold text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 1. No PHI in CMS
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 1. No PHI in CMS
               </p>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
                 No patient identifiers or medical records are ever stored in Builder.io content models.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-              <p className="font-bold text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 2. Component Composition
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 2. Component Composition
               </p>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
                 Heavy clinical UI (Patient 360, Cohort Builder, DICOM launcher) registered as custom React components.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-              <p className="font-bold text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 3. Multi-Environment
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 3. Multi-Environment
               </p>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
                 Builder environments (dev → staging → prod) with strict approval gates for layout publishing.
               </p>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 space-y-1.5">
-              <p className="font-bold text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" /> 4. Business Associate
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 4. Business Associate
               </p>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
                 Designed to avoid PHI exposure entirely, eliminating vendor PHI liability risk.
               </p>
             </div>

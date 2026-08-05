@@ -48,7 +48,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ open, onOpenChange }) =>
             {isAuthenticated ? "Select Active User Persona" : "Demo Clinician & Researcher Authentication"}
           </DialogTitle>
           <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
-            Select a verified clinical or research role to access protected Beacon routes.
+            Select a verified clinical or research role to access protected UCANDO routes.
             <span className="block text-[11px] text-amber-300/90 font-mono mt-1">
               Demo Authentication — Select any persona below to simulate role-based authorization.
             </span>

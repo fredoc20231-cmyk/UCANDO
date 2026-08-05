@@ -403,10 +403,10 @@ export function Layout({ children }: LayoutProps) {
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 flex flex-wrap items-center justify-between gap-4">
           <div className="space-y-1">
             <p className="font-semibold text-slate-800 dark:text-slate-300">
-              Beacon — Cancer Data Commons (UCCANDO)
+              UCANDO — UC-CCC Cancer Data Commons
             </p>
             <p className="text-[11px] text-slate-500 dark:text-slate-500">
-              © 2025 The Beacon Comprehensive Cancer Center. All rights reserved. HIPAA Consented Ecosystem.
+              © 2025 The UC-CCC Comprehensive Cancer Center. All rights reserved. HIPAA Consented Ecosystem.
             </p>
           </div>
           <div className="flex items-center gap-4 text-[11px]">

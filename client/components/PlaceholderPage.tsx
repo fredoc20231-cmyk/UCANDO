@@ -42,8 +42,8 @@ export function PlaceholderPage({
               </div>
             </div>
 
-            <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-xs">
-              <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Route Active in Beacon Hub
+            <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60 text-xs">
+              <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Route Active in UCANDO Hub
             </Badge>
           </div>
 

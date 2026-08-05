@@ -104,35 +104,35 @@ export function SmartLaunchModal({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
-        className={`bg-slate-950 border-slate-800 text-white p-0 gap-0 overflow-hidden duration-300 transition-all ${
+        className={`bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white p-0 gap-0 overflow-hidden duration-300 transition-all ${
           isFullscreen
             ? "max-w-[98vw] w-[98vw] h-[95vh] rounded-xl"
             : "max-w-6xl w-[95vw] rounded-2xl"
         }`}
       >
         {/* Header Toolbar */}
-        <div className="p-4 bg-slate-900 border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
+        <div className="p-4 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="p-2.5 rounded-xl bg-emerald-950 text-emerald-400 border border-emerald-800/60 shrink-0">
+            <div className="p-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-400 border border-emerald-300 dark:border-emerald-800/60 shrink-0">
               <Zap className="w-5 h-5 animate-pulse" />
             </div>
 
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <DialogTitle className="text-base font-bold text-white truncate">
+                <DialogTitle className="text-base font-bold text-slate-900 dark:text-white truncate">
                   SMART Launch: {platformName}
                 </DialogTitle>
-                <Badge variant="outline" className="border-emerald-500/40 text-emerald-300 bg-emerald-950/60 text-[10px] font-mono">
+                <Badge variant="outline" className="border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 text-[10px] font-mono">
                   <ShieldCheck className="w-3 h-3 mr-1" /> SMART on FHIR v2.0
                 </Badge>
-                <Badge variant="outline" className="border-sky-500/40 text-sky-300 bg-sky-950/60 text-[10px] font-mono">
+                <Badge variant="outline" className="border-slate-300 dark:border-sky-500/40 text-slate-700 dark:text-sky-300 bg-slate-100 dark:bg-sky-950/60 text-[10px] font-mono">
                   Patient: {patientId}
                 </Badge>
               </div>
-              <DialogDescription className="text-xs text-slate-400 flex items-center gap-2 mt-0.5 font-mono truncate">
-                <Globe className="w-3 h-3 text-emerald-400" />
+              <DialogDescription className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2 mt-0.5 font-mono truncate">
+                <Globe className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                 <span>Embedded SMART App:</span>
-                <span className="text-emerald-300 font-semibold">{targetUrl}</span>
+                <span className="text-emerald-700 dark:text-emerald-300 font-semibold">{targetUrl}</span>
               </DialogDescription>
             </div>
           </div>
@@ -143,7 +143,7 @@ export function SmartLaunchModal({
               size="sm"
               variant="outline"
               onClick={handleRefresh}
-              className="h-8 text-xs bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="h-8 text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
               title="Refresh Frame"
             >
               <RotateCw className={`w-3.5 h-3.5 mr-1 ${loading ? "animate-spin" : ""}`} />
@@ -154,7 +154,7 @@ export function SmartLaunchModal({
               size="sm"
               variant="outline"
               onClick={() => window.open(targetUrl, "_blank")}
-              className="h-8 text-xs bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white hidden sm:flex"
+              className="h-8 text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white hidden sm:flex"
               title="Open in New Window"
             >
               <ExternalLink className="w-3.5 h-3.5 mr-1" />
@@ -165,7 +165,7 @@ export function SmartLaunchModal({
               size="sm"
               variant="outline"
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="h-8 text-xs bg-slate-900 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="h-8 text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white"
               title={isFullscreen ? "Exit Fullscreen" : "Expand Frame"}
             >
               {isFullscreen ? (
@@ -179,7 +179,7 @@ export function SmartLaunchModal({
               size="sm"
               variant="ghost"
               onClick={onClose}
-              className="h-8 w-8 p-0 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+              className="h-8 w-8 p-0 rounded-lg text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -187,18 +187,18 @@ export function SmartLaunchModal({
         </div>
 
         {/* OAuth Context Banner */}
-        <div className="px-4 py-2 bg-slate-950 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono shrink-0">
-          <div className="flex items-center gap-2 text-slate-300">
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+        <div className="px-4 py-2 bg-slate-100 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800/80 flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono shrink-0">
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <span>OAuth Scopes:</span>
-            <span className="text-emerald-400 bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800/40">
+            <span className="text-emerald-800 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-300 dark:border-emerald-800/40">
               launch/patient patient/*.read patient/MolecularSequence.read
             </span>
           </div>
 
-          <div className="flex items-center gap-3 text-slate-400 text-[10px]">
-            <span>Token: <code className="text-sky-300">{handshakeToken}</code></span>
-            <span className="text-emerald-400 flex items-center gap-1">
+          <div className="flex items-center gap-3 text-slate-500 dark:text-slate-400 text-[10px]">
+            <span>Token: <code className="text-brand-maroon dark:text-sky-300 font-semibold">{handshakeToken}</code></span>
+            <span className="text-emerald-700 dark:text-emerald-400 flex items-center gap-1 font-semibold">
               <Lock className="w-3 h-3" /> Encrypted Session
             </span>
           </div>
@@ -206,19 +206,19 @@ export function SmartLaunchModal({
 
         {/* Embedded Frame Viewport */}
         <div
-          className="relative w-full bg-slate-950 overflow-hidden transition-all duration-75"
+          className="relative w-full bg-slate-100 dark:bg-slate-950 overflow-hidden transition-all duration-75"
           style={{ height: isFullscreen ? "calc(95vh - 120px)" : `${frameHeight}px` }}
         >
           {isDragging && <div className="absolute inset-0 z-30 bg-transparent cursor-ns-resize" />}
 
           {loading && (
-            <div className="absolute inset-0 z-20 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 space-y-3 text-center">
-              <div className="p-3 rounded-2xl bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 animate-bounce">
+            <div className="absolute inset-0 z-20 bg-slate-100/90 dark:bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 space-y-3 text-center">
+              <div className="p-3 rounded-2xl bg-emerald-100 dark:bg-emerald-950/80 border border-emerald-300 dark:border-emerald-500/40 text-emerald-800 dark:text-emerald-400 animate-bounce">
                 <Cpu className="w-8 h-8" />
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-bold text-white">Establishing SMART on FHIR Context...</p>
-                <p className="text-xs text-slate-400">Loading {targetUrl} inside secure patient sandbox frame</p>
+                <p className="text-sm font-bold text-slate-900 dark:text-white">Establishing SMART on FHIR Context...</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Loading {targetUrl} inside secure patient sandbox frame</p>
               </div>
             </div>
           )}
@@ -237,22 +237,22 @@ export function SmartLaunchModal({
         {!isFullscreen && (
           <div
             onMouseDown={handleMouseDown}
-            className={`group w-full py-2.5 px-4 bg-slate-900 border-t border-slate-800 hover:bg-slate-800/90 cursor-ns-resize select-none flex items-center justify-between gap-3 transition-colors ${
-              isDragging ? "bg-slate-800 border-sky-500/60 ring-1 ring-sky-500/50" : ""
+            className={`group w-full py-2.5 px-4 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 hover:bg-slate-200 dark:hover:bg-slate-800/90 cursor-ns-resize select-none flex items-center justify-between gap-3 transition-colors ${
+              isDragging ? "bg-slate-200 dark:bg-slate-800 border-brand-maroon dark:border-sky-500/60 ring-1 ring-brand-maroon dark:ring-sky-500/50" : ""
             }`}
             title="Drag line up or down to expand or shrink frame"
           >
-            <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5">
-              <ArrowUpDown className="w-3.5 h-3.5 text-sky-400" />
+            <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+              <ArrowUpDown className="w-3.5 h-3.5 text-brand-maroon dark:text-sky-400" />
               <span>Drag horizontal separator line to expand / shrink frame</span>
             </span>
 
-            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-slate-950 border border-slate-700 group-hover:border-sky-400 shadow-md text-xs font-mono font-bold text-sky-300">
-              <GripHorizontal className="w-4 h-4 text-sky-400 animate-pulse shrink-0" />
+            <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-700 group-hover:border-brand-maroon dark:group-hover:border-sky-400 shadow-md text-xs font-mono font-bold text-brand-maroon dark:text-sky-300">
+              <GripHorizontal className="w-4 h-4 text-brand-maroon dark:text-sky-400 animate-pulse shrink-0" />
               <span>{frameHeight}px</span>
             </div>
 
-            <span className="text-[10px] font-mono text-slate-400 truncate hidden sm:inline">
+            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate hidden sm:inline">
               Cronos.life Frame Drag Handle
             </span>
           </div>

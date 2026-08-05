@@ -61,45 +61,45 @@ export default function TrialMatching() {
     <Layout>
       <div className="space-y-6 pb-12">
         {/* Header */}
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-xl">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-amber-950 text-amber-300 border border-amber-700/50 shadow-md">
-                <FlaskConical className="w-6 h-6 text-amber-400" />
+              <div className="p-3 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 shadow-md">
+                <FlaskConical className="w-6 h-6 text-amber-600 dark:text-amber-400" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-white">AI Clinical Trial Matching Engine</h1>
-                  <Badge variant="outline" className="border-amber-500/40 text-amber-300 bg-amber-950/40 text-[10px]">
+                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">AI Clinical Trial Matching Engine</h1>
+                  <Badge variant="outline" className="border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 text-[10px]">
                     mCODE Automated Extraction
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
-                  Real-time eligibility matching against active Beacon Comprehensive Cancer Center protocol catalog.
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  Real-time eligibility matching against active UC-CCC Comprehensive Cancer Center protocol catalog.
                 </p>
               </div>
             </div>
 
-            <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-xs py-1 px-3">
-              <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-400" /> Patient UC-BEACON-89421 Evaluated
+            <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-xs py-1 px-3">
+              <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-500 dark:text-amber-400" /> Patient UC-BEACON-89421 Evaluated
             </Badge>
           </div>
 
           {/* Active Patient Profile Snapshot */}
-          <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Active Patient</span>
-              <span className="font-bold text-white">UC-BEACON-89421 (58 y/o Female)</span>
+              <span className="font-bold text-slate-900 dark:text-white">UC-BEACON-89421 (58 y/o Female)</span>
             </div>
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Diagnosis</span>
-              <span className="font-bold text-sky-300">Stage III Invasive Breast Carcinoma</span>
+              <span className="font-bold text-sky-600 dark:text-sky-300">Stage III Invasive Breast Carcinoma</span>
             </div>
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Matching Biomarkers</span>
               <div className="flex flex-wrap gap-1 mt-0.5">
-                <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-[9px]">BRCA1 Pathogenic</Badge>
-                <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-[9px]">PD-L1 CPS &gt;= 10</Badge>
+                <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[9px]">BRCA1 Pathogenic</Badge>
+                <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[9px]">PD-L1 CPS &gt;= 10</Badge>
               </div>
             </div>
           </div>
@@ -111,7 +111,7 @@ export default function TrialMatching() {
               placeholder="Filter matched trials by drug name, NCT ID, or biomarker (e.g., Olaparib, BRCA1, NCT05214820)..."
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              className="pl-9 bg-slate-950 border-slate-800 text-xs text-slate-200"
+              className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200"
             />
           </div>
         </div>
@@ -132,32 +132,32 @@ export default function TrialMatching() {
             return (
               <div
                 key={trial.nctId}
-                className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-lg hover:border-slate-700 transition-colors"
+                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="space-y-1.5 max-w-2xl">
                     <div className="flex flex-wrap items-center gap-2">
-                      <Badge className="bg-amber-950 text-amber-300 border-amber-800 font-mono text-xs">
+                      <Badge className="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800 font-mono text-xs">
                         {trial.matchScorePercent}% Match
                       </Badge>
-                      <Badge variant="outline" className="border-sky-500/40 text-sky-300 bg-sky-950/40 text-[10px]">
+                      <Badge variant="outline" className="border-sky-300 dark:border-sky-500/40 text-sky-800 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/40 text-[10px]">
                         {trial.phase}
                       </Badge>
                       <a
                         href={`https://clinicaltrials.gov/study/${trial.nctId}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-xs font-mono text-purple-400 hover:underline inline-flex items-center"
+                        className="text-xs font-mono text-brand-maroon dark:text-rose-300 hover:underline inline-flex items-center font-semibold"
                       >
                         {trial.nctId} <ExternalLink className="w-3 h-3 ml-1" />
                       </a>
                     </div>
 
-                    <h3 className="text-base font-bold text-white leading-snug">{trial.title}</h3>
+                    <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">{trial.title}</h3>
 
-                    <p className="text-xs text-slate-400">
-                      PI: <strong className="text-slate-200">{trial.principalInvestigator}</strong> • Site:{" "}
-                      <span className="text-slate-300">{trial.primaryLocation}</span>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                      PI: <strong className="text-slate-800 dark:text-slate-200">{trial.principalInvestigator}</strong> • Site:{" "}
+                      <span className="text-slate-700 dark:text-slate-300">{trial.primaryLocation}</span>
                     </p>
                   </div>
 
@@ -165,7 +165,7 @@ export default function TrialMatching() {
                     <Button
                       size="sm"
                       onClick={() => setSelectedTrialForPrescreen(trial)}
-                      className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                      className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
                     >
                       <Send className="w-3.5 h-3.5 mr-1.5" /> Submit IRB Pre-Screen
                     </Button>
@@ -173,7 +173,7 @@ export default function TrialMatching() {
                       size="sm"
                       variant="ghost"
                       onClick={() => setExpandedTrialId(isExpanded ? null : trial.nctId)}
-                      className="h-8 text-xs text-slate-400 hover:text-white px-2"
+                      className="h-8 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2"
                     >
                       {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </Button>
@@ -182,25 +182,25 @@ export default function TrialMatching() {
 
                 {/* Matching Biomarkers */}
                 <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-[11px] font-semibold text-slate-400">Matching Criteria:</span>
+                  <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Matching Criteria:</span>
                   {trial.matchingBiomarkers.map((b) => (
-                    <Badge key={b} className="bg-emerald-950 text-emerald-300 border-emerald-800 text-[10px]">
-                      <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-400" /> {b}
+                    <Badge key={b} className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]">
+                      <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-600 dark:text-emerald-400" /> {b}
                     </Badge>
                   ))}
                 </div>
 
                 {/* Expandable Criteria Details */}
                 {isExpanded && (
-                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-3">
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-3">
                     <div className="space-y-2">
-                      <span className="font-bold text-emerald-400 uppercase font-mono text-[10px] block">
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono text-[10px] block">
                         Inclusion Criteria Met
                       </span>
-                      <ul className="space-y-1.5 text-slate-300">
+                      <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
                         {trial.inclusionCriteria.map((inc, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
                             <span>{inc}</span>
                           </li>
                         ))}
@@ -208,13 +208,13 @@ export default function TrialMatching() {
                     </div>
 
                     <div className="space-y-2">
-                      <span className="font-bold text-red-400 uppercase font-mono text-[10px] block">
+                      <span className="font-bold text-red-600 dark:text-red-400 uppercase font-mono text-[10px] block">
                         Exclusion Criteria Rules Evaluated
                       </span>
-                      <ul className="space-y-1.5 text-slate-300">
+                      <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
                         {trial.exclusionCriteria.map((exc, i) => (
                           <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
                             <span>{exc} (Patient Cleared)</span>
                           </li>
                         ))}
@@ -229,39 +229,39 @@ export default function TrialMatching() {
 
         {/* Pre-screen Submission Dialog */}
         <Dialog open={!!selectedTrialForPrescreen} onOpenChange={() => setSelectedTrialForPrescreen(null)}>
-          <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 max-w-md">
+          <DialogContent className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 max-w-md">
             <DialogHeader>
-              <DialogTitle className="text-lg font-bold text-white flex items-center gap-2">
-                <Send className="w-5 h-5 text-amber-400" /> Confirm IRB Pre-Screen Request
+              <DialogTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Send className="w-5 h-5 text-amber-600 dark:text-amber-400" /> Confirm IRB Pre-Screen Request
               </DialogTitle>
-              <DialogDescription className="text-xs text-slate-400">
+              <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
                 Submit de-identified eligibility packet to Clinical Trials Office.
               </DialogDescription>
             </DialogHeader>
 
             {prescreenSuccess ? (
-              <div className="p-6 rounded-xl bg-emerald-950/60 border border-emerald-500/60 text-center space-y-2">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                <p className="text-sm font-bold text-emerald-200">Pre-Screen Request Submitted!</p>
-                <p className="text-xs text-emerald-300">
+              <div className="p-6 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-500/60 text-center space-y-2">
+                <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
+                <p className="text-sm font-bold text-emerald-900 dark:text-emerald-200">Pre-Screen Request Submitted!</p>
+                <p className="text-xs text-emerald-800 dark:text-emerald-300">
                   Notification transmitted to {selectedTrialForPrescreen?.principalInvestigator}.
                 </p>
               </div>
             ) : (
               <div className="space-y-4 pt-2">
-                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1 text-xs font-mono">
+                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1 text-xs font-mono">
                   <p><span className="text-slate-500">Trial:</span> {selectedTrialForPrescreen?.nctId}</p>
                   <p><span className="text-slate-500">PI:</span> {selectedTrialForPrescreen?.principalInvestigator}</p>
                   <p><span className="text-slate-500">Match Score:</span> {selectedTrialForPrescreen?.matchScorePercent}%</p>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
-                  <Button variant="ghost" onClick={() => setSelectedTrialForPrescreen(null)} className="text-xs text-slate-400">
+                  <Button variant="ghost" onClick={() => setSelectedTrialForPrescreen(null)} className="text-xs text-slate-500 dark:text-slate-400">
                     Cancel
                   </Button>
                   <Button
                     onClick={handleSendPrescreen}
-                    className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                    className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs"
                   >
                     Confirm Submission
                   </Button>

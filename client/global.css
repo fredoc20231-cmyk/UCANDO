@@ -10,6 +10,7 @@
    * Tailwind CSS theme
    * tailwind.config.ts expects color variables expressed as space-separated HSL values.
   */
+  /* THEME CONTRACT: every component MUST pair hardcoded slate/white classes with a dark: variant. Never add bg-slate-900, text-white, text-slate-300/400, or border-slate-700/800 without a corresponding dark: pair. See Patient360.tsx for a correct reference implementation after this fix. */
   :root {
     --background: 210 40% 98%;
     --foreground: 222.2 84% 4.9%;
