@@ -918,11 +918,11 @@ export function getMultiomics() {
       }
     ],
     oncoPrintSamples: [
-      { sampleId: "SMP-001", patientId: "UC-BEACON-89421", tumorType: "Breast Invasive", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "cnv_amp" } },
-      { sampleId: "SMP-002", patientId: "UC-BEACON-89422", tumorType: "Breast Invasive", variants: { BRCA1: "germline_snv", TP53: "none", PIK3CA: "somatic_snv", ERBB2: "none" } },
-      { sampleId: "SMP-003", patientId: "UC-BEACON-89423", tumorType: "Ovarian High Grade", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "none" } },
-      { sampleId: "SMP-004", patientId: "UC-BEACON-89424", tumorType: "Breast Invasive", variants: { BRCA1: "none", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "cnv_amp" } },
-      { sampleId: "SMP-005", patientId: "UC-BEACON-89425", tumorType: "TNBC", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "none" } }
+      { sampleId: "SMP-001", patientId: "UC-CCC-89421", tumorType: "Breast Invasive", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "cnv_amp" } },
+      { sampleId: "SMP-002", patientId: "UC-CCC-89422", tumorType: "Breast Invasive", variants: { BRCA1: "germline_snv", TP53: "none", PIK3CA: "somatic_snv", ERBB2: "none" } },
+      { sampleId: "SMP-003", patientId: "UC-CCC-89423", tumorType: "Ovarian High Grade", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "none", ERBB2: "none" } },
+      { sampleId: "SMP-004", patientId: "UC-CCC-89424", tumorType: "Breast Invasive", variants: { BRCA1: "none", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "cnv_amp" } },
+      { sampleId: "SMP-005", patientId: "UC-CCC-89425", tumorType: "TNBC", variants: { BRCA1: "somatic_snv", TP53: "somatic_snv", PIK3CA: "somatic_snv", ERBB2: "none" } }
     ],
     pathways: [
       { pathway: "Homologous Recombination Repair (HRD)", geneCount: 14, pValue: 0.00001, fdr: 0.0001, enrichmentScore: 4.82 },

@@ -108,7 +108,7 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
   }
 
   try {
-    const systemPrompt = "You are Gemini High, an expert AI oncology assistant for Beacon. Analyze clinical notes, multiomics, and mCODE FHIR data accurately, concisely, and adhering strictly to HIPAA de-identification invariants.";
+    const systemPrompt = "You are Gemini High, an expert AI oncology assistant for UCANDO. Analyze clinical notes, multiomics, and mCODE FHIR data accurately, concisely, and adhering strictly to HIPAA de-identification invariants.";
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
@@ -120,7 +120,7 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
             {
               role: "user",
               parts: [
-                { text: `${systemPrompt}\n\nPatient Context:\n${patientContext || "De-identified Stage III Breast Cancer patient UC-BEACON-89421 with BRCA1 pathogenic variant"}\n\nUser Question:\n${prompt}` }
+                { text: `${systemPrompt}\n\nPatient Context:\n${patientContext || "De-identified Stage III Breast Cancer patient UC-CCC-89421 with BRCA1 pathogenic variant"}\n\nUser Question:\n${prompt}` }
               ]
             }
           ]

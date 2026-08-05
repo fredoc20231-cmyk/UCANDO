@@ -125,7 +125,7 @@ export default function Manual() {
           </h2>
           <ol className="list-decimal list-inside space-y-2.5 text-sm text-slate-700 dark:text-slate-300">
             <li className="pl-1">Select your active role persona in the header dropdown (e.g. Dr. Alex Rivera, MD or Lead Bioinformatician).</li>
-            <li className="pl-1">Navigate to <strong>Clinician Patient 360</strong> to inspect patient <code className="font-mono bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-xs">UC-BEACON-89421</code> longitudinal history.</li>
+            <li className="pl-1">Navigate to <strong>Clinician Patient 360</strong> to inspect patient <code className="font-mono bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-xs">UC-CCC-89421</code> longitudinal history.</li>
             <li className="pl-1">Open <strong>Visual Cohort Builder</strong> to run de-identified feasibility queries and apply disease presets.</li>
             <li className="pl-1">Explore <strong>Global Integrations</strong> to model SMART-on-FHIR launches into EHRs and public genomics resources.</li>
             <li className="pl-1">Review <strong>Audit & Compliance</strong> to verify WORM-signed SOC2 event records.</li>

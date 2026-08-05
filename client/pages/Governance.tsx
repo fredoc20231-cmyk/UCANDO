@@ -134,7 +134,7 @@ export default function Governance() {
                     <td className="py-3 px-3 text-emerald-600 dark:text-emerald-400">PERMIT</td>
                   </tr>
                   <tr className="hover:bg-slate-50 dark:hover:bg-slate-950/60">
-                    <td className="py-3 px-3 font-bold text-slate-900 dark:text-white">Beacon Faculty Researcher</td>
+                    <td className="py-3 px-3 font-bold text-slate-900 dark:text-white">UC-CCC Faculty Researcher</td>
                     <td className="py-3 px-3 text-red-600 dark:text-red-400 font-bold">DENIED</td>
                     <td className="py-3 px-3 text-amber-700 dark:text-amber-300">IRB DUC REQUIRED</td>
                     <td className="py-3 px-3 text-emerald-600 dark:text-emerald-400 font-bold">PERMIT (SAFE HARBOR)</td>

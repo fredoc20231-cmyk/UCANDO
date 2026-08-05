@@ -95,7 +95,7 @@ export function PlaceholderPage({
                   </div>
                   <p className="text-sm font-semibold text-slate-800 dark:text-slate-200">{title} Workspace Shell</p>
                   <p className="text-xs text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-                    Connected to the central Beacon Kafka event bus and OPA consent engine. Ready for full feature expansion.
+                    Connected to the central UCANDO Kafka event bus and OPA consent engine. Ready for full feature expansion.
                   </p>
                 </div>
               )}

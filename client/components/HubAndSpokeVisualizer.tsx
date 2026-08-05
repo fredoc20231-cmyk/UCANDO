@@ -118,7 +118,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
             </div>
 
             <p className="text-xs text-slate-700 dark:text-slate-300 max-w-lg mx-auto leading-relaxed">
-              Every patient consented at Beacon flows into Beacon. Encrypted at rest (AES-256), governed by Open Policy Agent (OPA) consent enforcement.
+              Every patient consented at UC-CCC flows into UCANDO. Encrypted at rest (AES-256), governed by Open Policy Agent (OPA) consent enforcement.
             </p>
 
             {/* Data Zones Grid Inside Central Hub */}

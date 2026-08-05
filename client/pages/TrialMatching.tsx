@@ -81,7 +81,7 @@ export default function TrialMatching() {
             </div>
 
             <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-xs py-1 px-3">
-              <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-500 dark:text-amber-400" /> Patient UC-BEACON-89421 Evaluated
+              <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-500 dark:text-amber-400" /> Patient UC-CCC-89421 Evaluated
             </Badge>
           </div>
 
@@ -89,7 +89,7 @@ export default function TrialMatching() {
           <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Active Patient</span>
-              <span className="font-bold text-slate-900 dark:text-white">UC-BEACON-89421 (58 y/o Female)</span>
+              <span className="font-bold text-slate-900 dark:text-white">UC-CCC-89421 (58 y/o Female)</span>
             </div>
             <div>
               <span className="text-[10px] text-slate-500 font-mono uppercase block">Diagnosis</span>

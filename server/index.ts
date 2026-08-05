@@ -35,7 +35,7 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-  // Beacon Oncology Data Commons API
+  // UCANDO Oncology Data Commons API
   app.get("/api/beacon/stats", handleGetHubStats);
   app.get("/api/beacon/spokes", handleGetSpokes);
   app.get("/api/beacon/patient/360", handleGetPatient360);
