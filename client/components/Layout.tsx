@@ -71,6 +71,7 @@ export function Layout({ children }: LayoutProps) {
   const [searchFocused, setSearchQueryFocused] = useState(false);
 
   const navItems = [
+    { label: "Data Architecture", path: "/architecture", icon: Database },
     { label: "Integration Hub", path: "/", icon: LayoutDashboard },
     { label: "Clinician Patient 360", path: "/patient-360", icon: Users, highlight: true },
     { label: "Researcher Portal", path: "/researcher-portal", icon: Layers },
@@ -84,7 +85,6 @@ export function Layout({ children }: LayoutProps) {
     { label: "Data Quality", path: "/data-quality", icon: FileSpreadsheet },
     { label: "Global Integrations", path: "/global-integrations", icon: Globe, hasDivider: true },
     { label: "Help / Manual", path: "/manual", icon: HelpCircle },
-    { label: "Data Architecture", path: "/architecture", icon: Database },
   ];
 
   const searchSuggestions = [
