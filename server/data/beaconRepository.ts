@@ -157,7 +157,7 @@ export function getSpokes(): SpokeConnection[] {
     {
       id: "ehr",
       name: "EHR (Epic Cadence)",
-      subtitle: "Beacon EHR Core",
+      subtitle: "UCANDO EHR Core",
       integrationMode: "HL7 v2 Feeds + FHIR R4 + SMART on FHIR",
       status: "connected",
       latencyMs: 12,
@@ -478,7 +478,7 @@ export function getPatient360(patientId: string): Patient360Record {
         pathogenicity: "Pathogenic",
         readDepth: 1240,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-BRCA1-094",
+        bioComputeObject: "https://ucando.demo-cancercenter.org/bco/BCO-2023-BRCA1-094",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       },
       {
@@ -491,7 +491,7 @@ export function getPatient360(patientId: string): Patient360Record {
         pathogenicity: "Pathogenic",
         readDepth: 980,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-TP53-112",
+        bioComputeObject: "https://ucando.demo-cancercenter.org/bco/BCO-2023-TP53-112",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       },
       {
@@ -504,7 +504,7 @@ export function getPatient360(patientId: string): Patient360Record {
         pathogenicity: "Likely Pathogenic",
         readDepth: 850,
         pipelineVersion: "Multiomics-GATK-v4.2.1",
-        bioComputeObject: "https://beacon.demo-cancercenter.org/bco/BCO-2023-PIK3-004",
+        bioComputeObject: "https://ucando.demo-cancercenter.org/bco/BCO-2023-PIK3-004",
         multiomicsPlatformJobId: "OMICS-JOB-884920"
       }
     ],
@@ -665,7 +665,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
         {
           method: "POST",
           path: "/v1/results/genomics",
-          summary: "Multiomics Platform Results Write-Back to Beacon Hub",
+          summary: "Multiomics Platform Results Write-Back to UCANDO Hub",
           description: "Delivers FHIR DiagnosticReport + MolecularSequence bundles containing called variants, VAFs, and BioCompute provenance.",
           requestBodySample: JSON.stringify(
             {
@@ -685,7 +685,7 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
                   }
                 ]
               },
-              biocompute_object: "https://beacon.demo-cancercenter.org/bco/BCO-2024-00129"
+              biocompute_object: "https://ucando.demo-cancercenter.org/bco/BCO-2024-00129"
             },
             null,
             2
@@ -756,18 +756,18 @@ export function getApiContracts(): Record<string, ApiContractSpec> {
 
 export function getIRBCharter(): IRBCharterDoc {
   return {
-    title: "Beacon Cancer Data Commons — Governance Charter & Consent Framework",
+    title: "UCANDO — Governance Charter & Consent Framework",
     irbApprovalNumber: "IRB-DEMO-0000",
     version: "v3.1",
     effectiveDate: "2024-01-01",
     sections: [
       {
         heading: "1. Scope & Primary Mandate",
-        content: "The Beacon Cancer Data Commons serves as the unified, HIPAA-compliant integration spine for all cancer center patient data (EHR, multiomics, digital radiology, digital pathology WSI, biospecimens, tumor registry, and PROs). Every consented patient record is ingested, harmonized under OMOP CDM v5.4 and mCODE FHIR, and governed strictly by dynamic consent preferences."
+        content: "UCANDO serves as the unified, HIPAA-compliant integration spine for all cancer center patient data (EHR, multiomics, digital radiology, digital pathology WSI, biospecimens, tumor registry, and PROs). Every consented patient record is ingested, harmonized under OMOP CDM v5.4 and mCODE FHIR, and governed strictly by dynamic consent preferences."
       },
       {
         heading: "2. Builder.io PHI-Free Architectural Invariant",
-        content: "Non-Negotiable Rule: Builder.io is strictly a PHI-free visual layer. No protected health information (PHI) or patient record shall ever be transmitted to or stored within Builder content or services. All patient rendering occurs client-side or via authenticated server calls directly to the Beacon Hub."
+        content: "Non-Negotiable Rule: Builder.io is strictly a PHI-free visual layer. No protected health information (PHI) or patient record shall ever be transmitted to or stored within Builder content or services. All patient rendering occurs client-side or via authenticated server calls directly to the UCANDO Hub."
       },
       {
         heading: "3. Open Policy Agent (OPA) Consent Enforcement",
@@ -944,7 +944,7 @@ export function getMultiomics() {
 export function getImagingDetails() {
   return {
     studyId: "std_rad_881",
-    accessionNumber: "ACC-BEACON-2024-9910",
+    accessionNumber: "ACC-UCANDO-2024-9910",
     modality: "PET/CT",
     studyDate: "2024-01-20",
     bodyPart: "Chest/Abdomen/Pelvis",
@@ -997,9 +997,9 @@ export function getTrialMatches() {
       nctId: "NCT05214820",
       title: "Phase II Study of Olaparib + Pembrolizumab in BRCA1-Mutated Advanced Solid Tumors",
       phase: "Phase II",
-      sponsor: "Beacon Comprehensive Cancer Center",
+      sponsor: "UC-CCC",
       status: "Recruiting",
-      primaryLocation: "Beacon Main Medical Center",
+      primaryLocation: "UC-CCC Main Medical Center",
       matchScorePercent: 96,
       matchingBiomarkers: ["BRCA1 Pathogenic Variant", "PD-L1 CPS >= 10", "Prior Platinum Chemotherapy"],
       inclusionCriteria: [
@@ -1020,9 +1020,9 @@ export function getTrialMatches() {
       nctId: "NCT04882194",
       title: "Targeted Alpha Therapy (225Ac-PSMA) for Advanced Metastatic Cancer",
       phase: "Phase I/II",
-      sponsor: "Beacon Comprehensive Cancer Center / NIH NCI",
+      sponsor: "UC-CCC / NIH NCI",
       status: "Recruiting",
-      primaryLocation: "Beacon Specialty Care Center",
+      primaryLocation: "UC-CCC Specialty Care Center",
       matchScorePercent: 88,
       matchingBiomarkers: ["High SUVmax on PET/CT", "Refractory to Standard Regimen"],
       inclusionCriteria: [
@@ -1041,9 +1041,9 @@ export function getTrialMatches() {
       nctId: "NCT05102941",
       title: "Neoadjuvant mRNA Neoantigen Vaccine Combined with Nivolumab in Stage III Malignancy",
       phase: "Phase I",
-      sponsor: "Beacon Center for Personalized Therapeutics",
+      sponsor: "UC-CCC Center for Personalized Therapeutics",
       status: "Enrolling by invitation",
-      primaryLocation: "Beacon Regional Center",
+      primaryLocation: "UC-CCC Regional Center",
       matchScorePercent: 82,
       matchingBiomarkers: ["High Tumor Mutational Burden (TMB > 10 mut/Mb)", "HLA-A*02:01 Positive"],
       inclusionCriteria: [
