@@ -131,6 +131,19 @@ export default function Manual() {
             <li className="pl-1">Review <strong>Audit & Compliance</strong> to verify WORM-signed SOC2 event records.</li>
           </ol>
         </section>
+
+        {/* Section 6: Credits & Attribution */}
+        <section className="space-y-3 p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+          <h2 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400" /> About This Platform
+          </h2>
+          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+            UCANDO was developed by the Computational Oncology and Bioinformatics Unit at the University of Chicago Comprehensive Cancer Center (UC-CCC), under the direction of Dr. Kevin Odunsi and Dr. Ahmed Fadiel.
+          </p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pt-2 border-t border-slate-100 dark:border-slate-800">
+            All patient, trial, and clinical data shown in this platform is synthetic and used for demonstration purposes only. It does not represent real patients, real clinical outcomes, or real decisions made by any named individual.
+          </p>
+        </section>
       </div>
     </Layout>
   );

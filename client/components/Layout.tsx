@@ -405,8 +405,11 @@ export function Layout({ children }: LayoutProps) {
             <p className="font-semibold text-slate-800 dark:text-slate-300">
               UCANDO — UC-CCC Cancer Data Commons
             </p>
-            <p className="text-[11px] text-slate-500 dark:text-slate-500">
-              © 2025 The UC-CCC Comprehensive Cancer Center. All rights reserved. HIPAA Consented Ecosystem.
+            <p className="text-[11px] text-slate-500 dark:text-slate-500 max-w-3xl leading-relaxed">
+              © 2026 University of Chicago Comprehensive Cancer Center (UC-CCC). All rights reserved. This platform and its underlying source code are proprietary and confidential. Unauthorized reproduction, distribution, or use is prohibited without written permission.
+            </p>
+            <p className="text-[11px] text-slate-500 dark:text-slate-500 font-medium">
+              Developed by the Computational Oncology and Bioinformatics Unit, UC-CCC.
             </p>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
