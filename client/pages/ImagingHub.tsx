@@ -114,10 +114,10 @@ export default function ImagingHub() {
           {/* Radiology DICOM Viewer */}
           <TabsContent value="radiology" className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Left Controls Sidebar */}
-            <div className="lg:col-span-1 space-y-5 p-5 rounded-2xl bg-slate-900 border border-slate-800 text-xs">
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-                <span className="font-bold text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
-                  <Sliders className="w-4 h-4 text-sky-400" /> Canvas Controls
+            <div className="lg:col-span-1 space-y-5 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                <span className="font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-1.5">
+                  <Sliders className="w-4 h-4 text-sky-500 dark:text-sky-400" /> Canvas Controls
                 </span>
                 <Button
                   size="sm"
@@ -127,7 +127,7 @@ export default function ImagingHub() {
                     setWindowWidth(350);
                     setSliceIndex(120);
                   }}
-                  className="h-6 text-[10px] text-slate-400 hover:text-white px-1.5"
+                  className="h-6 text-[10px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-1.5"
                 >
                   <RotateCcw className="w-3 h-3 mr-1" /> Reset
                 </Button>
@@ -135,7 +135,7 @@ export default function ImagingHub() {
 
               {/* Series Selector */}
               <div className="space-y-2">
-                <span className="text-[10px] text-slate-400 uppercase font-mono">Series Selection</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Series Selection</span>
                 <div className="space-y-1.5">
                   {study?.seriesList.map((ser) => (
                     <button
@@ -144,10 +144,10 @@ export default function ImagingHub() {
                       className={`w-full text-left p-2.5 rounded-lg border transition-colors ${
                         activeSeries === ser.seriesId
                           ? "bg-sky-950/60 border-sky-500 text-sky-200"
-                          : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
+                          : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-slate-300 dark:hover:border-slate-700"
                       }`}
                     >
-                      <span className="font-bold block text-white">{ser.description}</span>
+                      <span className="font-bold block text-slate-900 dark:text-white">{ser.description}</span>
                       <span className="text-[10px] text-slate-500">{ser.numSlices} Slices • 1.25mm</span>
                     </button>
                   ))}
@@ -155,10 +155,10 @@ export default function ImagingHub() {
               </div>
 
               {/* Slice Navigation Slider */}
-              <div className="space-y-2 pt-2 border-t border-slate-800">
+              <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-800">
                 <div className="flex justify-between font-mono">
-                  <span className="text-slate-400">Slice Index:</span>
-                  <span className="font-bold text-sky-300">{sliceIndex} / 240</span>
+                  <span className="text-slate-500 dark:text-slate-400">Slice Index:</span>
+                  <span className="font-bold text-sky-600 dark:text-sky-300">{sliceIndex} / 240</span>
                 </div>
                 <Slider
                   value={[sliceIndex]}
@@ -171,12 +171,12 @@ export default function ImagingHub() {
               </div>
 
               {/* Windowing & Contrast Sliders */}
-              <div className="space-y-3 pt-2 border-t border-slate-800">
-                <span className="text-[10px] text-slate-400 uppercase font-mono">Windowing (HU / SUV)</span>
+              <div className="space-y-3 pt-2 border-t border-slate-200 dark:border-slate-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono">Windowing (HU / SUV)</span>
                 <div className="space-y-1">
                   <div className="flex justify-between font-mono text-[11px]">
-                    <span className="text-slate-400">Window Level (Center):</span>
-                    <span className="text-slate-200">{windowLevel} HU</span>
+                    <span className="text-slate-500 dark:text-slate-400">Window Level (Center):</span>
+                    <span className="text-slate-700 dark:text-slate-200">{windowLevel} HU</span>
                   </div>
                   <Slider
                     value={[windowLevel]}
@@ -257,9 +257,9 @@ export default function ImagingHub() {
               </div>
 
               {/* Radiology Summary text */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-1">
+              <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1">
                 <span className="text-[10px] text-slate-500 uppercase font-mono">Radiology Impression</span>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
                   {study?.findingsSummary}
                 </p>
               </div>
@@ -267,17 +267,17 @@ export default function ImagingHub() {
           </TabsContent>
 
           {/* Pathology Whole Slide Image Viewer */}
-          <TabsContent value="pathology" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <TabsContent value="pathology" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h3 className="text-sm font-bold text-white">Digital Pathology Whole Slide Image (H&E Stain)</h3>
-                <p className="text-xs text-slate-400">
-                  Slide Barcode: <code className="text-purple-300 font-mono">{study?.pathologySlide?.slideId}</code> • H&E Stain
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">Digital Pathology Whole Slide Image (H&E Stain)</h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Slide Barcode: <code className="text-purple-600 dark:text-purple-300 font-mono">{study?.pathologySlide?.slideId}</code> • H&E Stain
                 </p>
               </div>
 
               <div className="flex items-center gap-2 font-mono text-xs">
-                <span className="text-slate-400 mr-1">Magnification:</span>
+                <span className="text-slate-500 dark:text-slate-400 mr-1">Magnification:</span>
                 {(["10x", "20x", "40x"] as const).map((z) => (
                   <Button
                     key={z}
@@ -287,7 +287,7 @@ export default function ImagingHub() {
                     className={`h-7 text-xs ${
                       pathologyZoom === z
                         ? "bg-purple-600 hover:bg-purple-500 text-white"
-                        : "border-slate-800 bg-slate-950 text-slate-300"
+                        : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300"
                     }`}
                   >
                     {z}
@@ -324,23 +324,23 @@ export default function ImagingHub() {
           </TabsContent>
 
           {/* Radiomics Features Table */}
-          <TabsContent value="radiomics" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-white">Extracted PyRadiomics Quantitative Biomarkers</h3>
+          <TabsContent value="radiomics" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Extracted PyRadiomics Quantitative Biomarkers</h3>
 
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 font-mono text-[10px] uppercase">
+                  <tr className="border-b border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 font-mono text-[10px] uppercase">
                     <th className="py-2.5 px-3">Biomarker Feature Name</th>
                     <th className="py-2.5 px-3">Category</th>
                     <th className="py-2.5 px-3">Extracted Value</th>
                     <th className="py-2.5 px-3">Cohort Normal Z-Score</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60 text-slate-300 font-mono">
+                <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60 text-slate-700 dark:text-slate-300 font-mono">
                   {study?.radiomicsFeatures.map((f) => (
-                    <tr key={f.featureName} className="hover:bg-slate-950/60">
-                      <td className="py-3 px-3 font-bold text-white">{f.featureName}</td>
+                    <tr key={f.featureName} className="hover:bg-slate-50 dark:hover:bg-slate-950/60">
+                      <td className="py-3 px-3 font-bold text-slate-900 dark:text-white">{f.featureName}</td>
                       <td className="py-3 px-3 text-slate-400">{f.category}</td>
                       <td className="py-3 px-3 text-sky-300 font-bold">{f.value}</td>
                       <td className="py-3 px-3">
