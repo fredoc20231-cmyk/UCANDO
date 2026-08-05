@@ -42,7 +42,8 @@ import {
   Layers,
   LogIn,
   Globe,
-  HelpCircle
+  HelpCircle,
+  Database
 } from "lucide-react";
 
 function CloudIcon({ className }: { className?: string }) {
@@ -83,6 +84,7 @@ export function Layout({ children }: LayoutProps) {
     { label: "Data Quality", path: "/data-quality", icon: FileSpreadsheet },
     { label: "Global Integrations", path: "/global-integrations", icon: Globe, hasDivider: true },
     { label: "Help / Manual", path: "/manual", icon: HelpCircle },
+    { label: "Data Architecture", path: "/architecture", icon: Database },
   ];
 
   const searchSuggestions = [

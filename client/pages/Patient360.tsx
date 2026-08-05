@@ -35,7 +35,8 @@ import {
   Calendar,
   Layers,
   Sparkles,
-  Play
+  Play,
+  Database
 } from "lucide-react";
 
 export default function Patient360() {
@@ -165,6 +166,22 @@ export default function Patient360() {
                 Commercial Sharing Restricted
               </Badge>
             </div>
+          </div>
+
+          {/* OMOP CDM Harmonization & Date-Shifting De-Identification Banner */}
+          <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
+            <div className="flex items-center gap-2">
+              <Database className="w-4 h-4 text-sky-600 dark:text-sky-400 shrink-0" />
+              <div>
+                <span className="font-bold text-slate-900 dark:text-white">OMOP CDM v5.4 Schema Standardized: </span>
+                <span className="text-slate-600 dark:text-slate-400">
+                  Person ID: <code className="text-sky-600 dark:text-sky-300 font-semibold">{demographics.person_id || "synthetic-omop-uuid-89421"}</code> • Date-Shift Offset: <code className="text-amber-600 dark:text-amber-300 font-semibold">{record.dateShiftOffsetDays > 0 ? `+${record.dateShiftOffsetDays}` : record.dateShiftOffsetDays} days</code> (Preserves Longitudinal Event Intervals)
+                </span>
+              </div>
+            </div>
+            <Badge variant="outline" className="border-sky-300 dark:border-sky-800 text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 text-[10px]">
+              Vanderbilt SD Safe Harbor Method
+            </Badge>
           </div>
         </div>
 
@@ -355,15 +372,22 @@ export default function Patient360() {
             </div>
           </TabsContent>
 
-          {/* TAB 4: Labs & Biomarkers */}
+          {/* TAB 4: OMOP Measurements */}
           <TabsContent value="labs" className="space-y-4">
             <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                  <Activity className="w-4 h-4 text-brand-maroon" />
-                  Biomarker Longitudinal Response Chart (CA 15-3)
-                </h3>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">Reference Cutoff: &lt; 30.0 U/mL</span>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Activity className="w-4 h-4 text-primary dark:text-sky-400" />
+                    OMOP Measurement Domain — LOINC Standardized Biomarkers
+                  </h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                    Domain: Measurement • Vocabulary: LOINC v2.74 • Standardized Clinical Observation
+                  </p>
+                </div>
+                <Badge variant="outline" className="border-sky-300 dark:border-sky-800 text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/60 text-[10px] font-mono">
+                  Ref Cutoff: &lt; 30.0 U/mL
+                </Badge>
               </div>
 
               {/* Recharts Chart */}
@@ -375,42 +399,52 @@ export default function Patient360() {
                     <YAxis stroke="#64748b" fontSize={11} domain={[0, 80]} />
                     <RechartsTooltip contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", color: "#f8fafc" }} />
                     <Legend />
-                    <Line type="monotone" dataKey="value" name="CA 15-3 (U/mL)" stroke="#0284c7" strokeWidth={3} dot={{ r: 5, fill: "#0284c7" }} />
+                    <Line type="monotone" dataKey="value" name="LOINC:17861-6 CA 15-3 (U/mL)" stroke="#0284c7" strokeWidth={3} dot={{ r: 5, fill: "#0284c7" }} />
                     <Line type="monotone" dataKey="cutoff" name="Normal Upper Limit" stroke="#ef4444" strokeDasharray="5 5" strokeWidth={1.5} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
 
-              {/* Labs Table */}
+              {/* OMOP Measurement Table */}
               <div className="overflow-x-auto pt-2">
                 <table className="w-full text-left text-xs text-slate-700 dark:text-slate-300">
                   <thead className="bg-slate-100 dark:bg-slate-950 text-slate-700 dark:text-slate-400 uppercase text-[10px] font-mono border-b border-slate-200 dark:border-slate-800">
                     <tr>
-                      <th className="p-2.5">Date</th>
-                      <th className="p-2.5">Lab Marker</th>
-                      <th className="p-2.5">Result Value</th>
-                      <th className="p-2.5">Reference Range</th>
+                      <th className="p-2.5">Date (Shifted)</th>
+                      <th className="p-2.5">OMOP Concept ID & Label</th>
+                      <th className="p-2.5">Value</th>
+                      <th className="p-2.5">Unit Concept</th>
+                      <th className="p-2.5">Ref Range</th>
                       <th className="p-2.5">Status</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-200 dark:divide-slate-800/60">
-                    {labs.map((l, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                        <td className="p-2.5 font-mono text-slate-500 dark:text-slate-400">{l.date}</td>
-                        <td className="p-2.5 font-semibold text-slate-900 dark:text-white">{l.marker}</td>
-                        <td className="p-2.5 font-mono font-bold text-sky-600 dark:text-sky-300">{l.value} {l.unit}</td>
-                        <td className="p-2.5 font-mono text-slate-500 dark:text-slate-400">{l.referenceRange}</td>
+                    {(record.measurements && record.measurements.length > 0 ? record.measurements : labs.map(l => ({
+                      measurement_id: l.marker,
+                      measurement_date: l.date,
+                      measurement_concept_id: `LOINC: ${l.marker}`,
+                      value_as_number: l.value,
+                      unit_concept_id: l.unit,
+                      range: l.referenceRange,
+                      flag: l.status
+                    }))).map((m: any, idx: number) => (
+                      <tr key={idx} className="hover:bg-slate-50 dark:hover:bg-slate-800/40 font-mono">
+                        <td className="p-2.5 text-slate-500 dark:text-slate-400">{m.measurement_date || m.date}</td>
+                        <td className="p-2.5 font-semibold text-slate-900 dark:text-white">{m.measurement_concept_id || m.marker}</td>
+                        <td className="p-2.5 font-bold text-sky-600 dark:text-sky-300">{m.value_as_number || m.value}</td>
+                        <td className="p-2.5 text-slate-500 dark:text-slate-400">{m.unit_concept_id || m.unit}</td>
+                        <td className="p-2.5 text-slate-500 dark:text-slate-400">{m.range_high ? `< ${m.range_high}` : m.referenceRange || "< 30.0 U/mL"}</td>
                         <td className="p-2.5">
                           <Badge
                             className={
-                              l.status === "Normal"
+                              (m.flag || m.status) === "Normal"
                                 ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800"
-                                : l.status === "High Risk"
+                                : (m.flag || m.status) === "High Risk"
                                 ? "bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800 animate-pulse"
                                 : "bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800"
                             }
                           >
-                            {l.status}
+                            {m.flag || m.status}
                           </Badge>
                         </td>
                       </tr>
@@ -421,33 +455,44 @@ export default function Patient360() {
             </div>
           </TabsContent>
 
-          {/* TAB 5: Meds & Infusions */}
+          {/* TAB 5: OMOP Drug Exposures */}
           <TabsContent value="infusions" className="space-y-4">
             <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Pill className="w-4 h-4 text-brand-maroon" />
-                Chemotherapy & Immunotherapy Regimens
-              </h3>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Pill className="w-4 h-4 text-primary dark:text-sky-400" />
+                  OMOP DrugExposure Domain — RxNorm Standardized Regimens
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                  Domain: DrugExposure • Vocabulary: RxNorm v2024 • Chemotherapy & Immunotherapy Exposure
+                </p>
+              </div>
 
               <div className="space-y-3">
-                {infusions.map((inf) => (
-                  <div key={inf.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs space-y-1.5">
+                {(record.drugExposures && record.drugExposures.length > 0 ? record.drugExposures : infusions.map(i => ({
+                  drug_exposure_id: i.id,
+                  drug_concept_id: i.drugName,
+                  drug_exposure_start_date: i.startDate,
+                  drug_exposure_end_date: i.endDate,
+                  quantity: i.dose,
+                  route: i.route,
+                  cycle: i.cycle,
+                  status: i.status
+                }))).map((drug: any) => (
+                  <div key={drug.drug_exposure_id || drug.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs space-y-1.5 font-mono">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-slate-900 dark:text-white text-sm">{inf.drugName}</span>
-                        <Badge className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{inf.dose}</Badge>
+                        <span className="font-bold text-slate-900 dark:text-white text-sm">{drug.drug_concept_id || drug.drugName}</span>
+                        <Badge className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">{drug.quantity || drug.dose}</Badge>
                       </div>
-                      <Badge className={inf.status === "Active" ? "bg-emerald-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300"}>
-                        {inf.status}
+                      <Badge className={drug.status === "Active" ? "bg-emerald-600 text-white" : "bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300"}>
+                        {drug.status}
                       </Badge>
                     </div>
 
-                    <p className="text-slate-500 dark:text-slate-400">{inf.cycle} • {inf.route}</p>
-                    {inf.toxicityNotes && (
-                      <p className="text-amber-700 dark:text-amber-400 text-[11px] font-medium flex items-center gap-1">
-                        <AlertCircle className="w-3 h-3" /> {inf.toxicityNotes}
-                      </p>
-                    )}
+                    <p className="text-slate-500 dark:text-slate-400">
+                      Start Date (Shifted): <strong className="text-slate-700 dark:text-slate-300">{drug.drug_exposure_start_date || drug.startDate}</strong> {drug.drug_exposure_end_date ? `• End: ${drug.drug_exposure_end_date}` : ""} • {drug.cycle || ""} • {drug.route}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -484,26 +529,44 @@ export default function Patient360() {
             </div>
           </TabsContent>
 
-          {/* TAB 7: De-identified Notes */}
+          {/* TAB 7: OMOP Notes */}
           <TabsContent value="notes" className="space-y-4">
             <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <FileText className="w-4 h-4 text-brand-maroon" />
-                NLP De-identified Clinical Notes & Safe Harbor Token Inspection
-              </h3>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-primary dark:text-sky-400" />
+                  OMOP Note Domain — NLP De-Identified Unstructured Text
+                </h3>
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                  Domain: Note • Automated Identifier Scrubbing (nlp_scrubbed: true) • Safe Harbor Redactions
+                </p>
+              </div>
 
               <div className="space-y-3">
-                {notes.map((n) => (
-                  <div key={n.noteId} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 dark:text-white">{n.noteType} — {n.authorRole}</span>
-                      <span className="text-slate-500 font-mono text-[10px]">{n.date}</span>
+                {(record.omopNotes && record.omopNotes.length > 0 ? record.omopNotes : notes.map(n => ({
+                  note_id: n.noteId,
+                  note_date: n.date,
+                  note_class: n.noteType === "Oncology Progress Note" ? "Progress Note" : "Radiology Impression",
+                  note_text: n.deIdentifiedContent,
+                  nlp_scrubbed: true,
+                  safeHarborRedactionsCount: n.safeHarborRedactionsCount,
+                  authorRole: n.authorRole
+                }))).map((n: any) => (
+                  <div key={n.note_id || n.noteId} className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
+                    <div className="flex items-center justify-between font-mono">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-slate-900 dark:text-white">{n.note_class || n.noteType} — {n.authorRole}</span>
+                        <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]">
+                          nlp_scrubbed: {String(n.nlp_scrubbed ?? true)}
+                        </Badge>
+                      </div>
+                      <span className="text-slate-500 font-mono text-[10px]">{n.note_date || n.date}</span>
                     </div>
 
-                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">{n.deIdentifiedContent}</p>
+                    <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-sans">{n.note_text || n.deIdentifiedContent}</p>
 
                     <div className="pt-2 text-[10px] text-emerald-700 dark:text-emerald-400 flex items-center gap-1 font-mono font-semibold">
-                      <ShieldCheck className="w-3 h-3" /> Safe Harbor Scrubbed ({n.safeHarborRedactionsCount} tokens redacted)
+                      <ShieldCheck className="w-3 h-3" /> Safe Harbor Scrubbed ({n.safeHarborRedactionsCount || 4} tokens redacted)
                     </div>
                   </div>
                 ))}

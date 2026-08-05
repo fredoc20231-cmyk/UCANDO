@@ -44,10 +44,13 @@ export interface SpokeConnection {
 
 export interface PatientDemographics {
   id: string;
+  person_id: string; // OMOP CDM Person ID (synthetic UUID)
   deIdentifiedId: string;
   mrn: string;
   age: number;
   gender: string;
+  sex: string; // OMOP CDM sex
+  race: string; // OMOP CDM race
   ethnicity: string;
   primaryDiagnosis: string;
   stage: string;
@@ -55,6 +58,58 @@ export interface PatientDemographics {
   attendingPhysician: string;
   primaryCenter: string;
   consentStatus: "Consented" | "Pending" | "Restricted" | "Withdrawn";
+}
+
+// --- OMOP CDM COMMON DATA MODEL INTERFACES ---
+export interface OmopConditionOccurrence {
+  condition_occurrence_id: string;
+  person_id: string;
+  condition_concept_id: string; // Mock ICD-10 code + label (e.g. "ICD10:C50.911 - Malignant neoplasm of right breast")
+  condition_start_date: string;
+  condition_end_date?: string;
+  condition_status?: string;
+}
+
+export interface OmopProcedureOccurrence {
+  procedure_occurrence_id: string;
+  person_id: string;
+  procedure_concept_id: string; // Mock CPT code + label (e.g. "CPT:19301 - Mastectomy, partial")
+  procedure_date: string;
+}
+
+export interface OmopMeasurement {
+  measurement_id: string;
+  person_id: string;
+  measurement_concept_id: string; // LOINC code + label (e.g. "LOINC:17861-6 - CA 15-3 [Units/volume] in Serum")
+  value_as_number: number;
+  unit_concept_id: string; // e.g. "U/mL"
+  measurement_date: string;
+  range_low?: number;
+  range_high?: number;
+  flag?: "Normal" | "Elevated" | "High Risk" | "Low";
+}
+
+export interface OmopDrugExposure {
+  drug_exposure_id: string;
+  person_id: string;
+  drug_concept_id: string; // RxNorm code + label (e.g. "RxNorm:1303251 - Trastuzumab 150mg Injection")
+  drug_exposure_start_date: string;
+  drug_exposure_end_date?: string;
+  quantity: string;
+  route?: string;
+  cycle?: string;
+  status?: "Completed" | "Active" | "Discontinued";
+}
+
+export interface OmopNote {
+  note_id: string;
+  person_id: string;
+  note_date: string;
+  note_class: "Progress Note" | "Discharge Summary" | "Tumor Board Summary" | "Surgical Pathology" | "Radiology Impression";
+  note_text: string;
+  nlp_scrubbed: boolean; // Automated PHI/identifier scrubbing flag
+  safeHarborRedactionsCount?: number;
+  authorRole?: string;
 }
 
 export interface PatientConsent {
@@ -175,6 +230,13 @@ export interface Patient360Record {
   infusions: InfusionRegimen[];
   biospecimens: Biospecimen[];
   notes: ClinicalNote[];
+  // OMOP CDM Collections & De-Identification
+  conditionOccurrences: OmopConditionOccurrence[];
+  procedureOccurrences: OmopProcedureOccurrence[];
+  measurements: OmopMeasurement[];
+  drugExposures: OmopDrugExposure[];
+  omopNotes: OmopNote[];
+  dateShiftOffsetDays: number;
 }
 
 export interface ApiContractSpec {

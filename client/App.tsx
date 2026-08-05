@@ -23,6 +23,7 @@ import AuditDashboard from "./pages/AuditDashboard";
 import DataQuality from "./pages/DataQuality";
 import GlobalIntegrations from "./pages/GlobalIntegrations";
 import Manual from "./pages/Manual";
+import Architecture from "./pages/Architecture";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -84,6 +85,7 @@ const App = () => (
                 }
               />
               <Route path="/manual" element={<Manual />} />
+              <Route path="/architecture" element={<Architecture />} />
 
               {/* CATCH-ALL CATCH ROUTE */}
               <Route path="*" element={<NotFound />} />

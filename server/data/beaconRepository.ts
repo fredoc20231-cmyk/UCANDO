@@ -2,9 +2,45 @@ import {
   HubStats,
   SpokeConnection,
   Patient360Record,
+  OmopConditionOccurrence,
+  OmopProcedureOccurrence,
+  OmopMeasurement,
+  OmopDrugExposure,
+  OmopNote,
   ApiContractSpec,
   IRBCharterDoc
 } from "@shared/api";
+
+/**
+ * DATE-SHIFTING DE-IDENTIFICATION ALGORITHM:
+ * For each synthetic patient, a single random integer offset (between -60 and +60 days) is generated
+ * at record-creation / query time. This offset is applied consistently to every date field in that
+ * patient's ConditionOccurrence, ProcedureOccurrence, Measurement, DrugExposure, Note, and timeline records.
+ *
+ * WHY THIS IS CRITICAL:
+ * Date-shifting preserves exact longitudinal time intervals between clinical events (e.g. days from diagnosis
+ * to surgery, or days between chemotherapy cycles) which are essential for survival and outcome research, while
+ * obfuscating absolute calendar dates to prevent re-identification through external data matching.
+ * This matches the Safe Harbor / Expert Determination methodology used in research databases like Vanderbilt's
+ * Synthetic Derivative.
+ */
+function getDateShiftOffsetForPatient(patientId: string): number {
+  let hash = 0;
+  for (let i = 0; i < patientId.length; i++) {
+    hash = (hash << 5) - hash + patientId.charCodeAt(i);
+    hash |= 0;
+  }
+  const rawOffset = (Math.abs(hash) % 120) - 60;
+  return rawOffset === 0 ? 14 : rawOffset;
+}
+
+function shiftDateString(dateStr: string, offsetDays: number): string {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}/.test(dateStr)) return dateStr;
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return dateStr;
+  d.setDate(d.getDate() + offsetDays);
+  return d.toISOString().split("T")[0];
+}
 
 // NOTE: Temporary in-memory consent store. Must be replaced by a real database (e.g., PostgreSQL/Supabase) when moving off Builder hosting.
 
@@ -221,26 +257,144 @@ export function getPatient360(patientId: string): Patient360Record {
     permissions: { ...defaultConsentPermissions }
   };
 
+  const offsetDays = getDateShiftOffsetForPatient(patientId);
+  const personId = `synthetic-omop-uuid-${patientId.toLowerCase()}`;
+
+  // OMOP CDM Condition Occurrences
+  const conditionOccurrences: OmopConditionOccurrence[] = [
+    {
+      condition_occurrence_id: "cond-occ-101",
+      person_id: personId,
+      condition_concept_id: "ICD10:C50.911 - Malignant neoplasm of unspecific site of right female breast",
+      condition_start_date: shiftDateString("2023-07-28", offsetDays),
+      condition_status: "Active Primary Malignancy"
+    },
+    {
+      condition_occurrence_id: "cond-occ-102",
+      person_id: personId,
+      condition_concept_id: "ICD10:C77.3 - Secondary and unspecified malignant neoplasm of axillary lymph nodes",
+      condition_start_date: shiftDateString("2023-08-04", offsetDays),
+      condition_status: "Pathology Confirmed N2a"
+    }
+  ];
+
+  // OMOP CDM Procedure Occurrences
+  const procedureOccurrences: OmopProcedureOccurrence[] = [
+    {
+      procedure_occurrence_id: "proc-occ-201",
+      person_id: personId,
+      procedure_concept_id: "CPT:19307 - Modified radical mastectomy with axillary lymphadenectomy",
+      procedure_date: shiftDateString("2023-08-04", offsetDays)
+    },
+    {
+      procedure_occurrence_id: "proc-occ-202",
+      person_id: personId,
+      procedure_concept_id: "CPT:71260 - Computed tomography, thorax, with contrast material(s)",
+      procedure_date: shiftDateString("2023-11-20", offsetDays)
+    }
+  ];
+
+  // OMOP CDM Measurements (Labs & Biomarkers)
+  const rawLabs = [
+    { date: "2023-07-28", marker: "LOINC:17861-6 - CA 15-3 [Units/volume] in Serum", value: 68.4, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Elevated" as const },
+    { date: "2023-09-01", marker: "LOINC:17861-6 - CA 15-3 [Units/volume] in Serum", value: 42.1, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Elevated" as const },
+    { date: "2023-11-20", marker: "LOINC:17861-6 - CA 15-3 [Units/volume] in Serum", value: 18.2, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Normal" as const },
+    { date: "2024-02-01", marker: "LOINC:17861-6 - CA 15-3 [Units/volume] in Serum", value: 14.5, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Normal" as const },
+    { date: "2023-10-14", marker: "LOINC:26499-4 - Absolute Neutrophil Count (ANC)", value: 0.4, unit: "x10^9/L", referenceRange: "1.5 - 8.0 x10^9/L", status: "High Risk" as const },
+    { date: "2023-10-18", marker: "LOINC:26499-4 - Absolute Neutrophil Count (ANC)", value: 2.8, unit: "x10^9/L", referenceRange: "1.5 - 8.0 x10^9/L", status: "Normal" as const },
+    { date: "2024-02-01", marker: "LOINC:718-7 - Hemoglobin [Mass/volume] in Blood", value: 12.8, unit: "g/dL", referenceRange: "12.0 - 15.5 g/dL", status: "Normal" as const }
+  ];
+
+  const measurements: OmopMeasurement[] = rawLabs.map((l, idx) => ({
+    measurement_id: `meas-${300 + idx}`,
+    person_id: personId,
+    measurement_concept_id: l.marker,
+    value_as_number: l.value,
+    unit_concept_id: l.unit,
+    measurement_date: shiftDateString(l.date, offsetDays),
+    flag: l.status
+  }));
+
+  // OMOP CDM Drug Exposures (Infusions)
+  const rawInfusions = [
+    { id: "inf-101", drugName: "RxNorm:1303251 - Pembrolizumab 200 mg IV Injection", dose: "200 mg IV", route: "Intravenous Infusion", cycle: "Cycle 1 - 8 (Every 3 Weeks)", startDate: "2023-09-01", status: "Active" as const },
+    { id: "inf-102", drugName: "RxNorm:105260 - Doxorubicin 60 mg/m² Injection", dose: "60 mg/m²", route: "IV Push", cycle: "Cycle 1 - 4 (Dose-Dense)", startDate: "2023-09-01", endDate: "2023-10-26", status: "Completed" as const },
+    { id: "inf-103", drugName: "RxNorm:3002 - Cyclophosphamide 600 mg/m² Injection", dose: "600 mg/m²", route: "IV Infusion", cycle: "Cycle 1 - 4 (Dose-Dense)", startDate: "2023-09-01", endDate: "2023-10-26", status: "Completed" as const },
+    { id: "inf-104", drugName: "RxNorm:7804 - Paclitaxel 175 mg/m² Injection", dose: "175 mg/m²", route: "IV Infusion", cycle: "Cycle 5 - 8 (Dose-Dense)", startDate: "2023-11-09", status: "Active" as const }
+  ];
+
+  const drugExposures: OmopDrugExposure[] = rawInfusions.map((d) => ({
+    drug_exposure_id: d.id,
+    person_id: personId,
+    drug_concept_id: d.drugName,
+    drug_exposure_start_date: shiftDateString(d.startDate, offsetDays),
+    drug_exposure_end_date: d.endDate ? shiftDateString(d.endDate, offsetDays) : undefined,
+    quantity: d.dose,
+    route: d.route,
+    cycle: d.cycle,
+    status: d.status
+  }));
+
+  // OMOP CDM Notes
+  const rawNotes = [
+    {
+      noteId: "NOTE-2023-8820",
+      date: "2023-08-20",
+      authorRole: "Attending Oncologist (Dr. Alex Rivera)",
+      noteType: "Oncology Progress Note" as const,
+      deIdentifiedContent: "54-year-old female patient presented with Stage IIIB TNBC. Germline panel positive for pathogenic [REDACTED_GENE_MUTATION]. Multidisciplinary tumor board recommended dose-dense AC-T regimen combined with neoadjuvant pembrolizumab immunotherapy. Patient consented for UCANDO Data Commons biobanking under protocol [REDACTED_IRB].",
+      safeHarborRedactionsCount: 4
+    },
+    {
+      noteId: "NOTE-2023-9914",
+      date: "2023-11-22",
+      authorRole: "Radiologist",
+      noteType: "Radiology Impression" as const,
+      deIdentifiedContent: "Restaging PET/CT performed after 4 cycles of AC chemotherapy. Complete resolution of FDG uptake in the surgical bed (SUV max 1.2 vs 12.4 baseline). No distant metastatic lesions identified.",
+      safeHarborRedactionsCount: 2
+    }
+  ];
+
+  const omopNotes: OmopNote[] = rawNotes.map((n) => ({
+    note_id: n.noteId,
+    person_id: personId,
+    note_date: shiftDateString(n.date, offsetDays),
+    note_class: n.noteType === "Oncology Progress Note" ? "Progress Note" : "Radiology Impression",
+    note_text: n.deIdentifiedContent,
+    nlp_scrubbed: true,
+    safeHarborRedactionsCount: n.safeHarborRedactionsCount,
+    authorRole: n.authorRole
+  }));
+
   return {
     demographics: {
       id: patientId,
+      person_id: personId,
       deIdentifiedId: "DEID-BEACON-772910",
       mrn: "UC-4892104-A",
       age: 54,
       gender: "Female",
+      sex: "Female",
+      race: "White",
       ethnicity: "Non-Hispanic White",
       primaryDiagnosis: "Invasive Ductal Carcinoma of Breast",
       stage: "Stage IIIB (pT3, pN2a, cM0)",
       oncoSubtype: "Triple-Negative Breast Cancer (TNBC) - High Risk",
       attendingPhysician: "Dr. Alex Rivera, MD, PhD (Oncology)",
-      primaryCenter: "Beacon Comprehensive Cancer Center",
+      primaryCenter: "UC-CCC Comprehensive Cancer Center",
       consentStatus: "Consented"
     },
     consent: currentConsent,
+    dateShiftOffsetDays: offsetDays,
+    conditionOccurrences,
+    procedureOccurrences,
+    measurements,
+    drugExposures,
+    omopNotes,
     timeline: [
       {
         id: "evt-01",
-        date: "2023-07-28",
+        date: shiftDateString("2023-07-28", offsetDays),
         type: "diagnosis",
         title: "Initial Diagnosis: Right Breast Invasive Carcinoma",
         description: "Core needle biopsy confirmed invasive ductal carcinoma, Grade 3. ER 0%, PR 0%, HER2 1+ (Triple Negative).",
@@ -250,7 +404,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-02",
-        date: "2023-08-04",
+        date: shiftDateString("2023-08-04", offsetDays),
         type: "surgery",
         title: "Surgical Resection & Biospecimen Collection",
         description: "Right modified radical mastectomy with axillary lymph node dissection. 4 of 12 lymph nodes positive.",
@@ -260,7 +414,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-03",
-        date: "2023-08-18",
+        date: shiftDateString("2023-08-18", offsetDays),
         type: "genomics",
         title: "Multiomics Profiling: BRCA1 Germline Pathogenic Variant",
         description: "Comprehensive genomic profiling identified BRCA1 c.5266dupC (p.Gln1756Profs*74) frameshift variant with 48.2% VAF.",
@@ -271,7 +425,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-04",
-        date: "2023-09-01",
+        date: shiftDateString("2023-09-01", offsetDays),
         type: "treatment",
         title: "Initiation of Dose-Dense AC-T + Pembrolizumab Regimen",
         description: "Cycle 1: Doxorubicin (60 mg/m²) + Cyclophosphamide (600 mg/m²) + Pembrolizumab (200 mg).",
@@ -281,7 +435,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-05",
-        date: "2023-10-14",
+        date: shiftDateString("2023-10-14", offsetDays),
         type: "toxicity",
         title: "Adverse Toxicity: Grade 3 Febrile Neutropenia",
         description: "ANC dropped to 0.4 x 10^9/L. Hospitalized for 48 hours, resolved after G-CSF (Filgrastim) support.",
@@ -291,7 +445,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-06",
-        date: "2023-11-20",
+        date: shiftDateString("2023-11-20", offsetDays),
         type: "imaging",
         title: "Restaging PET/CT & MRI Radiology Study",
         description: "Restaging PET/CT scan demonstrates complete metabolic response in surgical bed and axillary nodes.",
@@ -303,7 +457,7 @@ export function getPatient360(patientId: string): Patient360Record {
       },
       {
         id: "evt-07",
-        date: "2024-01-15",
+        date: shiftDateString("2024-01-15", offsetDays),
         type: "genomics",
         title: "ctDNA Liquid Biopsy Monitoring (Signatera)",
         description: "Circulating tumor DNA test: Undetectable ctDNA (<0.01 MTM/mL). Molecular complete response.",
@@ -359,7 +513,7 @@ export function getPatient360(patientId: string): Patient360Record {
         studyId: "STD-2023-9941",
         accessionNumber: "ACC-2023-9941",
         modality: "PET/CT",
-        studyDate: "2023-11-20",
+        studyDate: shiftDateString("2023-11-20", offsetDays),
         bodyPart: "Chest/Abdomen/Pelvis",
         instancesCount: 480,
         dicomWebEndpoint: "https://imaging.demo-cancercenter.org/dicomweb/studies/1.2.840.113619.2.55.3.28",
@@ -371,7 +525,7 @@ export function getPatient360(patientId: string): Patient360Record {
         studyId: "STD-2023-8102",
         accessionNumber: "ACC-2023-8102",
         modality: "MRI",
-        studyDate: "2023-08-01",
+        studyDate: shiftDateString("2023-08-01", offsetDays),
         bodyPart: "Bilateral Breast with Contrast",
         instancesCount: 320,
         dicomWebEndpoint: "https://imaging.demo-cancercenter.org/dicomweb/studies/1.2.840.113619.2.55.3.10",
@@ -383,7 +537,7 @@ export function getPatient360(patientId: string): Patient360Record {
         studyId: "STD-2023-WSI-04",
         accessionNumber: "ACC-WSI-2023-441",
         modality: "WSI",
-        studyDate: "2023-08-05",
+        studyDate: shiftDateString("2023-08-05", offsetDays),
         bodyPart: "Surgical Specimen Histology",
         instancesCount: 12,
         dicomWebEndpoint: "https://pathology.demo-cancercenter.org/dicomweb/studies/1.3.6.1.4.1.59973.1",
@@ -392,65 +546,22 @@ export function getPatient360(patientId: string): Patient360Record {
         findingsSummary: "Whole slide pathology 40x scan. Tumor infiltrating lymphocytes (TILs) elevated at 45%."
       }
     ],
-    labs: [
-      { date: "2023-07-28", marker: "CA 15-3", value: 68.4, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Elevated" },
-      { date: "2023-09-01", marker: "CA 15-3", value: 42.1, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Elevated" },
-      { date: "2023-11-20", marker: "CA 15-3", value: 18.2, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Normal" },
-      { date: "2024-02-01", marker: "CA 15-3", value: 14.5, unit: "U/mL", referenceRange: "< 30.0 U/mL", status: "Normal" },
-      { date: "2023-10-14", marker: "Absolute Neutrophil Count (ANC)", value: 0.4, unit: "x10^9/L", referenceRange: "1.5 - 8.0 x10^9/L", status: "High Risk" },
-      { date: "2023-10-18", marker: "Absolute Neutrophil Count (ANC)", value: 2.8, unit: "x10^9/L", referenceRange: "1.5 - 8.0 x10^9/L", status: "Normal" },
-      { date: "2024-02-01", marker: "Hemoglobin", value: 12.8, unit: "g/dL", referenceRange: "12.0 - 15.5 g/dL", status: "Normal" }
-    ],
-    infusions: [
-      {
-        id: "inf-101",
-        drugName: "Pembrolizumab (Keytruda)",
-        dose: "200 mg IV",
-        route: "Intravenous Infusion",
-        cycle: "Cycle 1 - 8 (Every 3 Weeks)",
-        startDate: "2023-09-01",
-        status: "Active"
-      },
-      {
-        id: "inf-102",
-        drugName: "Doxorubicin (Adriamycin)",
-        dose: "60 mg/m²",
-        route: "IV Push",
-        cycle: "Cycle 1 - 4 (Dose-Dense)",
-        startDate: "2023-09-01",
-        endDate: "2023-10-26",
-        toxicityGrade: 3,
-        toxicityNotes: "Grade 3 neutropenia managed with G-CSF",
-        status: "Completed"
-      },
-      {
-        id: "inf-103",
-        drugName: "Cyclophosphamide (Cytoxan)",
-        dose: "600 mg/m²",
-        route: "IV Infusion",
-        cycle: "Cycle 1 - 4 (Dose-Dense)",
-        startDate: "2023-09-01",
-        endDate: "2023-10-26",
-        toxicityGrade: 1,
-        status: "Completed"
-      },
-      {
-        id: "inf-104",
-        drugName: "Paclitaxel (Taxol)",
-        dose: "175 mg/m²",
-        route: "IV Infusion",
-        cycle: "Cycle 5 - 8 (Dose-Dense)",
-        startDate: "2023-11-09",
-        status: "Active"
-      }
-    ],
+    labs: rawLabs.map((l) => ({
+      ...l,
+      date: shiftDateString(l.date, offsetDays)
+    })),
+    infusions: rawInfusions.map((d) => ({
+      ...d,
+      startDate: shiftDateString(d.startDate, offsetDays),
+      endDate: d.endDate ? shiftDateString(d.endDate, offsetDays) : undefined
+    })),
     biospecimens: [
       {
         specimenId: "SPEC-2023-FFPE-904",
         type: "FFPE Tumor Block",
         anatomicSite: "Right Breast Primary Tumor",
         volume: "1 Tissue Block (10 slides cut)",
-        collectionDate: "2023-08-04",
+        collectionDate: shiftDateString("2023-08-04", offsetDays),
         limsBarcode: "HTRC-BC-2023-88901",
         storageTemp: "-20°C Vault",
         lineageStage: "Sequencing Ready"
@@ -460,7 +571,7 @@ export function getPatient360(patientId: string): Patient360Record {
         type: "Plasma",
         anatomicSite: "Peripheral Blood Draw",
         volume: "4 mL Aliqout x 3",
-        collectionDate: "2023-11-20",
+        collectionDate: shiftDateString("2023-11-20", offsetDays),
         limsBarcode: "HTRC-PL-2023-99411",
         storageTemp: "-80°C Cryo",
         lineageStage: "DNA Extraction"
@@ -470,30 +581,16 @@ export function getPatient360(patientId: string): Patient360Record {
         type: "Buffy Coat Blood",
         anatomicSite: "Germline Control Draw",
         volume: "2 mL Aliquot",
-        collectionDate: "2023-08-04",
+        collectionDate: shiftDateString("2023-08-04", offsetDays),
         limsBarcode: "HTRC-GERM-2023-0041",
         storageTemp: "-80°C Cryo",
         lineageStage: "Sequencing Ready"
       }
     ],
-    notes: [
-      {
-        noteId: "NOTE-2023-8820",
-        date: "2023-08-20",
-        authorRole: "Attending Oncologist (Dr. Alex Rivera)",
-        noteType: "Oncology Progress Note",
-        deIdentifiedContent: "54-year-old female patient presented with Stage IIIB TNBC. Germline panel positive for pathogenic [REDACTED_GENE_MUTATION]. Multidisciplinary tumor board recommended dose-dense AC-T regimen combined with neoadjuvant pembrolizumab immunotherapy. Patient consented for Beacon Data Commons biobanking under protocol [REDACTED_IRB].",
-        safeHarborRedactionsCount: 4
-      },
-      {
-        noteId: "NOTE-2023-9914",
-        date: "2023-11-22",
-        authorRole: "Radiologist",
-        noteType: "Radiology Impression",
-        deIdentifiedContent: "Restaging PET/CT performed after 4 cycles of AC chemotherapy. Complete resolution of FDG uptake in the surgical bed (SUV max 1.2 vs 12.4 baseline). No distant metastatic lesions identified.",
-        safeHarborRedactionsCount: 2
-      }
-    ]
+    notes: rawNotes.map((n) => ({
+      ...n,
+      date: shiftDateString(n.date, offsetDays)
+    }))
   };
 }
 
