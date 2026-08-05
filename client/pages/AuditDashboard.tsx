@@ -72,7 +72,7 @@ export default function AuditDashboard() {
               </div>
             </div>
 
-            <Button className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs">
+            <Button className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs">
               <Download className="w-3.5 h-3.5 mr-1.5" /> Export Certified SOC2 Audit Log
             </Button>
           </div>

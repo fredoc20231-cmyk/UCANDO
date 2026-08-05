@@ -38,7 +38,7 @@ export default function Manual() {
             <BookOpen className="w-5 h-5 text-brand-maroon" /> 1. Platform Overview
           </h2>
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            The Beacon Cancer Data Commons (UCCANDO) is a governed, multi-modal oncology data integration platform designed to break down siloes between electronic health records (EHR), high-throughput genomics pipelines, DICOM imaging archives, and clinical trial matching registries. It enables real-time cohort discovery, longitudinal patient timeline visualization, and automated OPA policy-driven data sharing across participating cancer center spokes.
+            UCANDO, the UC-CCC Cancer Data Commons, is a governed, multi-modal oncology data integration platform designed to break down siloes between electronic health records (EHR), high-throughput genomics pipelines, DICOM imaging archives, and clinical trial matching registries. It enables real-time cohort discovery, longitudinal patient timeline visualization, and automated OPA policy-driven data sharing across participating cancer center spokes.
           </p>
         </section>
 
@@ -138,7 +138,7 @@ export default function Manual() {
             <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400" /> About This Platform
           </h2>
           <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-            UCANDO was developed by the Computational Oncology and Bioinformatics Unit at the University of Chicago Comprehensive Cancer Center (UC-CCC), under the direction of Dr. Kevin Odunsi and Dr. Ahmed Fadiel.
+            UCANDO was developed by the Computational Oncology and Bioinformatics Unit at the University of Chicago Comprehensive Cancer Center (UC-CCC), under the direction of Dr. K.O. and Dr. A.F.
           </p>
           <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed pt-2 border-t border-slate-100 dark:border-slate-800">
             All patient, trial, and clinical data shown in this platform is synthetic and used for demonstration purposes only. It does not represent real patients, real clinical outcomes, or real decisions made by any named individual.

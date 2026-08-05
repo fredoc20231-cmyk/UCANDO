@@ -134,7 +134,7 @@ export function Layout({ children }: LayoutProps) {
               <div className="h-11 px-1.5 py-1 rounded-xl border border-cyan-500/50 bg-slate-950 flex items-center justify-center shadow-lg group-hover:scale-105 group-hover:border-cyan-400 transition-all shrink-0">
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
-                  alt="UCCANDO Logo"
+                  alt="UCANDO Logo"
                   className="h-full w-auto object-contain rounded"
                 />
               </div>
@@ -147,7 +147,7 @@ export function Layout({ children }: LayoutProps) {
                     UCANDO
                   </Badge>
                 </div>
-                <p className="text-[11px] text-slate-300">Enterprise Oncology Integration Hub • UCCANDO</p>
+                <p className="text-[11px] text-slate-300">Enterprise Oncology Integration Hub • UCANDO</p>
               </div>
             </Link>
 

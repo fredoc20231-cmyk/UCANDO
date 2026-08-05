@@ -59,7 +59,7 @@ export default function Index() {
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-red-700 hover:bg-red-600 text-white font-bold px-3 py-1 text-xs border border-red-400 shadow-md">
+                <Badge className="bg-primary dark:bg-brand-maroon text-white font-bold px-3 py-1 text-xs shadow-md">
                   UC-CCC Cancer Data Commons
                 </Badge>
                 <Badge variant="outline" className="border-cyan-500/40 text-cyan-800 dark:text-cyan-200 bg-cyan-100/90 dark:bg-cyan-950/90 text-xs font-mono font-bold shadow-md">
@@ -80,7 +80,7 @@ export default function Index() {
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <Link to="/patient-360?id=UC-BEACON-89421">
-                  <Button className="bg-red-700 hover:bg-red-600 text-white font-bold text-xs h-10 px-5 shadow-lg shadow-red-950/20 border border-red-500/50">
+                  <Button className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-bold text-xs h-10 px-5 shadow-lg border border-primary/50 dark:border-red-500/50">
                     <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
@@ -94,15 +94,15 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Featured UCCANDO DNA Orb Logo Badge */}
+            {/* Featured UCANDO DNA Orb Logo Badge */}
             <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-white/90 dark:bg-slate-950/80 border border-cyan-500/30 shadow-2xl shadow-cyan-950/20 shrink-0">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
-                alt="UCCANDO Logo"
+                alt="UCANDO Logo"
                 className="h-44 w-auto max-w-[200px] object-contain rounded-xl shadow-lg border border-cyan-400/20 bg-slate-100 dark:bg-slate-950/60 p-1"
               />
               <span className="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 font-mono mt-2 tracking-widest uppercase">
-                UCCANDO
+                UCANDO
               </span>
             </div>
           </div>
@@ -207,7 +207,7 @@ export default function Index() {
             <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col justify-between hover:border-red-500/50 transition-all shadow-lg group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-brand-maroon text-white">
+                  <div className="p-2.5 rounded-xl bg-primary dark:bg-brand-maroon text-white">
                     <Users className="w-5 h-5" />
                   </div>
                   <Badge className="bg-red-950 text-red-300 border-red-800/60 text-[10px]">
@@ -224,7 +224,7 @@ export default function Index() {
 
               <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
                 <span className="text-slate-500 font-mono text-[11px]">Patient: UC-BEACON-89421</span>
-                <Link to="/patient-360?id=UC-BEACON-89421" className="text-red-600 dark:text-red-400 font-semibold flex items-center gap-1 hover:underline">
+                <Link to="/patient-360?id=UC-BEACON-89421" className="text-primary dark:text-red-400 font-semibold flex items-center gap-1 hover:underline">
                   Launch View <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>

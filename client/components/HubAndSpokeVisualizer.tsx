@@ -93,7 +93,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
                 >
                   <div className="absolute top-0 right-0 w-2 h-full bg-emerald-500 rounded-r-xl" />
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-sky-400 group-hover:bg-brand-maroon group-hover:text-white transition-colors">
+                    <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-sky-400 group-hover:bg-primary dark:group-hover:bg-brand-maroon group-hover:text-white transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -112,7 +112,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
           {/* Center Hub Core (Data Zones & Governance) */}
           <div className="lg:col-span-6 relative p-6 rounded-2xl bg-white dark:bg-slate-900/90 border-2 border-brand-maroon/60 shadow-xl text-center space-y-5">
             {/* Hub Header Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-maroon text-white text-xs font-bold shadow-md border border-red-500/30">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary dark:bg-brand-maroon text-white text-xs font-bold shadow-md">
               <ShieldCheck className="w-4 h-4 text-emerald-300" />
               <span>UCANDO / UC-CCC HUB — Single Governed Point of Truth</span>
             </div>
@@ -175,7 +175,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
                 >
                   <div className="absolute top-0 right-0 w-2 h-full bg-brand-maroon rounded-r-xl" />
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-emerald-400 group-hover:bg-brand-maroon group-hover:text-white transition-colors">
+                    <div className="p-2 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-800 dark:text-emerald-400 group-hover:bg-primary dark:group-hover:bg-brand-maroon group-hover:text-white transition-colors">
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 min-w-0">

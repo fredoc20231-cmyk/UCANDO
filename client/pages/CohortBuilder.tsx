@@ -716,7 +716,7 @@ export default function CohortBuilder() {
                     handleCopyText(cohortData?.mcodeQueryJson || "");
                     setExportModalOpen(false);
                   }}
-                  className="bg-brand-maroon hover:bg-red-800 text-white font-semibold text-xs"
+                  className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
                 >
                   Confirm & Download Dataset
                 </Button>

@@ -126,7 +126,7 @@ export default function OmicsView() {
               <Button
                 size="sm"
                 onClick={() => setSmartModalOpen(true)}
-                className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs h-8 shadow-md"
+                className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs h-8 shadow-md"
               >
                 <Zap className="w-3.5 h-3.5 mr-1.5" />
                 SMART Launch: Cronos.life Multiomics
