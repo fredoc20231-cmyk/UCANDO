@@ -49,7 +49,7 @@ export default function Patient360() {
   const [smartLaunching, setSmartLaunching] = useState<string | null>(null);
   const [smartModalOpen, setSmartModalOpen] = useState(false);
   const [smartPlatform, setSmartPlatform] = useState<"omics" | "imaging">("omics");
-  const [smartTargetUrl, setSmartTargetUrl] = useState("https://cronos.life/");
+  const [smartTargetUrl, setSmartTargetUrl] = useState("https://cronus.life/");
 
   useEffect(() => {
     setLoading(true);
@@ -68,7 +68,7 @@ export default function Patient360() {
   const triggerSmartLaunch = (platform: "omics" | "imaging") => {
     setSmartLaunching(platform);
     setSmartPlatform(platform);
-    setSmartTargetUrl(platform === "omics" ? "https://cronos.life/" : "https://cronos.life/");
+    setSmartTargetUrl(platform === "omics" ? "https://cronus.life/" : "https://cronus.life/");
     setTimeout(() => {
       setSmartLaunching(null);
       setSmartModalOpen(true);
@@ -581,7 +581,7 @@ export default function Patient360() {
         isOpen={smartModalOpen}
         onClose={() => setSmartModalOpen(false)}
         patientId={demographics?.id || patientId}
-        platformName={smartPlatform === "omics" ? "Cronus Multiomics Platform" : "OHIF DICOMweb Imaging Viewer"}
+        platformName={smartPlatform === "omics" ? "PhoenixMO Multiomics Platform" : "OHIF DICOMweb Imaging Viewer"}
         targetUrl={smartTargetUrl}
       />
     </Layout>

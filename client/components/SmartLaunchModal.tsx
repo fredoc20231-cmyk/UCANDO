@@ -36,8 +36,8 @@ export function SmartLaunchModal({
   isOpen,
   onClose,
   patientId = "UC-BEACON-89421",
-  platformName = "Cronos.life Multiomics Platform",
-  targetUrl = "https://cronos.life/"
+  platformName = "PhoenixMO Multiomics Platform",
+  targetUrl = "https://cronus.life/"
 }: SmartLaunchModalProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [iframeKey, setIframeKey] = useState(0);
@@ -253,7 +253,7 @@ export function SmartLaunchModal({
             </div>
 
             <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 truncate hidden sm:inline">
-              Cronos.life Frame Drag Handle
+              PhoenixMO Frame Drag Handle
             </span>
           </div>
         )}
