@@ -114,7 +114,7 @@ export function HubAndSpokeVisualizer({ spokes, dataZones }: HubAndSpokeVisualiz
             {/* Hub Header Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-maroon text-white text-xs font-bold shadow-lg shadow-red-900/40 border border-red-500/30">
               <ShieldCheck className="w-4 h-4 text-emerald-300" />
-              <span>BEACON HUB — Single Governed Point of Truth</span>
+              <span>UCANDO / UC-CCC HUB — Single Governed Point of Truth</span>
             </div>
 
             <p className="text-xs text-slate-300 max-w-lg mx-auto">

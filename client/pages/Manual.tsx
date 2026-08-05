@@ -25,10 +25,10 @@ export default function Manual() {
             Documentation & Platform Architecture
           </Badge>
           <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            Beacon Cancer Data Commons Operational Manual
+            UC-CCC Cancer Data Commons Operational Manual
           </h1>
           <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            A comprehensive guide for clinicians, oncologists, biostatisticians, and administrators evaluating and deploying the UCCANDO / Beacon oncology integration hub.
+            A comprehensive guide for clinicians, oncologists, biostatisticians, and administrators evaluating and deploying the UCANDO / UC-CCC oncology integration hub.
           </p>
         </div>
 

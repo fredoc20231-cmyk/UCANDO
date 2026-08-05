@@ -60,10 +60,10 @@ export default function Index() {
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge className="bg-red-700 hover:bg-red-600 text-white font-bold px-3 py-1 text-xs border border-red-400 shadow-md">
-                  Beacon Cancer Data Commons
+                  UC-CCC Cancer Data Commons
                 </Badge>
                 <Badge variant="outline" className="border-cyan-500/40 text-cyan-800 dark:text-cyan-200 bg-cyan-100/90 dark:bg-cyan-950/90 text-xs font-mono font-bold shadow-md">
-                  UCCANDO • Beacon
+                  UCANDO • UC-CCC
                 </Badge>
                 <Badge variant="outline" className="border-emerald-500/40 text-emerald-800 dark:text-emerald-200 bg-emerald-100/90 dark:bg-emerald-950/90 text-xs font-bold shadow-md">
                   <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-600 dark:text-emerald-400" /> HIPAA Consented Ecosystem

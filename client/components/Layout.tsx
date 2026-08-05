@@ -141,10 +141,10 @@ export function Layout({ children }: LayoutProps) {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-sm tracking-tight text-slate-900 dark:text-white group-hover:text-cyan-600 dark:group-hover:text-cyan-300 transition-colors">
-                    Beacon Cancer Data Commons
+                    UC-CCC Cancer Data Commons
                   </span>
                   <Badge variant="outline" className="border-cyan-500/40 bg-cyan-950/50 text-cyan-300 text-[10px] px-1.5 py-0 font-mono">
-                    BEACON
+                    UCANDO
                   </Badge>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">Enterprise Oncology Integration Hub • UCCANDO</p>
