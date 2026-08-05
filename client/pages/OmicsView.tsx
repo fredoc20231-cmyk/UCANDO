@@ -103,20 +103,20 @@ export default function OmicsView() {
     <Layout>
       <div className="space-y-6 pb-12">
         {/* Header */}
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-xl">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-purple-950 text-purple-300 border border-purple-700/50 shadow-md">
-                <Dna className="w-6 h-6 text-purple-400" />
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-md">
+                <Dna className="w-6 h-6 text-brand-maroon" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-white">Multiomics & Genomics Explorer</h1>
-                  <Badge variant="outline" className="border-purple-500/40 text-purple-300 bg-purple-950/40 text-[10px]">
+                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">Multiomics & Genomics Explorer</h1>
+                  <Badge variant="outline" className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-950 text-[10px]">
                     BioCompute Provenance IEEE 2791
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   High-throughput somatic & germline VCFs, gene expression matrices, and pathway enrichment scores.
                 </p>
               </div>
@@ -126,12 +126,12 @@ export default function OmicsView() {
               <Button
                 size="sm"
                 onClick={() => setSmartModalOpen(true)}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-8 shadow-md"
+                className="bg-brand-maroon hover:bg-brand-maroon/90 text-white font-semibold text-xs h-8 shadow-md"
               >
                 <Zap className="w-3.5 h-3.5 mr-1.5" />
                 SMART Launch: Cronos.life Multiomics
               </Button>
-              <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-xs py-1 px-3">
+              <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800/60 text-xs py-1 px-3">
                 <CheckCircle2 className="w-3.5 h-3.5 mr-1" /> Pipeline: Dragen v4.2 GRCh38
               </Badge>
             </div>
@@ -145,7 +145,7 @@ export default function OmicsView() {
                 placeholder="Search variant by gene (e.g. BRCA1, TP53) or HGVS notation..."
                 value={searchGene}
                 onChange={(e) => setSearchGene(e.target.value)}
-                className="pl-9 bg-slate-950 border-slate-800 text-xs text-slate-200"
+                className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200"
               />
             </div>
 
@@ -154,8 +154,8 @@ export default function OmicsView() {
               onClick={() => setFilterPathogenicOnly(!filterPathogenicOnly)}
               className={`text-xs ${
                 filterPathogenicOnly
-                  ? "bg-red-900 text-white hover:bg-red-800 border-red-700"
-                  : "bg-slate-950 text-slate-300 border-slate-800 hover:bg-slate-900"
+                  ? "bg-red-600 dark:bg-red-900 text-white hover:bg-red-700 dark:hover:bg-red-800 border-red-500"
+                  : "bg-white dark:bg-slate-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900"
               }`}
             >
               <Filter className="w-3.5 h-3.5 mr-1.5" />
@@ -166,28 +166,28 @@ export default function OmicsView() {
 
         {/* Main Tabs */}
         <Tabs defaultValue="variants" className="space-y-6">
-          <TabsList className="bg-slate-900 border border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="variants" className="text-xs data-[state=active]:bg-purple-800 text-slate-300">
+          <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl flex flex-wrap">
+            <TabsTrigger value="variants" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Dna className="w-3.5 h-3.5 mr-1.5" /> Genomic Variants Table
             </TabsTrigger>
-            <TabsTrigger value="oncoprint" className="text-xs data-[state=active]:bg-purple-800 text-slate-300">
+            <TabsTrigger value="oncoprint" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Layers className="w-3.5 h-3.5 mr-1.5" /> OncoPrint Matrix
             </TabsTrigger>
-            <TabsTrigger value="pathways" className="text-xs data-[state=active]:bg-purple-800 text-slate-300">
+            <TabsTrigger value="pathways" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Activity className="w-3.5 h-3.5 mr-1.5" /> Pathway Enrichment
             </TabsTrigger>
-            <TabsTrigger value="igv" className="text-xs data-[state=active]:bg-purple-800 text-slate-300">
+            <TabsTrigger value="igv" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <BarChart3 className="w-3.5 h-3.5 mr-1.5" /> IGV Browser Preview
             </TabsTrigger>
-            <TabsTrigger value="cronos" className="text-xs data-[state=active]:bg-sky-700 text-slate-300">
-              <Globe className="w-3.5 h-3.5 mr-1.5 text-sky-300" /> Cronos.life Frame
+            <TabsTrigger value="cronos" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+              <Globe className="w-3.5 h-3.5 mr-1.5" /> Cronos.life Frame
             </TabsTrigger>
           </TabsList>
 
           {/* Genomic Variants Table */}
-          <TabsContent value="variants" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+          <TabsContent value="variants" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono">
                 Detected Somatic & Germline Variants ({filteredVariants.length})
               </span>
               <span className="text-[10px] text-slate-500 font-mono">

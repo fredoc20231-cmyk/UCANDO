@@ -50,27 +50,27 @@ export default function ImagingHub() {
     <Layout>
       <div className="space-y-6 pb-12">
         {/* Header */}
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 shadow-xl">
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-sky-950 text-sky-300 border border-sky-700/50 shadow-md">
-                <ImageIcon className="w-6 h-6 text-sky-400" />
+              <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-800 shadow-md">
+                <ImageIcon className="w-6 h-6 text-brand-maroon" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-white">Imaging & Digital Pathology Workspace</h1>
-                  <Badge variant="outline" className="border-sky-500/40 text-sky-300 bg-sky-950/40 text-[10px]">
+                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">Imaging & Digital Pathology Workspace</h1>
+                  <Badge variant="outline" className="border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-950 text-[10px]">
                     DICOMweb STOW-RS
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                   Multi-modal PET/CT radiology & Whole Slide Image (WSI) H&E digital pathology zero-footprint viewer.
                 </p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800 text-xs py-1 px-3">
+              <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-xs py-1 px-3">
                 <ShieldCheck className="w-3.5 h-3.5 mr-1" /> De-identified Pixel Enclave
               </Badge>
             </div>
@@ -78,35 +78,35 @@ export default function ImagingHub() {
 
           {/* Metadata Chips */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
               <span className="text-[10px] text-slate-500 block uppercase">Accession Number</span>
-              <span className="font-bold text-sky-300">{study?.accessionNumber || "ACC-UCH-2024-9910"}</span>
+              <span className="font-bold text-slate-900 dark:text-slate-200">{study?.accessionNumber || "ACC-UCH-2024-9910"}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
               <span className="text-[10px] text-slate-500 block uppercase">Modality & Body Part</span>
-              <span className="font-bold text-white">{study?.modality} • {study?.bodyPart}</span>
+              <span className="font-bold text-slate-900 dark:text-white">{study?.modality} • {study?.bodyPart}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
               <span className="text-[10px] text-slate-500 block uppercase">Pathology WSI Slide ID</span>
-              <span className="font-bold text-purple-300">{study?.pathologySlide?.slideId}</span>
+              <span className="font-bold text-brand-maroon dark:text-rose-300">{study?.pathologySlide?.slideId}</span>
             </div>
-            <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+            <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
               <span className="text-[10px] text-slate-500 block uppercase">AI Tumor Purity Score</span>
-              <span className="font-bold text-emerald-300">{study?.pathologySlide?.tumorPurityPercent}% Tumor</span>
+              <span className="font-bold text-emerald-600 dark:text-emerald-300">{study?.pathologySlide?.tumorPurityPercent}% Tumor</span>
             </div>
           </div>
         </div>
 
         {/* Viewers Layout */}
         <Tabs defaultValue="radiology" className="space-y-6">
-          <TabsList className="bg-slate-900 border border-slate-800 p-1 rounded-xl">
-            <TabsTrigger value="radiology" className="text-xs data-[state=active]:bg-sky-700 text-slate-300">
+          <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 rounded-xl">
+            <TabsTrigger value="radiology" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <ImageIcon className="w-3.5 h-3.5 mr-1.5" /> PET/CT DICOM Slice Viewer
             </TabsTrigger>
-            <TabsTrigger value="pathology" className="text-xs data-[state=active]:bg-sky-700 text-slate-300">
+            <TabsTrigger value="pathology" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Layers className="w-3.5 h-3.5 mr-1.5" /> Whole Slide Image H&E Pathology
             </TabsTrigger>
-            <TabsTrigger value="radiomics" className="text-xs data-[state=active]:bg-sky-700 text-slate-300">
+            <TabsTrigger value="radiomics" className="text-xs data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Activity className="w-3.5 h-3.5 mr-1.5" /> Radiomics Quantitative Features
             </TabsTrigger>
           </TabsList>

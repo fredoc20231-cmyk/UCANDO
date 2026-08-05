@@ -70,6 +70,11 @@ export const handleUpdateConsent: RequestHandler = (req, res) => {
   res.json(beaconRepo.updateConsent(patientId, consentType, enabled, permissions));
 };
 
+export const handleRegisterPatient: RequestHandler = (req, res) => {
+  const patientData = req.body || {};
+  res.json(beaconRepo.registerPatient(patientData));
+};
+
 export const handleGeminiCopilot: RequestHandler = async (req, res) => {
   const { prompt, patientContext } = req.body || {};
 

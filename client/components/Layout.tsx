@@ -1,4 +1,4 @@
-import { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect, ReactNode } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -40,7 +40,9 @@ import {
   Sparkles,
   ExternalLink,
   Layers,
-  LogIn
+  LogIn,
+  Globe,
+  HelpCircle
 } from "lucide-react";
 
 function CloudIcon({ className }: { className?: string }) {
@@ -79,6 +81,8 @@ export function Layout({ children }: LayoutProps) {
     { label: "Governance & Admin", path: "/governance", icon: Shield },
     { label: "Audit & Compliance", path: "/audit-dashboard", icon: Activity },
     { label: "Data Quality", path: "/data-quality", icon: FileSpreadsheet },
+    { label: "Global Integrations", path: "/global-integrations", icon: Globe, hasDivider: true },
+    { label: "Help / Manual", path: "/manual", icon: HelpCircle },
   ];
 
   const searchSuggestions = [
@@ -365,20 +369,24 @@ export function Layout({ children }: LayoutProps) {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;
               return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
-                    isActive
-                      ? "bg-brand-maroon text-white shadow-sm shadow-red-900/50"
-                      : item.highlight
-                      ? "text-sky-600 dark:text-sky-300 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white"
-                      : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200"
-                  }`}
-                >
-                  <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500 dark:text-slate-400"}`} />
-                  <span>{item.label}</span>
-                </Link>
+                <React.Fragment key={item.path}>
+                  {item.hasDivider && (
+                    <div className="h-4 w-[1px] bg-slate-300 dark:bg-slate-800 mx-1 shrink-0" />
+                  )}
+                  <Link
+                    to={item.path}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
+                      isActive
+                        ? "bg-brand-maroon text-white shadow-sm shadow-red-900/50"
+                        : item.highlight
+                        ? "text-brand-maroon dark:text-rose-300 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white"
+                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200"
+                    }`}
+                  >
+                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500 dark:text-slate-400"}`} />
+                    <span>{item.label}</span>
+                  </Link>
+                </React.Fragment>
               );
             })}
           </div>

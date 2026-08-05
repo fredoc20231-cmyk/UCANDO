@@ -43,46 +43,76 @@ const consentStore: Record<string, PatientConsentState> = {
   }
 };
 
+let patientCountOffset = 0;
+const registeredPatientsList: Patient360Record[] = [];
+
 export function getHubStats(): HubStats {
+  const currentTotal = 104280 + patientCountOffset;
   return {
-    totalConsentedPatients: 104280,
-    totalBiospecimens: 1240500,
-    totalImagingStudies: 462100,
-    totalOmicsProfiles: 84910,
+    totalConsentedPatients: currentTotal,
+    totalBiospecimens: 1240500 + patientCountOffset * 3,
+    totalImagingStudies: 462100 + patientCountOffset * 2,
+    totalOmicsProfiles: 84910 + patientCountOffset,
     activeWorkspaces: 342,
     hipaaComplianceScore: 100,
     eventBusTps: 1845,
-    opaPolicyEnforcementsToday: 49210,
+    opaPolicyEnforcementsToday: 49210 + patientCountOffset * 5,
     dataZones: [
       {
         name: "Raw (Identified)",
         code: "raw",
-        count: 104280,
+        count: currentTotal,
         description: "Zero-Trust HIPAA Vault. EHR HL7/FHIR feeds, identified MRN/PHI isolated in encrypted tenant vault.",
         securityLevel: "AES-256 + HSM Isolated"
       },
       {
         name: "Curated (Controlled)",
         code: "curated",
-        count: 98450,
+        count: 98450 + patientCountOffset,
         description: "OMOP CDM v5.4 harmonized data, validated mCODE oncology profiles & BioCompute provenance.",
         securityLevel: "RBAC + Dynamic OPA Consent"
       },
       {
         name: "De-identified (Analytics)",
         code: "deid",
-        count: 98450,
+        count: 98450 + patientCountOffset,
         description: "Safe Harbor & Expert Determination de-identified clinical, omics & radiomics lakehouse zone.",
         securityLevel: "Tokenized Research ID"
       },
       {
         name: "Public (GA4GH Beacon)",
         code: "public",
-        count: 85200,
+        count: 85200 + patientCountOffset,
         description: "GA4GH Beacon v2 federated discovery endpoint. Aggregate frequency queries only, zero PHI.",
         securityLevel: "Differential Privacy Budgeted"
       }
     ]
+  };
+}
+
+export function registerPatient(data: {
+  name?: string;
+  mrn?: string;
+  diagnosis?: string;
+  primarySite?: string;
+  age?: number;
+  gender?: string;
+}): { success: boolean; patientId: string; stats: HubStats } {
+  patientCountOffset += 1;
+  const newId = `UC-BEACON-${89421 + patientCountOffset}`;
+
+  consentStore[newId] = {
+    status: "Active",
+    effectiveDate: new Date().toISOString().split("T")[0],
+    lastVerified: `${new Date().toISOString().split("T")[0]} (OPA Policy #UC-CONSENT-${9942 + patientCountOffset})`,
+    opaPolicyId: "opa:policy:beacon:cancer:beacon:consent_v2_4",
+    permissions: { ...defaultConsentPermissions }
+  };
+
+  return {
+    success: true,
+    patientId: newId,
+    stats: getHubStats()
   };
 }
 

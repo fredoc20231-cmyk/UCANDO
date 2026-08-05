@@ -21,6 +21,8 @@ import TrialMatching from "./pages/TrialMatching";
 import Governance from "./pages/Governance";
 import AuditDashboard from "./pages/AuditDashboard";
 import DataQuality from "./pages/DataQuality";
+import GlobalIntegrations from "./pages/GlobalIntegrations";
+import Manual from "./pages/Manual";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -73,6 +75,15 @@ const App = () => (
                 }
               />
               <Route path="/data-quality" element={<DataQuality />} />
+              <Route
+                path="/global-integrations"
+                element={
+                  <RequireAuth>
+                    <GlobalIntegrations />
+                  </RequireAuth>
+                }
+              />
+              <Route path="/manual" element={<Manual />} />
 
               {/* CATCH-ALL CATCH ROUTE */}
               <Route path="*" element={<NotFound />} />

@@ -256,8 +256,8 @@ export default function CohortBuilder() {
                 onClick={() => applyPreset("brca")}
                 className={`text-xs h-7 rounded-full ${
                   activePreset === "brca"
-                    ? "bg-sky-600 hover:bg-sky-500 text-white"
-                    : "border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-900"
+                    ? "bg-brand-maroon hover:bg-brand-maroon/90 text-white"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
                 }`}
               >
                 BRCA1/2 PARP Cohort
@@ -268,8 +268,8 @@ export default function CohortBuilder() {
                 onClick={() => applyPreset("tnbc")}
                 className={`text-xs h-7 rounded-full ${
                   activePreset === "tnbc"
-                    ? "bg-sky-600 hover:bg-sky-500 text-white"
-                    : "border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-900"
+                    ? "bg-brand-maroon hover:bg-brand-maroon/90 text-white"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
                 }`}
               >
                 Triple Negative Breast Cancer
@@ -280,8 +280,8 @@ export default function CohortBuilder() {
                 onClick={() => applyPreset("lung_egfr")}
                 className={`text-xs h-7 rounded-full ${
                   activePreset === "lung_egfr"
-                    ? "bg-sky-600 hover:bg-sky-500 text-white"
-                    : "border-slate-800 bg-slate-950 text-slate-300 hover:bg-slate-900"
+                    ? "bg-brand-maroon hover:bg-brand-maroon/90 text-white"
+                    : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-900"
                 }`}
               >
                 NSCLC EGFR Mutated
