@@ -37,7 +37,8 @@ import {
   Layers,
   Sparkles,
   Play,
-  Database
+  Database,
+  ArrowLeft
 } from "lucide-react";
 
 export default function Patient360() {
@@ -224,7 +225,26 @@ export default function Patient360() {
         )}
 
         {/* Tabbed Clinical Explorer */}
-        <div className={viewMode === "orbit" ? "hidden" : "block"}>
+        <div className={viewMode === "orbit" ? "hidden" : "block space-y-4"}>
+          {/* Back to Orbit View navigation bar */}
+          <div className="p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-between shadow-sm">
+            <div className="flex items-center gap-2 text-xs">
+              <span className="font-semibold text-slate-700 dark:text-slate-300">Viewing Patient Detail Domain:</span>
+              <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 uppercase font-mono font-bold text-[10px]">
+                {activeTab}
+              </Badge>
+            </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setViewMode("orbit")}
+              className="h-8 px-3 text-xs font-bold border-primary text-primary hover:bg-primary hover:text-white transition-all shadow-sm flex items-center gap-1.5"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Patient Orbit View</span>
+            </Button>
+          </div>
+
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 overflow-x-auto flex flex-wrap">
             <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
