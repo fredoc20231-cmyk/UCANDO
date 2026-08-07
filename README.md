@@ -54,6 +54,16 @@ Beacon operates as a **Hub-and-Spoke** federated architecture where the central 
 
 ---
 
+## ✨ Advanced UCANDO Modules & Capabilities
+
+- **iUCANDO AI Clinical Assistant**: Powered by Google Gemini 3.5 Flash, featuring multimodal Text, Voice recognition (via Web Speech API), and Spoken responses (via SpeechSynthesis). Accessible via top navigation or the persistent floating action trigger.
+- **Patient Orbit View**: Radial interactive visualization centering patient nodes (`UC-CCC-*`) surrounded by 6 orbital domain satellites (Clinical EHR, Multiomics, DICOM Imaging, Dynamic Consent, Audit Trail, and Metabolomics) with instant tab switching.
+- **Admin Census & Aggregate Metrics Dashboard** (`/admin`): Executive KPI dashboard summarizing total consented patients, multiomics samples, active clinical trials, disease distribution, and treatment regimens via interactive Recharts visualizations.
+- **OHIF Medical Imaging Integration**: Direct SMART-on-FHIR launch link to open OHIF DICOM radiology viewer (`https://viewer.ohif.org/`) for digital imaging studies.
+- **iCAT Shared Theme Tokens**: Harmonized color system and background modes (Day, Night, Sky) with shared `#636EFA` primary design tokens across components, charts, tables, and AI interfaces.
+
+---
+
 ## 🔒 Security Invariants & Zero-Trust Governance
 
 ### 1. Builder.io PHI-Free Architectural Invariant
@@ -116,20 +126,23 @@ allow {
 │   │   ├── SyntheticDataBanner.tsx # Demo synthetic data warning banner
 │   │   ├── RequireAuth.tsx      # Route auth guard
 │   │   ├── LoginModal.tsx       # Demo clinician authentication dialog
+│   │   ├── iUCANDOChat.tsx      # iUCANDO AI Assistant panel (Text & Voice + Speech synthesis)
+│   │   ├── PatientOrbitView.tsx # Patient Orbit radial interactive domain visualization
 │   │   ├── HubAndSpokeVisualizer.tsx # Interactive topology visualizer
 │   │   ├── ApiContractsModal.tsx   # OpenAPI specification contracts
 │   │   └── IRBCharterModal.tsx     # IRB governance charter
 │   ├── context/                 # Application contexts
 │   │   ├── AuthContext.tsx      # Demo authentication provider
-│   │   └── BackgroundContext.tsx# Theme background context
+│   │   └── BackgroundContext.tsx# Theme background context (Day/Night/Sky modes)
 │   ├── pages/                   # SPA page routes
 │   │   ├── Index.tsx            # Hub Command Center dashboard
-│   │   ├── Patient360.tsx       # Protected Clinician Patient 360 view
+│   │   ├── Patient360.tsx       # Protected Clinician Patient 360 (Orbit & Tab views)
+│   │   ├── Admin.tsx            # Protected Admin Census & Aggregate Metrics Dashboard
 │   │   ├── CohortBuilder.tsx    # Visual Cohort Query Builder & Kaplan-Meier
 │   │   ├── DynamicConsent.tsx   # Protected Dynamic Consent Console & OPA Rego
 │   │   ├── Governance.tsx       # Protected Governance & DUC Access Matrix
 │   │   ├── AuditDashboard.tsx   # Protected WORM Compliance & Audit Logs
-│   │   ├── ImagingHub.tsx       # DICOMweb & Pathology WSI Launch Hub
+│   │   ├── ImagingHub.tsx       # DICOMweb & Pathology WSI Launch Hub (OHIF Viewer)
 │   │   ├── OmicsView.tsx        # Multiomics Variant & OncoPrint Viewer
 │   │   ├── TrialMatching.tsx    # Precision Oncology Trial Prescreening
 │   │   └── DataQuality.tsx      # OMOP/mCODE Conformance & Quality Engine
@@ -151,17 +164,18 @@ allow {
 
 | Method | Route | Description | Auth Guard |
 | :--- | :--- | :--- | :--- |
-| `GET` | `/api/stats` | Hub KPI stats, patient counts & data zone distribution | Public |
-| `GET` | `/api/spokes` | Connected spoke latency, throughput & protocol status | Public |
-| `GET` | `/api/patient360` | Full Patient 360 record (Demographics, Consent, Timeline, Omics, DICOM, Infusions) | Protected (`/patient-360`) |
-| `POST` | `/api/consent/update` | Updates patient consent permissions in the in-memory repository store | Protected (`/consent-console`) |
-| `POST` | `/api/cohort/query` | Executes visual cohort query, computes Kaplan-Meier survival curves & mCODE query spec | Public |
-| `GET` | `/api/multiomics` | Retrieves somatic/germline variants, OncoPrint matrix & expression heatmap | Public |
-| `GET` | `/api/imaging` | DICOMweb study details, WSI pathology metadata & radiomics features | Public |
-| `GET` | `/api/trials` | AI precision trial Prescreen matching scores & biomarker eligibility | Public |
-| `GET` | `/api/audit-logs` | Immutable WORM audit logs with SHA-256 verification hashes | Protected (`/audit-dashboard`) |
-| `GET` | `/api/data-quality` | OMOP v5.4 conformance & mCODE mapping error metrics | Public |
-| `POST` | `/api/copilot` | Hardened Gemini AI oncology copilot endpoint (Max 2,000 chars, 10 req/min/IP limit) | Public |
+| `GET` | `/api/beacon/stats` | Hub KPI stats, patient counts & data zone distribution | Public |
+| `GET` | `/api/beacon/admin/stats` | Admin population metrics, cancer type breakdown & treatment distribution | Protected (`/admin`) |
+| `GET` | `/api/beacon/spokes` | Connected spoke latency, throughput & protocol status | Public |
+| `GET` | `/api/beacon/patient360` | Full Patient 360 record (Demographics, Consent, Timeline, Omics, DICOM, Metabolomics) | Protected (`/patient-360`) |
+| `POST` | `/api/beacon/consent/update` | Updates patient consent permissions in the in-memory repository store | Protected (`/consent-console`) |
+| `POST` | `/api/beacon/cohort/query` | Executes visual cohort query, computes Kaplan-Meier survival curves & mCODE query spec | Public |
+| `GET` | `/api/beacon/multiomics` | Retrieves somatic/germline variants, OncoPrint matrix & expression heatmap | Public |
+| `GET` | `/api/beacon/imaging` | DICOMweb study details, WSI pathology metadata & radiomics features | Public |
+| `GET` | `/api/beacon/trials` | AI precision trial Prescreen matching scores & biomarker eligibility | Public |
+| `GET` | `/api/beacon/audit-logs` | Immutable WORM audit logs with SHA-256 verification hashes | Protected (`/audit-dashboard`) |
+| `GET` | `/api/beacon/data-quality` | OMOP v5.4 conformance & mCODE mapping error metrics | Public |
+| `POST` | `/api/beacon/gemini-copilot` | iUCANDO AI oncology copilot endpoint (Text/Voice AI, 2k char max, 10 req/min/IP limit) | Public |
 
 ---
 
