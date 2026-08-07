@@ -79,7 +79,20 @@ const consentStore: Record<string, PatientConsentState> = {
   }
 };
 
+export interface RegisteredPatient {
+  patientId: string;
+  name: string;
+  mrn: string;
+  diagnosis: string;
+  primarySite: string;
+  age: number;
+  gender: string;
+  treatment?: string;
+  registeredAt: string;
+}
+
 let patientCountOffset = 0;
+const registeredPatients: RegisteredPatient[] = [];
 const registeredPatientsList: Patient360Record[] = [];
 
 export function getHubStats(): HubStats {
@@ -133,9 +146,24 @@ export function registerPatient(data: {
   primarySite?: string;
   age?: number;
   gender?: string;
-}): { success: boolean; patientId: string; stats: HubStats } {
+  treatment?: string;
+}): { success: boolean; patientId: string; patient: RegisteredPatient; stats: HubStats } {
   patientCountOffset += 1;
   const newId = `UC-CCC-${89421 + patientCountOffset}`;
+
+  const newPatient: RegisteredPatient = {
+    patientId: newId,
+    name: data.name || `New Patient ${patientCountOffset}`,
+    mrn: data.mrn || `MRN-${Math.floor(100000 + Math.random() * 900000)}`,
+    diagnosis: data.diagnosis || "Invasive Breast Carcinoma",
+    primarySite: data.primarySite || "Breast",
+    age: Number(data.age) || 54,
+    gender: data.gender || "Female",
+    treatment: data.treatment || "AC-T Chemo + Pembrolizumab",
+    registeredAt: new Date().toISOString()
+  };
+
+  registeredPatients.push(newPatient);
 
   consentStore[newId] = {
     status: "Active",
@@ -148,6 +176,7 @@ export function registerPatient(data: {
   return {
     success: true,
     patientId: newId,
+    patient: newPatient,
     stats: getHubStats()
   };
 }
@@ -1165,7 +1194,7 @@ export function getAdminStats() {
   const multiomics = getMultiomics();
   const trials = getTrialMatches();
 
-  const patientsByCancerType = [
+  const baselineCancerTypes = [
     { cancerType: "Invasive Breast Carcinoma", count: 4280 },
     { cancerType: "High-Grade Serous Ovarian", count: 2150 },
     { cancerType: "Triple-Negative Breast (TNBC)", count: 1840 },
@@ -1173,7 +1202,7 @@ export function getAdminStats() {
     { cancerType: "Prostate Adenocarcinoma", count: 960 }
   ];
 
-  const patientsByTreatment = [
+  const baselineTreatments = [
     { treatment: "AC-T Chemo + Pembrolizumab", count: 3120 },
     { treatment: "Olaparib PARP Maintenance", count: 2450 },
     { treatment: "Targeted Radiotheranostics", count: 1890 },
@@ -1181,15 +1210,51 @@ export function getAdminStats() {
     { treatment: "Radiation Therapy (IMRT)", count: 1560 }
   ];
 
-  const totalPatients = patientsByCancerType.reduce((acc, curr) => acc + curr.count, 0);
-  const totalSamples = multiomics.oncoPrintSamples.length * 2480;
+  const patientsByCancerType = baselineCancerTypes.map((item) => ({ ...item }));
+  const patientsByTreatment = baselineTreatments.map((item) => ({ ...item }));
+
+  for (const patient of registeredPatients) {
+    const diag = patient.diagnosis || "Invasive Breast Carcinoma";
+    const existingCancerIndex = patientsByCancerType.findIndex(
+      (c) =>
+        c.cancerType.toLowerCase() === diag.toLowerCase() ||
+        diag.toLowerCase().includes(c.cancerType.toLowerCase()) ||
+        c.cancerType.toLowerCase().includes(diag.toLowerCase())
+    );
+    if (existingCancerIndex >= 0) {
+      patientsByCancerType[existingCancerIndex].count += 1;
+    } else {
+      patientsByCancerType.push({ cancerType: diag, count: 1 });
+    }
+
+    if (patient.treatment) {
+      const trt = patient.treatment;
+      const existingTrtIndex = patientsByTreatment.findIndex(
+        (t) =>
+          t.treatment.toLowerCase() === trt.toLowerCase() ||
+          trt.toLowerCase().includes(t.treatment.toLowerCase()) ||
+          t.treatment.toLowerCase().includes(trt.toLowerCase())
+      );
+      if (existingTrtIndex >= 0) {
+        patientsByTreatment[existingTrtIndex].count += 1;
+      } else {
+        patientsByTreatment.push({ treatment: trt, count: 1 });
+      }
+    }
+  }
+
+  const baselineTotal = baselineCancerTypes.reduce((acc, curr) => acc + curr.count, 0);
+  const totalPatients = baselineTotal + registeredPatients.length;
+  const totalSamples = multiomics.oncoPrintSamples.length * 2480 + registeredPatients.length * 12;
   const totalActiveTrials = trials.length;
 
   return {
     totalPatients,
     totalSamples,
     totalActiveTrials,
+    registeredPatientsCount: registeredPatients.length,
     patientsByCancerType,
-    patientsByTreatment
+    patientsByTreatment,
+    recentRegistrations: registeredPatients.slice(-5).reverse()
   };
 }

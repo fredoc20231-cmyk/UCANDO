@@ -25,6 +25,7 @@ import GlobalIntegrations from "./pages/GlobalIntegrations";
 import Manual from "./pages/Manual";
 import Architecture from "./pages/Architecture";
 import Admin from "./pages/Admin";
+import FhirCallback from "./pages/FhirCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -68,6 +69,7 @@ const App = () => (
                   </RequireAuth>
                 }
               />
+              <Route path="/fhir-callback" element={<FhirCallback />} />
               <Route
                 path="/audit-dashboard"
                 element={

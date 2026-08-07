@@ -24,8 +24,9 @@ interface IntegrationCard {
   category: "EHR / Clinical" | "Genomics & Molecular" | "Public Registry";
   description: string;
   targetUrl: string;
-  status: "Connected" | "Available" | "Membership Required";
+  status: "Live SMART Sandbox" | "Connected" | "Available" | "Roadmap — pending Epic approval" | "Membership Required";
   isCosmos?: boolean;
+  isSmartSandbox?: boolean;
 }
 
 const INTEGRATIONS: IntegrationCard[] = [
@@ -33,9 +34,10 @@ const INTEGRATIONS: IntegrationCard[] = [
     id: "epic-ehr",
     name: "Epic EHR",
     category: "EHR / Clinical",
-    description: "Electronic health record access via SMART on FHIR launch with OAuth2 scoping.",
-    targetUrl: "https://fhir.epic.com/",
-    status: "Connected"
+    description: "Live connection to SMART Health IT's public test sandbox — not a production Epic instance. This demonstrates the same protocol used for real EHR integration.",
+    targetUrl: "https://launch.smarthealthit.org/v/r4/auth/authorize",
+    status: "Live SMART Sandbox",
+    isSmartSandbox: true
   },
   {
     id: "epic-cosmos",
@@ -43,7 +45,7 @@ const INTEGRATIONS: IntegrationCard[] = [
     category: "EHR / Clinical",
     description: "De-identified multi-health-system research dataset covering 220M+ patient records.",
     targetUrl: "https://cosmos.epic.com/request-access/",
-    status: "Membership Required",
+    status: "Roadmap — pending Epic approval",
     isCosmos: true
   },
   {
@@ -52,7 +54,7 @@ const INTEGRATIONS: IntegrationCard[] = [
     category: "EHR / Clinical",
     description: "Genomic result integration, variant interpretation, and discrete FHIR diagnostic report mapping within the EHR.",
     targetUrl: "https://genomics.epic.com/",
-    status: "Available"
+    status: "Roadmap — pending Epic approval"
   },
   {
     id: "clinvar",
@@ -100,6 +102,12 @@ export default function GlobalIntegrations() {
   });
 
   const handleLaunch = (item: IntegrationCard) => {
+    if (item.id === "epic-ehr") {
+      const redirectUri = encodeURIComponent(`${window.location.origin}/fhir-callback`);
+      const sandboxAuthUrl = `https://launch.smarthealthit.org/v/r4/auth/authorize?response_type=code&client_id=my_web_app&redirect_uri=${redirectUri}&scope=patient%2F%2A.read+launch%2Fpatient+openid+profile&state=smart_launch_ucando&aud=https%3A%2F%2Flaunch.smarthealthit.org%2Fv%2Fr4%2Ffhir`;
+      window.location.href = sandboxAuthUrl;
+      return;
+    }
     if (item.isCosmos) {
       window.open(item.targetUrl, "_blank", "noopener,noreferrer");
       return;
@@ -163,7 +171,7 @@ export default function GlobalIntegrations() {
                   </Badge>
                   <Badge
                     className={
-                      item.status === "Connected"
+                      item.status === "Live SMART Sandbox" || item.status === "Connected"
                         ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]"
                         : item.status === "Available"
                         ? "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border-slate-300 dark:border-slate-700 text-[10px]"
@@ -203,7 +211,9 @@ export default function GlobalIntegrations() {
                 )}
 
                 <p className="text-[10px] text-slate-400 dark:text-slate-500 leading-tight">
-                  Roadmap integration — pending Epic vendor approval and institutional credentialing. Futuristic plan pending Epic approvals and institutional processing.
+                  {item.isSmartSandbox
+                    ? "Live connection to SMART Health IT's public test sandbox — not a production Epic instance. This demonstrates the same protocol used for real EHR integration."
+                    : "Roadmap integration — pending Epic vendor approval and institutional credentialing."}
                 </p>
               </div>
             </div>
