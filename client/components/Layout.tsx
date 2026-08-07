@@ -110,7 +110,7 @@ export function Layout({ children }: LayoutProps) {
     >
       {/* Decorative Background Elements */}
       {bgTheme === "day" && (
-        <div className="fixed top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-amber-200/25 via-sky-100/30 to-transparent blur-3xl pointer-events-none -z-10" />
+        <div className="fixed top-0 right-0 w-[500px] h-[300px] bg-gradient-to-bl from-indigo-200/30 via-purple-100/20 to-transparent blur-3xl pointer-events-none -z-10" />
       )}
       {bgTheme === "night" && (
         <div className="fixed top-0 right-1/4 w-[600px] h-[300px] bg-gradient-to-b from-indigo-950/40 via-purple-950/20 to-transparent blur-3xl pointer-events-none -z-10" />
@@ -327,12 +327,12 @@ export function Layout({ children }: LayoutProps) {
                 className={cn(
                   "flex items-center gap-1 px-2.5 py-1 rounded-md transition-all text-xs font-semibold",
                   bgTheme === "day"
-                    ? "bg-amber-400 text-amber-950 shadow-sm"
+                    ? "bg-primary text-primary-foreground shadow-sm font-bold"
                     : "text-slate-400 hover:text-white hover:bg-slate-800"
                 )}
                 title="Switch to Day Background (Light Daylight)"
               >
-                <Sun className={cn("w-3.5 h-3.5", bgTheme === "day" ? "text-amber-950 fill-amber-950/20" : "text-amber-400")} />
+                <Sun className={cn("w-3.5 h-3.5", bgTheme === "day" ? "text-primary-foreground fill-current" : "text-amber-400")} />
                 <span>Day</span>
               </button>
 

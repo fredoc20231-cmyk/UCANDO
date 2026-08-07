@@ -304,9 +304,9 @@ export default function CohortBuilder() {
         {/* Query Layout: Left Criteria Filter Sidebar + Right Analytics Main */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Query Filter Sidebar */}
-          <div className="lg:col-span-1 space-y-5 p-5 rounded-2xl bg-slate-900 border border-slate-800">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <span className="text-sm font-bold text-white flex items-center gap-2">
+          <div className="lg:col-span-1 space-y-5 p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800">
+              <span className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
                 <Filter className="w-4 h-4 text-sky-400" /> Filter Criteria
               </span>
               <Button
@@ -607,9 +607,9 @@ export default function CohortBuilder() {
             </Tabs>
 
             {/* De-identified Sample Patients Preview Table */}
-            <div className="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-white uppercase tracking-wider font-mono flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider font-mono flex items-center gap-2">
                   <Users className="w-4 h-4 text-sky-400" />
                   De-Identified Patient Cohort Preview
                 </span>
