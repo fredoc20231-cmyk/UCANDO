@@ -15,10 +15,12 @@ import {
 import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
 import { SyntheticDataBanner } from "./SyntheticDataBanner";
+import { IUCANDOChat } from "./iUCANDOChat";
 import { LoginModal } from "./LoginModal";
 import { useAuth, DEMO_USERS } from "@/context/AuthContext";
 import {
   Activity,
+  BarChart3,
   ShieldCheck,
   Search,
   User,
@@ -66,6 +68,7 @@ export function Layout({ children }: LayoutProps) {
   const [contractsOpen, setContractsOpen] = useState(false);
   const [charterOpen, setCharterOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
   const [userRole, setUserRole] = useState<string>("Clinician (Dr. Alex Rivera, MD)");
   const [searchQuery, setSearchQuery] = useState("");
   const [searchFocused, setSearchQueryFocused] = useState(false);
@@ -73,6 +76,7 @@ export function Layout({ children }: LayoutProps) {
   const navItems = [
     { label: "Integration Hub", path: "/", icon: LayoutDashboard },
     { label: "Data Architecture", path: "/architecture", icon: Database },
+    { label: "iUCANDO AI", path: "#chat", icon: Sparkles, isChatTrigger: true, highlight: true },
     { label: "Clinician Patient 360", path: "/patient-360", icon: Users, highlight: true },
     { label: "Researcher Portal", path: "/researcher-portal", icon: Layers },
     { label: "Cohort Builder", path: "/cohort-builder", icon: SlidersHorizontal },
@@ -81,6 +85,7 @@ export function Layout({ children }: LayoutProps) {
     { label: "Omics Results", path: "/omics-view", icon: Dna },
     { label: "Trial Matching", path: "/trial-matching", icon: GitPullRequest },
     { label: "Governance & Admin", path: "/governance", icon: Shield },
+    { label: "Admin Census", path: "/admin", icon: BarChart3 },
     { label: "Audit & Compliance", path: "/audit-dashboard", icon: Activity },
     { label: "Data Quality", path: "/data-quality", icon: FileSpreadsheet },
     { label: "Global Integrations", path: "/global-integrations", icon: Globe, hasDivider: true },
@@ -171,7 +176,7 @@ export function Layout({ children }: LayoutProps) {
 
           {/* Center Search Input & User Profile */}
           <div className="flex items-center gap-3 hidden md:flex">
-            <div className="relative w-48 lg:w-56">
+            <div className="relative w-40 lg:w-48">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
@@ -215,7 +220,7 @@ export function Layout({ children }: LayoutProps) {
                     <div className="w-6 h-6 rounded-full bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-cyan-300 font-bold text-[10px] shrink-0 shadow-sm">
                       {user?.avatarInitial || "AR"}
                     </div>
-                    <div className="hidden sm:block truncate max-w-[150px]">
+                    <div className="hidden sm:block truncate max-w-[125px]">
                       <p className="font-semibold text-slate-100 text-[11px] truncate leading-tight">
                         {user?.name || "Dr. Alex Rivera, MD"}
                       </p>
@@ -267,7 +272,7 @@ export function Layout({ children }: LayoutProps) {
               size="sm"
               variant="outline"
               onClick={() => setContractsOpen(true)}
-              className="h-8 text-xs border-slate-700 bg-slate-950 hover:bg-slate-800 text-emerald-300 hover:text-emerald-200"
+              className="h-7 px-2 text-[11px] border-slate-700 bg-slate-950 hover:bg-slate-800 text-emerald-300 hover:text-emerald-200"
             >
               <FileCode className="w-3.5 h-3.5 mr-1.5 text-emerald-400" />
               <span className="hidden sm:inline">API Contracts</span>
@@ -277,7 +282,7 @@ export function Layout({ children }: LayoutProps) {
               size="sm"
               variant="outline"
               onClick={() => setCharterOpen(true)}
-              className="h-8 text-xs border-slate-700 bg-slate-950 hover:bg-slate-800 text-rose-300 hover:text-rose-200"
+              className="h-7 px-2 text-[11px] border-slate-700 bg-slate-950 hover:bg-slate-800 text-rose-300 hover:text-rose-200"
             >
               <Landmark className="w-3.5 h-3.5 mr-1.5 text-rose-400" />
               <span className="hidden sm:inline">IRB Charter</span>
@@ -375,19 +380,30 @@ export function Layout({ children }: LayoutProps) {
                   {item.hasDivider && (
                     <div className="h-4 w-[1px] bg-slate-300 dark:bg-slate-800 mx-1 shrink-0" />
                   )}
-                  <Link
-                    to={item.path}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
-                      isActive
-                        ? "bg-primary dark:bg-brand-maroon text-white shadow-sm"
-                        : item.highlight
-                        ? "text-brand-maroon dark:text-rose-300 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white"
-                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200"
-                    }`}
-                  >
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500 dark:text-slate-400"}`} />
-                    <span>{item.label}</span>
-                  </Link>
+                  {item.isChatTrigger ? (
+                    <button
+                      type="button"
+                      onClick={() => setChatOpen(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap bg-primary/10 text-primary hover:bg-primary hover:text-white transition-all border border-primary/30"
+                    >
+                      <Icon className="w-3.5 h-3.5 text-primary" />
+                      <span>{item.label}</span>
+                    </button>
+                  ) : (
+                    <Link
+                      to={item.path}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium whitespace-nowrap transition-all ${
+                        isActive
+                          ? "bg-primary dark:bg-brand-maroon text-white shadow-sm"
+                          : item.highlight
+                          ? "text-brand-maroon dark:text-rose-300 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white"
+                          : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-slate-200"
+                      }`}
+                    >
+                      <Icon className={`w-3.5 h-3.5 ${isActive ? "text-white" : "text-slate-500 dark:text-slate-400"}`} />
+                      <span>{item.label}</span>
+                    </Link>
+                  )}
                 </React.Fragment>
               );
             })}
@@ -432,6 +448,20 @@ export function Layout({ children }: LayoutProps) {
       <ApiContractsModal open={contractsOpen} onOpenChange={setContractsOpen} />
       <IRBCharterModal open={charterOpen} onOpenChange={setCharterOpen} />
       <LoginModal open={loginOpen} onOpenChange={setLoginOpen} />
+
+      {/* Floating Action Button for iUCANDO AI Assistant */}
+      <button
+        type="button"
+        onClick={() => setChatOpen(true)}
+        className="fixed bottom-6 right-6 z-40 p-3.5 rounded-full bg-primary text-white shadow-2xl hover:scale-105 transition-all flex items-center gap-2 font-bold text-xs ring-4 ring-primary/20 group"
+        title="Open iUCANDO AI Assistant"
+      >
+        <Sparkles className="w-5 h-5 animate-pulse" />
+        <span className="hidden sm:inline">iUCANDO</span>
+      </button>
+
+      {/* iUCANDO AI Chat Slide-in Panel */}
+      <IUCANDOChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }

@@ -13,100 +13,100 @@
   /* THEME CONTRACT: every component MUST pair hardcoded slate/white classes with a dark: variant. Never add bg-slate-900, text-white, text-slate-300/400, or border-slate-700/800 without a corresponding dark: pair. See Patient360.tsx for a correct reference implementation after this fix. */
   :root {
     --background: 0 0% 100%;
-    --foreground: 215 25% 20%;
+    --foreground: 221 39% 11%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 215 25% 20%;
+    --card: 210 20% 98%;
+    --card-foreground: 221 39% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 25% 20%;
+    --popover-foreground: 221 39% 11%;
 
-    /* NCI GDC Blue / Primary for Day Mode */
-    --primary: 205 100% 30%;
+    /* iCAT Theme Primary: #636EFA */
+    --primary: 236 94% 68%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 96%;
-    --secondary-foreground: 215 25% 20%;
+    --secondary: 268 94% 68%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 15% 45%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 218 14% 34%;
 
-    --accent: 205 90% 40%;
+    --accent: 164 100% 40%;
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 9 85% 58%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 214 20% 88%;
-    --input: 214 20% 88%;
-    --ring: 205 100% 30%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 236 94% 68%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 222 47% 11%;
+    --sidebar-background: 221 39% 11%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 350 100% 30%;
+    --sidebar-primary: 236 94% 68%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 217 32% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217 32% 17%;
-    --sidebar-ring: 199 89% 48%;
+    --sidebar-ring: 236 94% 68%;
 
-    /* Enterprise Clinical Custom Colors */
-    --brand-maroon: 350 100% 25%;
-    --brand-dark-maroon: 350 100% 18%;
-    --beacon-cyan: 199 89% 48%;
-    --beacon-teal: 173 80% 40%;
-    --beacon-emerald: 160 84% 39%;
-    --beacon-purple: 262 83% 58%;
-    --beacon-amber: 38 92% 50%;
+    /* Enterprise Custom iCAT Tokens */
+    --brand-maroon: 236 94% 68%;
+    --brand-dark-maroon: 236 85% 58%;
+    --beacon-cyan: 189 89% 53%;
+    --beacon-teal: 164 100% 40%;
+    --beacon-emerald: 164 100% 40%;
+    --beacon-purple: 268 94% 68%;
+    --beacon-amber: 26 100% 68%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 219 48% 8%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 47% 8.5%;
+    --card: 220 39% 11%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 47% 8.5%;
+    --popover: 220 39% 11%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 350 85% 42%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 236 94% 68%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 217.2 32.6% 15%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 268 94% 68%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 217.2 32.6% 15%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 217 19% 18%;
+    --muted-foreground: 215 14% 82%;
 
-    --accent: 199 89% 48%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 164 100% 40%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 9 85% 58%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 16%;
-    --input: 217.2 32.6% 16%;
-    --ring: 199 89% 48%;
+    --border: 217 19% 27%;
+    --input: 217 19% 27%;
+    --ring: 236 94% 68%;
 
-    --sidebar-background: 222 50% 6.5%;
+    --sidebar-background: 219 48% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 350 85% 42%;
+    --sidebar-primary: 236 94% 68%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 32% 14%;
+    --sidebar-accent: 220 39% 11%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 32% 14%;
-    --sidebar-ring: 199 89% 48%;
+    --sidebar-border: 217 19% 27%;
+    --sidebar-ring: 236 94% 68%;
 
-    --brand-maroon: 350 85% 38%;
-    --brand-dark-maroon: 350 90% 25%;
-    --beacon-cyan: 199 89% 48%;
-    --beacon-teal: 173 80% 40%;
-    --beacon-emerald: 160 84% 39%;
-    --beacon-purple: 262 83% 58%;
-    --beacon-amber: 38 92% 50%;
+    --brand-maroon: 236 94% 68%;
+    --brand-dark-maroon: 236 85% 58%;
+    --beacon-cyan: 189 89% 53%;
+    --beacon-teal: 164 100% 40%;
+    --beacon-emerald: 164 100% 40%;
+    --beacon-purple: 268 94% 68%;
+    --beacon-amber: 26 100% 68%;
   }
 }
 

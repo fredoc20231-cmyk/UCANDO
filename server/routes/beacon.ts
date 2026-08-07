@@ -65,6 +65,10 @@ export const handleGetDataQuality: RequestHandler = (_req, res) => {
   res.json(beaconRepo.getDataQuality());
 };
 
+export const handleGetAdminStats: RequestHandler = (_req, res) => {
+  res.json(beaconRepo.getAdminStats());
+};
+
 export const handleUpdateConsent: RequestHandler = (req, res) => {
   const { patientId, consentType, enabled, permissions } = req.body || {};
   res.json(beaconRepo.updateConsent(patientId, consentType, enabled, permissions));

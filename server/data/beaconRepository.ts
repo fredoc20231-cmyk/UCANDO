@@ -590,7 +590,13 @@ export function getPatient360(patientId: string): Patient360Record {
     notes: rawNotes.map((n) => ({
       ...n,
       date: shiftDateString(n.date, offsetDays)
-    }))
+    })),
+    metabolomics: [
+      { metabolite_id: "met-101", metabolite_name: "L-Lactate", value_as_number: 2.1, unit: "mmol/L", reference_range: "0.5 - 2.2", flag: "Normal" },
+      { metabolite_id: "met-102", metabolite_name: "Citrate", value_as_number: 110, unit: "umol/L", reference_range: "100 - 250", flag: "Normal" },
+      { metabolite_id: "met-103", metabolite_name: "D-2-Hydroxyglutarate", value_as_number: 14.2, unit: "umol/L", reference_range: "< 5.0", flag: "Elevated" },
+      { metabolite_id: "met-104", metabolite_name: "Glutamine", value_as_number: 580, unit: "umol/L", reference_range: "420 - 730", flag: "Normal" }
+    ]
   };
 }
 
@@ -1152,5 +1158,38 @@ export function getDataQuality() {
         errorReason: "Transcript isoform discrepancy between RefSeq v109 and ENSEMBL v104"
       }
     ]
+  };
+}
+
+export function getAdminStats() {
+  const multiomics = getMultiomics();
+  const trials = getTrialMatches();
+
+  const patientsByCancerType = [
+    { cancerType: "Invasive Breast Carcinoma", count: 4280 },
+    { cancerType: "High-Grade Serous Ovarian", count: 2150 },
+    { cancerType: "Triple-Negative Breast (TNBC)", count: 1840 },
+    { cancerType: "Non-Small Cell Lung Cancer", count: 1210 },
+    { cancerType: "Prostate Adenocarcinoma", count: 960 }
+  ];
+
+  const patientsByTreatment = [
+    { treatment: "AC-T Chemo + Pembrolizumab", count: 3120 },
+    { treatment: "Olaparib PARP Maintenance", count: 2450 },
+    { treatment: "Targeted Radiotheranostics", count: 1890 },
+    { treatment: "mRNA Vaccine + Nivolumab", count: 1420 },
+    { treatment: "Radiation Therapy (IMRT)", count: 1560 }
+  ];
+
+  const totalPatients = patientsByCancerType.reduce((acc, curr) => acc + curr.count, 0);
+  const totalSamples = multiomics.oncoPrintSamples.length * 2480;
+  const totalActiveTrials = trials.length;
+
+  return {
+    totalPatients,
+    totalSamples,
+    totalActiveTrials,
+    patientsByCancerType,
+    patientsByTreatment
   };
 }

@@ -220,6 +220,15 @@ export interface ClinicalNote {
   safeHarborRedactionsCount: number;
 }
 
+export interface OmopMetabolomics {
+  metabolite_id: string;
+  metabolite_name: string;
+  value_as_number: number;
+  unit: string;
+  reference_range: string;
+  flag: "Normal" | "Elevated" | "Low";
+}
+
 export interface Patient360Record {
   demographics: PatientDemographics;
   consent: PatientConsent;
@@ -236,6 +245,7 @@ export interface Patient360Record {
   measurements: OmopMeasurement[];
   drugExposures: OmopDrugExposure[];
   omopNotes: OmopNote[];
+  metabolomics?: OmopMetabolomics[];
   dateShiftOffsetDays: number;
 }
 

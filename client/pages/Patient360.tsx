@@ -3,6 +3,7 @@ import { useSearchParams, Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { SmartLaunchModal } from "@/components/SmartLaunchModal";
 import { Patient360Record } from "@shared/api";
+import { PatientOrbitView } from "@/components/PatientOrbitView";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -46,6 +47,7 @@ export default function Patient360() {
   const [record, setRecord] = useState<Patient360Record | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("timeline");
+  const [viewMode, setViewMode] = useState<"orbit" | "tab">("orbit");
   const [smartLaunching, setSmartLaunching] = useState<string | null>(null);
   const [smartModalOpen, setSmartModalOpen] = useState(false);
   const [smartPlatform, setSmartPlatform] = useState<"omics" | "imaging">("omics");
@@ -68,7 +70,7 @@ export default function Patient360() {
   const triggerSmartLaunch = (platform: "omics" | "imaging") => {
     setSmartLaunching(platform);
     setSmartPlatform(platform);
-    setSmartTargetUrl(platform === "omics" ? "https://cronus.life/" : "https://cronus.life/");
+    setSmartTargetUrl(platform === "omics" ? "https://cronus.life/" : "https://viewer.ohif.org/");
     setTimeout(() => {
       setSmartLaunching(null);
       setSmartModalOpen(true);
@@ -118,8 +120,33 @@ export default function Patient360() {
               </p>
             </div>
 
-            {/* SMART Launch Action Toolbar */}
+            {/* SMART Launch Action Toolbar & View Mode Toggle */}
             <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl mr-2">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("orbit")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    viewMode === "orbit"
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  Orbit View
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("tab")}
+                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                    viewMode === "tab"
+                      ? "bg-primary text-white shadow-sm"
+                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                  }`}
+                >
+                  Tab View
+                </button>
+              </div>
+
               <Button
                 size="sm"
                 onClick={() => triggerSmartLaunch("omics")}
@@ -185,8 +212,20 @@ export default function Patient360() {
           </div>
         </div>
 
+        {/* Render Patient Orbit View when in orbit mode */}
+        {viewMode === "orbit" && (
+          <PatientOrbitView
+            patient={record}
+            onSelectTab={(tabKey) => {
+              setActiveTab(tabKey);
+              setViewMode("tab");
+            }}
+          />
+        )}
+
         {/* Tabbed Clinical Explorer */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+        <div className={viewMode === "orbit" ? "hidden" : "block"}>
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1 overflow-x-auto flex flex-wrap">
             <TabsTrigger value="timeline" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <Clock className="w-3.5 h-3.5 mr-1.5" /> Longitudinal Timeline
@@ -573,7 +612,8 @@ export default function Patient360() {
               </div>
             </div>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
       </div>
 
       {/* SMART Launch Multiomics & Imaging Frame Modal */}

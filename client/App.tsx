@@ -24,6 +24,7 @@ import DataQuality from "./pages/DataQuality";
 import GlobalIntegrations from "./pages/GlobalIntegrations";
 import Manual from "./pages/Manual";
 import Architecture from "./pages/Architecture";
+import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -76,6 +77,14 @@ const App = () => (
                 }
               />
               <Route path="/data-quality" element={<DataQuality />} />
+              <Route
+                path="/admin"
+                element={
+                  <RequireAuth>
+                    <Admin />
+                  </RequireAuth>
+                }
+              />
               <Route
                 path="/global-integrations"
                 element={
