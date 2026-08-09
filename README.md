@@ -169,14 +169,15 @@ allow {
 | `GET` | `/api/beacon/stats` | Hub KPI stats, patient counts & data zone distribution | Public |
 | `GET` | `/api/beacon/admin/stats` | Admin population metrics, cancer type breakdown & treatment distribution | Protected (`/admin`) |
 | `GET` | `/api/beacon/spokes` | Connected spoke latency, throughput & protocol status | Public |
-| `GET` | `/api/beacon/patient360` | Full Patient 360 record (Demographics, Consent, Timeline, Omics, DICOM, Metabolomics) | Protected (`/patient-360`) |
+| `GET` | `/api/beacon/patient/360` | Full Patient 360 record (Demographics, Consent, Timeline, Omics, DICOM, Metabolomics) | Protected (`/patient-360`) |
 | `POST` | `/api/beacon/consent/update` | Updates patient consent permissions in the in-memory repository store | Protected (`/consent-console`) |
 | `POST` | `/api/beacon/cohort/query` | Executes visual cohort query, computes Kaplan-Meier survival curves & mCODE query spec | Public |
-| `GET` | `/api/beacon/multiomics` | Retrieves somatic/germline variants, OncoPrint matrix & expression heatmap | Public |
-| `GET` | `/api/beacon/imaging` | DICOMweb study details, WSI pathology metadata & radiomics features | Public |
+| `GET` | `/api/beacon/omics` | Retrieves somatic/germline variants, OncoPrint matrix & expression heatmap | Public |
+| `GET` | `/api/beacon/imaging/details` | DICOMweb study details, WSI pathology metadata & radiomics features | Public |
 | `GET` | `/api/beacon/trials` | AI precision trial Prescreen matching scores & biomarker eligibility | Public |
-| `GET` | `/api/beacon/audit-logs` | Immutable WORM audit logs with SHA-256 verification hashes | Protected (`/audit-dashboard`) |
+| `GET` | `/api/beacon/audit` | Immutable WORM audit logs with SHA-256 verification hashes | Protected (`/audit-dashboard`) |
 | `GET` | `/api/beacon/data-quality` | OMOP v5.4 conformance & mCODE mapping error metrics | Public |
+| `POST` | `/api/beacon/patient/register` | Registers a new synthetic patient and live-updates admin census totals | Protected (`/admin`) |
 | `POST` | `/api/beacon/gemini-copilot` | iUCANDO AI oncology copilot endpoint (Text/Voice AI, 2k char max, 10 req/min/IP limit) | Public |
 
 ---
