@@ -57,45 +57,67 @@ export default function FhirCallback() {
   const [conditions, setConditions] = useState<FhirCondition[]>([]);
   const [observations, setObservations] = useState<FhirObservation[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [notConnected, setNotConnected] = useState<string | null>(null);
 
   useEffect(() => {
     async function handleAuth() {
-      // If code is not present in URL parameters, fallback to demo SMART sandbox patient token
-      const authCode = code;
+      // Case 1: the sandbox redirected back with an explicit OAuth2 error
+      // (e.g. user declined consent, invalid request). Surface it honestly.
+      if (errorParam) {
+        setNotConnected(
+          `SMART sandbox returned an error: "${errorParam}". No connection was established.`
+        );
+        setLoading(false);
+        return;
+      }
 
+      // Case 2: no authorization code and no error present. This page was
+      // opened without going through the real launch flow (direct nav,
+      // bookmark, refresh after a session ended, etc). Do NOT fabricate a
+      // connected state here — show a clear "not connected" message instead.
+      if (!code) {
+        setNotConnected(
+          "No active SMART launch session found. Please start the connection from the Global Integrations page."
+        );
+        setLoading(false);
+        return;
+      }
+
+      // Case 3: real authorization code present — do the real OAuth2 exchange.
       try {
         const redirectUri = `${window.location.origin}/fhir-callback`;
         const tokenEndpoint = "https://launch.smarthealthit.org/v/r4/auth/token";
 
-        if (authCode) {
-          setStatusMessage("Exchanging authorization code for OAuth2 access token...");
-          const params = new URLSearchParams();
-          params.append("grant_type", "authorization_code");
-          params.append("code", authCode);
-          params.append("redirect_uri", redirectUri);
-          params.append("client_id", "my_web_app");
+        setStatusMessage("Exchanging authorization code for OAuth2 access token...");
+        const params = new URLSearchParams();
+        params.append("grant_type", "authorization_code");
+        params.append("code", code);
+        params.append("redirect_uri", redirectUri);
+        params.append("client_id", "my_web_app");
 
-          const tokenRes = await fetch(tokenEndpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: params
-          });
+        const tokenRes = await fetch(tokenEndpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: params
+        });
 
-          if (!tokenRes.ok) {
-            throw new Error(`Token endpoint returned HTTP ${tokenRes.status}`);
-          }
-
-          const tokenData = await tokenRes.json();
-          setAccessToken(tokenData.access_token);
-          setTokenMetadata(tokenData);
-
-          const launchedPatientId = tokenData.patient || "5c8658c6-3821-4c9e-be4f-716c3b6d54b0";
-          setPatientId(launchedPatientId);
-          await loadFhirResources(tokenData.access_token, launchedPatientId);
-        } else {
-          setFetchError("No active SMART launch session found. Please initiate the launch from the Global Integrations Hub.");
-          setLoading(false);
+        if (!tokenRes.ok) {
+          throw new Error(`Token endpoint returned HTTP ${tokenRes.status}`);
         }
+
+        const tokenData = await tokenRes.json();
+        if (!tokenData.access_token) {
+          throw new Error("Token endpoint response did not include an access_token");
+        }
+        setAccessToken(tokenData.access_token);
+        setTokenMetadata(tokenData);
+
+        const launchedPatientId = tokenData.patient;
+        if (!launchedPatientId) {
+          throw new Error("Token response did not include a launch patient context");
+        }
+        setPatientId(launchedPatientId);
+        await loadFhirResources(tokenData.access_token, launchedPatientId);
       } catch (err: any) {
         console.error("SMART on FHIR auth error:", err);
         setFetchError(err.message || "Failed to exchange OAuth2 code");
@@ -149,44 +171,6 @@ export default function FhirCallback() {
   const patientName =
     patient?.name?.[0]?.given?.join(" ") + " " + (patient?.name?.[0]?.family || "") || "Sandbox Synthetic Patient";
 
-  if (fetchError) {
-    return (
-      <Layout>
-        <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/30 flex items-center justify-center mx-auto shadow-inner">
-            <Info className="w-6 h-6" />
-          </div>
-          <div className="space-y-2">
-            <Badge variant="outline" className="border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10 text-xs px-2.5 py-0.5 font-mono">
-              Session Required
-            </Badge>
-            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
-              No Active SMART Launch Session Found
-            </h1>
-            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg mx-auto">
-              You navigated directly to <code className="font-mono bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-primary">/fhir-callback</code> without an authorization code or active SMART OAuth2 launch session parameter.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-left text-slate-600 dark:text-slate-400 space-y-1 font-mono">
-            <p className="font-bold text-slate-900 dark:text-white">How to perform a live launch:</p>
-            <p>1. Open Global Integrations Hub</p>
-            <p>2. Locate the "Epic EHR" card</p>
-            <p>3. Click "Launch Epic EHR" to initiate OAuth2 authentication against the public SMART Health IT sandbox</p>
-          </div>
-
-          <div className="pt-2">
-            <Link to="/global-integrations">
-              <Button className="bg-primary hover:bg-primary/90 text-white font-bold text-xs shadow-md">
-                <Zap className="w-4 h-4 mr-2" /> Go to Global Integrations Hub
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-
   if (loading) {
     return (
       <Layout>
@@ -196,6 +180,26 @@ export default function FhirCallback() {
             <p className="font-bold text-slate-900 dark:text-white text-base">SMART on FHIR OAuth2 Connection</p>
             <p className="text-xs text-slate-500">{statusMessage}</p>
           </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (notConnected) {
+    return (
+      <Layout>
+        <div className="p-12 text-center bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center gap-4">
+          <Badge className="bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 text-xs py-1 px-3">
+            Not Connected
+          </Badge>
+          <p className="font-bold text-slate-900 dark:text-white text-base max-w-md">
+            {notConnected}
+          </p>
+          <Link to="/global-integrations">
+            <Button size="sm" className="bg-primary dark:bg-brand-maroon text-white text-xs">
+              <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Return to Global Integrations
+            </Button>
+          </Link>
         </div>
       </Layout>
     );

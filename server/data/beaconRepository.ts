@@ -625,7 +625,55 @@ export function getPatient360(patientId: string): Patient360Record {
       { metabolite_id: "met-102", metabolite_name: "Citrate", value_as_number: 110, unit: "umol/L", reference_range: "100 - 250", flag: "Normal" },
       { metabolite_id: "met-103", metabolite_name: "D-2-Hydroxyglutarate", value_as_number: 14.2, unit: "umol/L", reference_range: "< 5.0", flag: "Elevated" },
       { metabolite_id: "met-104", metabolite_name: "Glutamine", value_as_number: 580, unit: "umol/L", reference_range: "420 - 730", flag: "Normal" }
-    ]
+    ],
+    socialDeterminants: {
+      housingStability: "Stable",
+      transportationAccess: "Reliable",
+      foodSecurity: "Secure",
+      employmentStatus: "Disability Leave",
+      insuranceStatus: "Commercial",
+      preferredLanguage: "English",
+      supportSystem: "Strong (Family/Caregiver Present)"
+    },
+    treatmentResponses: [
+      {
+        id: "tr-01",
+        date: shiftDateString("2023-10-12", offsetDays),
+        treatmentName: "Neoadjuvant Dose-Dense AC-T Chemotherapy",
+        responseCategory: "Partial Response",
+        assessmentMethod: "RECIST 1.1",
+        notes: "Interim imaging shows 42% reduction in primary tumor dimension; no new metastatic lesions."
+      },
+      {
+        id: "tr-02",
+        date: shiftDateString("2024-01-20", offsetDays),
+        treatmentName: "Neoadjuvant Dose-Dense AC-T Chemotherapy (Completion)",
+        responseCategory: "Complete Response",
+        assessmentMethod: "RECIST 1.1",
+        notes: "Post-treatment imaging and exam show no residual measurable disease at primary site prior to surgical resection."
+      },
+      {
+        id: "tr-03",
+        date: shiftDateString("2024-08-15", offsetDays),
+        treatmentName: "Adjuvant Capecitabine",
+        responseCategory: "Stable Disease",
+        assessmentMethod: "Clinical Assessment",
+        notes: "No evidence of recurrence on 6-month surveillance visit; tolerating adjuvant therapy with Grade 1 hand-foot syndrome."
+      }
+    ],
+    recovery: {
+      survivorshipPhase: "Surveillance",
+      functionalStatus: "ECOG 1",
+      functionalStatusScale: "ECOG",
+      followUpSchedule: "Clinical exam every 3 months; annual mammography/breast MRI; bone density scan every 2 years",
+      lateEffectsMonitoring: [
+        "Cardiotoxicity surveillance (anthracycline exposure) — echocardiogram annually",
+        "Peripheral neuropathy screening at each visit",
+        "Bone health monitoring (aromatase inhibitor candidacy pending endocrine consult)",
+        "Psychosocial distress screening (NCCN Distress Thermometer) at each visit"
+      ],
+      lastAssessmentDate: shiftDateString("2024-11-02", offsetDays)
+    }
   };
 }
 

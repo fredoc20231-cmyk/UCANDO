@@ -229,6 +229,43 @@ export interface OmopMetabolomics {
   flag: "Normal" | "Elevated" | "Low";
 }
 
+export interface SocialDeterminants {
+  housingStability: "Stable" | "At Risk" | "Unstable" | "Unknown";
+  transportationAccess: "Reliable" | "Limited" | "None" | "Unknown";
+  foodSecurity: "Secure" | "Marginal" | "Insecure" | "Unknown";
+  employmentStatus: "Employed" | "Unemployed" | "Disability Leave" | "Retired" | "Unknown";
+  insuranceStatus: "Commercial" | "Medicare" | "Medicaid" | "Uninsured" | "Unknown";
+  preferredLanguage: string;
+  supportSystem: "Strong (Family/Caregiver Present)" | "Moderate" | "Limited" | "Unknown";
+}
+
+export interface TreatmentResponseEntry {
+  id: string;
+  date: string;
+  treatmentName: string;
+  responseCategory:
+    | "Complete Response"
+    | "Partial Response"
+    | "Stable Disease"
+    | "Progressive Disease"
+    | "Not Yet Evaluable";
+  assessmentMethod: "RECIST 1.1" | "PERCIST" | "Clinical Assessment" | "Tumor Marker Trend";
+  notes: string;
+}
+
+export interface RecoveryStatus {
+  survivorshipPhase:
+    | "Active Treatment"
+    | "Surveillance"
+    | "Long-Term Survivorship"
+    | "Palliative / Supportive Care";
+  functionalStatus: string; // e.g. "ECOG 1" or "Karnofsky 90"
+  functionalStatusScale: "ECOG" | "Karnofsky";
+  followUpSchedule: string;
+  lateEffectsMonitoring: string[];
+  lastAssessmentDate: string;
+}
+
 export interface Patient360Record {
   demographics: PatientDemographics;
   consent: PatientConsent;
@@ -247,6 +284,10 @@ export interface Patient360Record {
   omopNotes: OmopNote[];
   metabolomics?: OmopMetabolomics[];
   dateShiftOffsetDays: number;
+  // Whole-person record: social context, treatment response, and survivorship
+  socialDeterminants: SocialDeterminants;
+  treatmentResponses: TreatmentResponseEntry[];
+  recovery: RecoveryStatus;
 }
 
 export interface ApiContractSpec {

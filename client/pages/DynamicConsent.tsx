@@ -41,6 +41,36 @@ interface WormReceipt {
   downstreamPropagatedSpokes: string[];
 }
 
+const OPA_CONSENT_REGO_POLICY = `package ucando.consent
+
+default allow = false
+
+# Allow internal academic research if patient consent is active
+allow {
+    input.action == "DATA_READ"
+    input.purpose == "academic_research"
+    input.patient_consent.researchUse == true
+}
+
+# Allow AI model training only if explicit permission is granted
+allow {
+    input.action == "TRAIN_AI_MODEL"
+    input.patient_consent.aiModelTraining == true
+    input.request.is_deidentified == true
+}
+
+# Restrict commercial partner export unless commercialSharing is permitted
+allow {
+    input.action == "PARTNER_EXPORT"
+    input.patient_consent.commercialSharing == true
+    input.request.duc_approval == true
+}
+
+# Immediate deny rule for withdrawn consent
+deny {
+    input.patient_consent.researchUse == false
+}`;
+
 export default function DynamicConsent() {
   const [patientId] = useState("UC-CCC-89421");
   const [permissions, setPermissions] = useState<ConsentState>({
@@ -392,7 +422,7 @@ export default function DynamicConsent() {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() => handleCopyText(`package beacon.consent...`)}
+                onClick={() => handleCopyText(OPA_CONSENT_REGO_POLICY)}
                 className="border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs text-slate-700 dark:text-slate-300"
               >
                 {copied ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
@@ -401,35 +431,7 @@ export default function DynamicConsent() {
             </div>
 
             <pre className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-sky-300 overflow-auto h-80">
-{`package ucando.consent
-
-default allow = false
-
-# Allow internal academic research if patient consent is active
-allow {
-    input.action == "DATA_READ"
-    input.purpose == "academic_research"
-    input.patient_consent.researchUse == true
-}
-
-# Allow AI model training only if explicit permission is granted
-allow {
-    input.action == "TRAIN_AI_MODEL"
-    input.patient_consent.aiModelTraining == true
-    input.request.is_deidentified == true
-}
-
-# Restrict commercial partner export unless commercialSharing is permitted
-allow {
-    input.action == "PARTNER_EXPORT"
-    input.patient_consent.commercialSharing == true
-    input.request.duc_approval == true
-}
-
-# Immediate deny rule for withdrawn consent
-deny {
-    input.patient_consent.researchUse == false
-}`}
+{OPA_CONSENT_REGO_POLICY}
             </pre>
           </TabsContent>
 

@@ -49,13 +49,7 @@ export default function Manual() {
           </h2>
           <div className="space-y-3 text-xs sm:text-sm divide-y divide-slate-100 dark:divide-slate-800/80">
             <div className="pt-2">
-              <strong className="text-slate-900 dark:text-white">Clinician Patient 360:</strong> Longitudinal timeline integrating diagnoses, treatments, lab toxicities, genomic VCFs, DICOM CT/PET slices, and **Patient Orbit View** radial domain explorer.
-            </div>
-            <div className="pt-2">
-              <strong className="text-slate-900 dark:text-white">iUCANDO AI Clinical Assistant:</strong> Gemini-powered multimodal assistant supporting Text mode, Voice speech recognition, and Spoken audio responses with automatic browser fallback.
-            </div>
-            <div className="pt-2">
-              <strong className="text-slate-900 dark:text-white">Admin Census & Institutional Dashboard:</strong> Real-time patient census, disease distribution bar charts, treatment breakdowns, and live patient registration linkage.
+              <strong className="text-slate-900 dark:text-white">Clinician Patient 360:</strong> Longitudinal timeline integrating diagnoses, treatments, lab toxicities, genomic VCFs, DICOM CT/PET slices, and SMART-on-FHIR launch tools, with a radial Patient Orbit View connecting each patient to EHR, omics, labs, pathology, and imaging, plus dedicated tabs for social determinants, treatment response, and survivorship.
             </div>
             <div className="pt-2">
               <strong className="text-slate-900 dark:text-white">Visual Cohort Builder:</strong> Feasibility query builder over demographics, SNOMED/ICD-10 diagnoses, genomic variants, and survival outcomes with differential privacy budget protection.
@@ -82,7 +76,13 @@ export default function Manual() {
               <strong className="text-slate-900 dark:text-white">OMOP & mCODE Data Quality Hub:</strong> Automated vocabulary normalization and HL7 mCODE completeness scoring.
             </div>
             <div className="pt-2">
-              <strong className="text-slate-900 dark:text-white">Global Integrations Hub:</strong> Live SMART-on-FHIR OAuth2 connection to public test sandbox (`launch.smarthealthit.org`) for Epic EHR, plus Epic Cosmos, Epic Genomics, and Epic MyChart roadmap cards.
+              <strong className="text-slate-900 dark:text-white">Admin Census Dashboard:</strong> Real-time patient, sample, and active trial counts, broken down by cancer type and treatment regimen, updating live as new patients are registered.
+            </div>
+            <div className="pt-2">
+              <strong className="text-slate-900 dark:text-white">iUCANDO AI Assistant:</strong> Platform-wide conversational assistant, powered by iPheonix-Can, available in text, voice, or both, accessible from any page.
+            </div>
+            <div className="pt-2">
+              <strong className="text-slate-900 dark:text-white">Global Integrations Hub:</strong> Federated launchpad for Epic EHR (live SMART-on-FHIR sandbox connection), Epic Cosmos, Epic Genomics, Epic MyChart, ClinVar, cBioPortal, GDC, and ClinicalTrials.gov.
             </div>
           </div>
         </section>

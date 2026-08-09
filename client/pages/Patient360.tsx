@@ -38,6 +38,10 @@ import {
   Sparkles,
   Play,
   Database,
+  Home,
+  HeartPulse,
+  Users,
+  TrendingUp,
   ArrowLeft
 } from "lucide-react";
 
@@ -267,6 +271,15 @@ export default function Patient360() {
             </TabsTrigger>
             <TabsTrigger value="notes" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
               <FileText className="w-3.5 h-3.5 mr-1.5" /> De-ID Notes ({notes.length})
+            </TabsTrigger>
+            <TabsTrigger value="social" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+              <Home className="w-3.5 h-3.5 mr-1.5" /> Demographics & Social
+            </TabsTrigger>
+            <TabsTrigger value="response" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+              <TrendingUp className="w-3.5 h-3.5 mr-1.5" /> Treatment Response
+            </TabsTrigger>
+            <TabsTrigger value="recovery" className="text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300">
+              <HeartPulse className="w-3.5 h-3.5 mr-1.5" /> Recovery & Survivorship
             </TabsTrigger>
           </TabsList>
 
@@ -630,6 +643,127 @@ export default function Patient360() {
                   </div>
                 ))}
               </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB: Demographics & Social Determinants of Health */}
+          <TabsContent value="social" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <User className="w-4 h-4 text-primary dark:text-sky-400" />
+                  Demographics
+                </h3>
+                <dl className="grid grid-cols-2 gap-y-2.5 text-xs font-mono">
+                  <dt className="text-slate-500 dark:text-slate-400">Age</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{demographics.age}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Sex</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{demographics.sex}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Race</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{demographics.race}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Ethnicity</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{demographics.ethnicity}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Preferred Language</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.preferredLanguage || "English"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Insurance Status</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.insuranceStatus || "Unknown"}</dd>
+                </dl>
+              </div>
+
+              <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Users className="w-4 h-4 text-primary dark:text-sky-400" />
+                  Social Determinants of Health
+                </h3>
+                <dl className="grid grid-cols-2 gap-y-2.5 text-xs font-mono">
+                  <dt className="text-slate-500 dark:text-slate-400">Housing Stability</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.housingStability || "Unknown"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Transportation Access</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.transportationAccess || "Unknown"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Food Security</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.foodSecurity || "Unknown"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400">Employment Status</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold">{record.socialDeterminants?.employmentStatus || "Unknown"}</dd>
+                  <dt className="text-slate-500 dark:text-slate-400 col-span-2">Support System</dt>
+                  <dd className="text-slate-900 dark:text-white font-semibold col-span-2">{record.socialDeterminants?.supportSystem || "Unknown"}</dd>
+                </dl>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB: Treatment Response */}
+          <TabsContent value="response" className="space-y-4">
+            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-primary dark:text-sky-400" />
+                Treatment Response Assessments
+              </h3>
+              <div className="space-y-3">
+                {(record.treatmentResponses || []).map((tr) => (
+                  <div key={tr.id} className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs space-y-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-bold text-slate-900 dark:text-white font-mono">{tr.treatmentName}</span>
+                      <Badge
+                        className={
+                          tr.responseCategory === "Complete Response"
+                            ? "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800"
+                            : tr.responseCategory === "Partial Response"
+                            ? "bg-sky-100 dark:bg-sky-950 text-sky-800 dark:text-sky-300 border-sky-300 dark:border-sky-800"
+                            : tr.responseCategory === "Progressive Disease"
+                            ? "bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800"
+                            : "bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800"
+                        }
+                      >
+                        {tr.responseCategory}
+                      </Badge>
+                    </div>
+                    <p className="text-slate-500 dark:text-slate-400 font-mono text-[10px]">
+                      {tr.date} • Assessed via {tr.assessmentMethod}
+                    </p>
+                    <p className="text-slate-700 dark:text-slate-300">{tr.notes}</p>
+                  </div>
+                ))}
+                {(!record.treatmentResponses || record.treatmentResponses.length === 0) && (
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">No treatment response assessments recorded yet.</p>
+                )}
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* TAB: Recovery & Survivorship */}
+          <TabsContent value="recovery" className="space-y-4">
+            <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <HeartPulse className="w-4 h-4 text-primary dark:text-sky-400" />
+                Recovery & Survivorship Status
+              </h3>
+              {record.recovery ? (
+                <>
+                  <dl className="grid grid-cols-2 gap-y-2.5 text-xs font-mono">
+                    <dt className="text-slate-500 dark:text-slate-400">Survivorship Phase</dt>
+                    <dd className="text-slate-900 dark:text-white font-semibold">{record.recovery.survivorshipPhase}</dd>
+                    <dt className="text-slate-500 dark:text-slate-400">Functional Status</dt>
+                    <dd className="text-slate-900 dark:text-white font-semibold">{record.recovery.functionalStatus} ({record.recovery.functionalStatusScale})</dd>
+                    <dt className="text-slate-500 dark:text-slate-400">Last Assessment</dt>
+                    <dd className="text-slate-900 dark:text-white font-semibold">{record.recovery.lastAssessmentDate}</dd>
+                    <dt className="text-slate-500 dark:text-slate-400 col-span-2">Follow-Up Schedule</dt>
+                    <dd className="text-slate-700 dark:text-slate-300 col-span-2 font-sans">{record.recovery.followUpSchedule}</dd>
+                  </dl>
+                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                    <p className="text-xs font-bold text-slate-900 dark:text-white mb-2">Late Effects Monitoring</p>
+                    <ul className="space-y-1.5">
+                      {record.recovery.lateEffectsMonitoring.map((item, idx) => (
+                        <li key={idx} className="text-xs text-slate-700 dark:text-slate-300 flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0 mt-0.5" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <p className="text-xs text-slate-500 dark:text-slate-400 italic">No survivorship data recorded yet.</p>
+              )}
             </div>
           </TabsContent>
           </Tabs>

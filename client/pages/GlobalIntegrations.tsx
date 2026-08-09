@@ -57,6 +57,14 @@ const INTEGRATIONS: IntegrationCard[] = [
     status: "Roadmap — pending Epic approval"
   },
   {
+    id: "epic-mychart",
+    name: "Epic MyChart",
+    category: "EHR / Clinical",
+    description: "Patient-facing portal integration for enrollment, secure messaging, and patient-reported outcomes.",
+    targetUrl: "https://mychart.epic.com/",
+    status: "Roadmap — pending Epic approval"
+  },
+  {
     id: "clinvar",
     name: "ClinVar (NCBI)",
     category: "Genomics & Molecular",
