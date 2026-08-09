@@ -138,7 +138,9 @@ export default function Admin() {
     "#00CC96",
     "#FFA15A",
     "#AB63FA",
-    "#19D3F3"
+    "#19D3F3",
+    "#B6E880",
+    "#FF97FF"
   ];
 
   if (loading || !stats) {
@@ -373,10 +375,10 @@ export default function Admin() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#111827",
-                      borderColor: "#374151",
+                      backgroundColor: "hsl(var(--popover))",
+                      borderColor: "hsl(var(--border))",
                       borderRadius: "8px",
-                      color: "#FFFFFF",
+                      color: "hsl(var(--popover-foreground))",
                       fontSize: "12px"
                     }}
                   />
@@ -417,10 +419,10 @@ export default function Admin() {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#111827",
-                      borderColor: "#374151",
+                      backgroundColor: "hsl(var(--popover))",
+                      borderColor: "hsl(var(--border))",
                       borderRadius: "8px",
-                      color: "#FFFFFF",
+                      color: "hsl(var(--popover-foreground))",
                       fontSize: "12px"
                     }}
                   />

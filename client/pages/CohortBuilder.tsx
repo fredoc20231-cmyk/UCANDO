@@ -469,15 +469,15 @@ export default function CohortBuilder() {
               </TabsList>
 
               {/* Kaplan-Meier Survival Tab */}
-              <TabsContent value="survival" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+              <TabsContent value="survival" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <h3 className="text-sm font-bold text-white">Overall Survival (5-Year Kaplan-Meier Estimate)</h3>
-                    <p className="text-xs text-slate-400">
+                    <h3 className="text-sm font-bold text-slate-900 dark:text-white">Overall Survival (5-Year Kaplan-Meier Estimate)</h3>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
                       Calculated across {cohortData?.filteredCount.toLocaleString()} matched cohort records with 95% confidence interval bands.
                     </p>
                   </div>
-                  <Badge variant="outline" className="border-sky-500/40 text-sky-300 bg-sky-950/40 text-[10px]">
+                  <Badge variant="outline" className="border-sky-300 dark:border-sky-500/40 text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/40 text-[10px]">
                     OMOP CDM Survival Engine
                   </Badge>
                 </div>
@@ -487,19 +487,19 @@ export default function CohortBuilder() {
                     <AreaChart data={cohortData?.kaplanMeier || []}>
                       <defs>
                         <linearGradient id="survivalGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#818cf8" stopOpacity={0.4} />
-                          <stop offset="95%" stopColor="#818cf8" stopOpacity={0.0} />
+                          <stop offset="5%" stopColor="#636EFA" stopOpacity={0.4} />
+                          <stop offset="95%" stopColor="#636EFA" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis dataKey="month" stroke="#64748b" label={{ value: "Months Post-Diagnosis", position: "insideBottom", offset: -5, fill: "#94a3b8", fontSize: 11 }} />
-                      <YAxis stroke="#64748b" domain={[0, 100]} label={{ value: "Survival %", angle: -90, position: "insideLeft", fill: "#94a3b8", fontSize: 11 }} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis dataKey="month" stroke="hsl(var(--muted-foreground))" label={{ value: "Months Post-Diagnosis", position: "insideBottom", offset: -5, fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
+                      <YAxis stroke="hsl(var(--muted-foreground))" domain={[0, 100]} label={{ value: "Survival %", angle: -90, position: "insideLeft", fill: "hsl(var(--muted-foreground))", fontSize: 11 }} />
                       <RechartsTooltip
-                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "8px", fontSize: "12px", color: "#fff" }}
+                        contentStyle={{ backgroundColor: "hsl(var(--popover))", borderColor: "hsl(var(--border))", borderRadius: "8px", fontSize: "12px", color: "hsl(var(--popover-foreground))" }}
                         formatter={(val: number) => [`${val}%`, "Survival Probability"]}
                         labelFormatter={(m) => `Month ${m}`}
                       />
-                      <Area type="monotone" dataKey="survivalRate" stroke="#818cf8" strokeWidth={2.5} fillOpacity={1} fill="url(#survivalGradient)" />
+                      <Area type="monotone" dataKey="survivalRate" stroke="#636EFA" strokeWidth={2.5} fillOpacity={1} fill="url(#survivalGradient)" />
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
@@ -507,36 +507,36 @@ export default function CohortBuilder() {
                 {/* At Risk Table */}
                 <div className="grid grid-cols-7 gap-2 pt-2 text-center text-xs font-mono">
                   {cohortData?.kaplanMeier.map((pt) => (
-                    <div key={pt.month} className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                      <span className="text-[10px] text-slate-500 block">Mo {pt.month}</span>
-                      <span className="font-bold text-slate-200">{pt.survivalRate}%</span>
-                      <span className="text-[9px] text-slate-500 block mt-0.5">{pt.atRisk} at risk</span>
+                    <div key={pt.month} className="p-2 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+                      <span className="text-[10px] text-slate-500 dark:text-slate-500 block">Mo {pt.month}</span>
+                      <span className="font-bold text-slate-800 dark:text-slate-200">{pt.survivalRate}%</span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-500 block mt-0.5">{pt.atRisk} at risk</span>
                     </div>
                   ))}
                 </div>
               </TabsContent>
 
               {/* Mutation Frequencies Tab */}
-              <TabsContent value="breakdown" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-6">
+              <TabsContent value="breakdown" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Mutation Frequencies Bar Chart */}
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+                    <h4 className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider font-mono">
                       Top Mutation Frequencies in Cohort
                     </h4>
                     <div className="h-60 w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <BarChart data={cohortData?.mutationFrequencies || []} layout="vertical">
-                          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                          <XAxis type="number" domain={[0, 60]} stroke="#64748b" fontSize={11} unit="%" />
-                          <YAxis type="category" dataKey="gene" stroke="#94a3b8" fontSize={11} width={60} />
+                          <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                          <XAxis type="number" domain={[0, 60]} stroke="hsl(var(--muted-foreground))" fontSize={11} unit="%" />
+                          <YAxis type="category" dataKey="gene" stroke="hsl(var(--muted-foreground))" fontSize={11} width={60} />
                           <RechartsTooltip
-                            contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "8px", fontSize: "12px", color: "#fff" }}
+                            contentStyle={{ backgroundColor: "hsl(var(--popover))", borderColor: "hsl(var(--border))", borderRadius: "8px", fontSize: "12px", color: "hsl(var(--popover-foreground))" }}
                             formatter={(val: number) => [`${val}%`, "Frequency"]}
                           />
-                          <Bar dataKey="percentage" fill="#38bdf8" radius={[0, 4, 4, 0]}>
+                          <Bar dataKey="percentage" fill="#19D3F3" radius={[0, 4, 4, 0]}>
                             {cohortData?.mutationFrequencies.map((entry, index) => (
-                              <Cell key={`cell-${index}`} fill={index === 0 ? "#f43f5e" : "#38bdf8"} />
+                              <Cell key={`cell-${index}`} fill={index === 0 ? "#EF553B" : "#19D3F3"} />
                             ))}
                           </Bar>
                         </BarChart>
@@ -546,19 +546,19 @@ export default function CohortBuilder() {
 
                   {/* Stage Distribution Breakdown */}
                   <div className="space-y-3">
-                    <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider font-mono">
+                    <h4 className="text-xs font-bold text-slate-700 dark:text-slate-200 uppercase tracking-wider font-mono">
                       Stage Distribution Breakdown
                     </h4>
                     <div className="space-y-3 pt-2">
                       {cohortData?.stageDistribution.map((stg) => (
                         <div key={stg.stage} className="space-y-1">
                           <div className="flex justify-between text-xs font-medium">
-                            <span className="text-slate-300">{stg.stage}</span>
-                            <span className="text-slate-400 font-mono">
+                            <span className="text-slate-700 dark:text-slate-300">{stg.stage}</span>
+                            <span className="text-slate-500 dark:text-slate-400 font-mono">
                               {stg.count.toLocaleString()} pts ({stg.percentage}%)
                             </span>
                           </div>
-                          <div className="w-full bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-800">
+                          <div className="w-full bg-slate-100 dark:bg-slate-950 h-2.5 rounded-full overflow-hidden border border-slate-200 dark:border-slate-800">
                             <div
                               className="bg-primary dark:bg-brand-maroon h-full rounded-full"
                               style={{ width: `${stg.percentage}%` }}
@@ -572,33 +572,33 @@ export default function CohortBuilder() {
               </TabsContent>
 
               {/* Inspector Tab */}
-              <TabsContent value="inspector" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4">
+              <TabsContent value="inspector" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4">
                 <div className="flex justify-between items-center">
-                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                    <Code className="w-4 h-4 text-sky-400" />
+                  <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <Code className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                     mCODE & GA4GH Standard Query Inspector
                   </h3>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handleCopyText(cohortData?.mcodeQueryJson || "")}
-                    className="border-slate-700 bg-slate-950 text-xs text-slate-300"
+                    className="border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs text-slate-700 dark:text-slate-300"
                   >
-                    {copied ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
+                    {copied ? <Check className="w-3.5 h-3.5 mr-1 text-emerald-500 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5 mr-1" />}
                     {copied ? "Copied" : "Copy mCODE JSON"}
                   </Button>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <span className="text-[11px] font-mono text-sky-300 font-bold uppercase">HL7 mCODE FHIR Bundle Query</span>
-                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-sky-200 h-64 overflow-auto shadow-inner">
+                    <span className="text-[11px] font-mono text-sky-700 dark:text-sky-300 font-bold uppercase">HL7 mCODE FHIR Bundle Query</span>
+                    <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] font-mono text-sky-800 dark:text-sky-200 h-64 overflow-auto shadow-inner">
                       {cohortData?.mcodeQueryJson}
                     </pre>
                   </div>
                   <div className="space-y-2">
-                    <span className="text-[11px] font-mono text-emerald-400 font-bold uppercase">GA4GH Beacon v2 Specification Query</span>
-                    <pre className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-[11px] font-mono text-emerald-200 h-64 overflow-auto shadow-inner">
+                    <span className="text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold uppercase">GA4GH Beacon v2 Specification Query</span>
+                    <pre className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] font-mono text-emerald-800 dark:text-emerald-200 h-64 overflow-auto shadow-inner">
                       {cohortData?.ga4ghBeaconQueryJson}
                     </pre>
                   </div>
