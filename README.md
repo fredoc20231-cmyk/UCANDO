@@ -58,16 +58,18 @@ UCANDO operates as a **Hub-and-Spoke** federated architecture where the central 
 
 - **iUCANDO AI Clinical Assistant**: Powered by Google Gemini 3.5 Flash, featuring multimodal Text, Voice recognition (via Web Speech API), and Spoken responses (via SpeechSynthesis). Accessible via top navigation or the persistent floating action trigger.
 - **Patient Orbit View**: Radial interactive visualization centering patient nodes (`UC-CCC-*`) surrounded by 6 orbital domain satellites (Clinical EHR, Multiomics, DICOM Imaging, Dynamic Consent, Audit Trail, and Metabolomics) with instant tab switching.
+- **Whole-Person Patient Record**: Beyond clinical timeline and labs, Patient 360 includes dedicated tabs for Demographics & Social Determinants of Health (housing, transportation, food security, insurance, support system), Treatment Response (RECIST 1.1-style response assessments over time), and Recovery & Survivorship (functional status, follow-up schedule, late-effects monitoring).
 - **Admin Census & Aggregate Metrics Dashboard** (`/admin`): Executive KPI dashboard summarizing total consented patients, multiomics samples, active clinical trials, disease distribution, and treatment regimens via interactive Recharts visualizations.
 - **OHIF Medical Imaging Integration**: Direct SMART-on-FHIR launch link to open OHIF DICOM radiology viewer (`https://viewer.ohif.org/`) for digital imaging studies.
 - **iCAT Shared Theme Tokens**: Harmonized color system and background modes (Day, Night, Sky) with shared `#636EFA` primary design tokens across components, charts, tables, and AI interfaces.
+- **Global Integrations Hub** (`/global-integrations`): Federated launchpad for EHR and public genomics platforms. Epic EHR has a **live, functioning SMART-on-FHIR OAuth2 connection** to the public SMART Health IT sandbox (`launch.smarthealthit.org`) — a real protocol-correct integration, not a mock. Epic Cosmos, Epic Genomics, and Epic MyChart are shown as roadmap cards pending Epic vendor approval and institutional credentialing. ClinVar, cBioPortal, GDC Data Portal, and ClinicalTrials.gov are linked as public reference resources.
 
 ---
 
 ## 🔒 Security Invariants & Zero-Trust Governance
 
 ### 1. Builder.io PHI-Free Architectural Invariant
-**Non-Negotiable Constraint**: Builder.io serves strictly as a PHI-free visual orchestration layer. Protected Health Information (PHI) is never transmitted to, stored in, or processed by Builder CMS services. All clinical rendering occurs client-side or via authenticated server calls to the Beacon Hub.
+**Non-Negotiable Constraint**: Builder.io serves strictly as a PHI-free visual orchestration layer. Protected Health Information (PHI) is never transmitted to, stored in, or processed by Builder CMS services. All clinical rendering occurs client-side or via authenticated server calls to the UCANDO Hub.
 
 ### 2. Dynamic Open Policy Agent (OPA) Consent Engine
 All data exports, research workspace queries, and federated GA4GH Beacon queries are evaluated in real-time against OPA Rego policies. When a patient modifies consent preferences (e.g. revoking AI model training or commercial sharing), policy enforcement propagates across downstream spokes within **< 24 hours**.
@@ -223,4 +225,4 @@ pnpm start
 
 ## 📄 License & Governance
 
-© 2025 The Beacon Comprehensive Cancer Center Data Commons. All rights reserved. Operates under IRB Protocol `IRB-DEMO-0000` for consented clinical ecosystem data integration.
+© 2026 University of Chicago Comprehensive Cancer Center (UC-CCC). All rights reserved. Developed by the Computational Oncology and Bioinformatics Unit, UC-CCC. Operates under IRB Protocol `IRB-DEMO-0000` for consented clinical ecosystem data integration.
