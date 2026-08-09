@@ -93,20 +93,8 @@ export default function FhirCallback() {
           setPatientId(launchedPatientId);
           await loadFhirResources(tokenData.access_token, launchedPatientId);
         } else {
-          // Default fallback simulation for testing without active URL code query
-          setStatusMessage("Connecting to public SMART Health IT FHIR sandbox...");
-          const samplePatientId = "5c8658c6-3821-4c9e-be4f-716c3b6d54b0";
-          setPatientId(samplePatientId);
-          setAccessToken("smart-sandbox-public-access-token-demo");
-          setTokenMetadata({
-            access_token: "smart-sandbox-public-access-token-demo",
-            token_type: "Bearer",
-            expires_in: 3600,
-            scope: "patient/*.read launch/patient openid profile",
-            patient: samplePatientId,
-            smart_style_url: "https://launch.smarthealthit.org/smart-style.json"
-          });
-          await loadFhirResources(null, samplePatientId);
+          setFetchError("No active SMART launch session found. Please initiate the launch from the Global Integrations Hub.");
+          setLoading(false);
         }
       } catch (err: any) {
         console.error("SMART on FHIR auth error:", err);
@@ -161,6 +149,44 @@ export default function FhirCallback() {
   const patientName =
     patient?.name?.[0]?.given?.join(" ") + " " + (patient?.name?.[0]?.family || "") || "Sandbox Synthetic Patient";
 
+  if (fetchError) {
+    return (
+      <Layout>
+        <div className="max-w-2xl mx-auto my-12 p-8 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-5 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 border border-amber-500/30 flex items-center justify-center mx-auto shadow-inner">
+            <Info className="w-6 h-6" />
+          </div>
+          <div className="space-y-2">
+            <Badge variant="outline" className="border-amber-500/40 text-amber-700 dark:text-amber-300 bg-amber-500/10 text-xs px-2.5 py-0.5 font-mono">
+              Session Required
+            </Badge>
+            <h1 className="text-xl font-bold text-slate-900 dark:text-white">
+              No Active SMART Launch Session Found
+            </h1>
+            <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg mx-auto">
+              You navigated directly to <code className="font-mono bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-primary">/fhir-callback</code> without an authorization code or active SMART OAuth2 launch session parameter.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs text-left text-slate-600 dark:text-slate-400 space-y-1 font-mono">
+            <p className="font-bold text-slate-900 dark:text-white">How to perform a live launch:</p>
+            <p>1. Open Global Integrations Hub</p>
+            <p>2. Locate the "Epic EHR" card</p>
+            <p>3. Click "Launch Epic EHR" to initiate OAuth2 authentication against the public SMART Health IT sandbox</p>
+          </div>
+
+          <div className="pt-2">
+            <Link to="/global-integrations">
+              <Button className="bg-primary hover:bg-primary/90 text-white font-bold text-xs shadow-md">
+                <Zap className="w-4 h-4 mr-2" /> Go to Global Integrations Hub
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
   if (loading) {
     return (
       <Layout>
@@ -180,7 +206,7 @@ export default function FhirCallback() {
       <div className="space-y-6 pb-12">
         {/* Navigation back */}
         <div className="flex items-center justify-between">
-          <Link to="/governance">
+          <Link to="/global-integrations">
             <Button size="sm" variant="outline" className="text-xs border-slate-200 dark:border-slate-800">
               <ArrowLeft className="w-3.5 h-3.5 mr-1.5" /> Back to Global Integrations Hub
             </Button>

@@ -401,7 +401,7 @@ export default function DynamicConsent() {
             </div>
 
             <pre className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-sky-300 overflow-auto h-80">
-{`package beacon.consent
+{`package ucando.consent
 
 default allow = false
 

@@ -1,4 +1,4 @@
-# Beacon — UCCANDO Precision Oncology Data Commons
+# UCANDO — University of Chicago Comprehensive Cancer Center Data Commons
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-cyan.svg)](https://react.dev/)
@@ -13,7 +13,7 @@ UCANDO is an enterprise precision oncology integration hub and federated data co
 
 ## 🏛 Architecture & Hub-and-Spoke Topology
 
-Beacon operates as a **Hub-and-Spoke** federated architecture where the central Hub acts as a single governed point of truth, orchestrating bidirectional data streams across six specialized domain spokes:
+UCANDO operates as a **Hub-and-Spoke** federated architecture where the central Hub acts as a single governed point of truth, orchestrating bidirectional data streams across six specialized domain spokes:
 
 ```
                           ┌──────────────────────────┐
@@ -28,7 +28,7 @@ Beacon operates as a **Hub-and-Spoke** federated architecture where the central 
 └──────────────────────────┘           │           └──────────────────────────┘
                                        │
                                ┌───────┴───────┐
-                               │  BEACON HUB   │
+                               │  UCANDO HUB   │
                                │  (OMOP CDM /  │
                                │  mCODE FHIR)  │
                                └───────┬───────┘
@@ -73,7 +73,7 @@ Beacon operates as a **Hub-and-Spoke** federated architecture where the central 
 All data exports, research workspace queries, and federated GA4GH Beacon queries are evaluated in real-time against OPA Rego policies. When a patient modifies consent preferences (e.g. revoking AI model training or commercial sharing), policy enforcement propagates across downstream spokes within **< 24 hours**.
 
 ```rego
-package beacon.consent
+package ucando.consent
 
 default allow = false
 
