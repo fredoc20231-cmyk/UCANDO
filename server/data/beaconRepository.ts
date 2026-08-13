@@ -7,6 +7,7 @@ import {
   OmopMeasurement,
   OmopDrugExposure,
   OmopNote,
+  InfusionRegimen,
   ApiContractSpec,
   IRBCharterDoc
 } from "@shared/api";
@@ -93,7 +94,6 @@ export interface RegisteredPatient {
 
 let patientCountOffset = 0;
 const registeredPatients: RegisteredPatient[] = [];
-const registeredPatientsList: Patient360Record[] = [];
 
 export function getHubStats(): HubStats {
   const currentTotal = 104280 + patientCountOffset;
@@ -277,7 +277,113 @@ export function getSpokes(): SpokeConnection[] {
   ];
 }
 
+function buildNewlyRegisteredPatientRecord(reg: RegisteredPatient): Patient360Record {
+  const offsetDays = getDateShiftOffsetForPatient(reg.patientId);
+  const personId = `synthetic-omop-uuid-${reg.patientId.toLowerCase()}`;
+  const enrollmentDate = reg.registeredAt.split("T")[0];
+  const currentConsent = consentStore[reg.patientId] || {
+    status: "Pending" as const,
+    effectiveDate: enrollmentDate,
+    lastVerified: `${enrollmentDate} (Awaiting Dynamic Consent Console Completion)`,
+    opaPolicyId: "opa:policy:ucando:consent_v2_4",
+    permissions: { ...defaultConsentPermissions }
+  };
+
+  return {
+    demographics: {
+      id: reg.patientId,
+      person_id: personId,
+      deIdentifiedId: `DEID-UCANDO-${reg.patientId.replace(/\D/g, "")}`,
+      mrn: reg.mrn,
+      age: reg.age,
+      gender: reg.gender,
+      sex: reg.gender,
+      race: "Not Yet Captured",
+      ethnicity: "Not Yet Captured",
+      primaryDiagnosis: reg.diagnosis,
+      stage: "Pending Full Diagnostic Workup",
+      oncoSubtype: "Pending Molecular Profiling",
+      attendingPhysician: "Pending Care Team Assignment",
+      primaryCenter: "UC-CCC Comprehensive Cancer Center",
+      consentStatus: currentConsent.status === "Active" ? "Consented" : "Pending"
+    },
+    consent: currentConsent,
+    dateShiftOffsetDays: offsetDays,
+    conditionOccurrences: [
+      {
+        condition_occurrence_id: `cond-occ-${reg.patientId}-01`,
+        person_id: personId,
+        condition_concept_id: `Reported Diagnosis: ${reg.diagnosis} (${reg.primarySite})`,
+        condition_start_date: shiftDateString(enrollmentDate, offsetDays),
+        condition_status: "Newly Reported at Intake — Pending Confirmation"
+      }
+    ],
+    procedureOccurrences: [],
+    measurements: [],
+    drugExposures: [],
+    omopNotes: [],
+    metabolomics: [],
+    timeline: [
+      {
+        id: "evt-enrollment",
+        date: shiftDateString(enrollmentDate, offsetDays),
+        type: "diagnosis",
+        title: "Enrolled in UCANDO at Intake",
+        description: `Patient registered at AbbVie Foundation Cancer Pavilion intake with reported diagnosis: ${reg.diagnosis}. Full diagnostic workup, staging, and care team assignment pending.`,
+        category: "Enrollment",
+        severity: "normal",
+        sourceSpoke: "ehr"
+      }
+    ],
+    genomics: [],
+    imaging: [],
+    labs: [],
+    infusions: reg.treatment
+      ? [
+          {
+            id: `infusion-${reg.patientId}-planned`,
+            drugName: reg.treatment,
+            dose: "Pending Care Team Determination",
+            route: "TBD",
+            cycle: "Pending Scheduling",
+            startDate: shiftDateString(enrollmentDate, offsetDays),
+            status: "Active"
+          } as InfusionRegimen
+        ]
+      : [],
+    biospecimens: [],
+    notes: [],
+    socialDeterminants: {
+      housingStability: "Unknown",
+      transportationAccess: "Unknown",
+      foodSecurity: "Unknown",
+      employmentStatus: "Unknown",
+      insuranceStatus: "Unknown",
+      preferredLanguage: "English",
+      supportSystem: "Unknown"
+    },
+    treatmentResponses: [],
+    recovery: {
+      survivorshipPhase: "Active Treatment",
+      functionalStatus: "Pending Assessment",
+      functionalStatusScale: "ECOG",
+      followUpSchedule: "Pending care team assignment",
+      lateEffectsMonitoring: [],
+      lastAssessmentDate: enrollmentDate
+    }
+  };
+}
+
 export function getPatient360(patientId: string): Patient360Record {
+  // If this ID belongs to a patient registered through the live enrollment
+  // flow (not the seeded demo patient), build a real record from their
+  // actual intake data instead of returning the unrelated seeded demo
+  // patient's clinical history with their ID stamped on top.
+  const registered = registeredPatients.find((p) => p.patientId === patientId);
+  if (registered) {
+    return buildNewlyRegisteredPatientRecord(registered);
+  }
+
   const currentConsent = consentStore[patientId] || {
     status: "Active",
     effectiveDate: "2023-08-14",
