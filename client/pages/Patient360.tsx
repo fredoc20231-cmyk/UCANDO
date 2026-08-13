@@ -466,9 +466,9 @@ export default function Patient360() {
               <div className="h-64 w-full pt-2">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={ca153Data}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#cbd5e1" className="dark:stroke-slate-700" />
-                    <XAxis dataKey="date" stroke="#64748b" fontSize={11} />
-                    <YAxis stroke="#64748b" fontSize={11} domain={[0, 80]} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                    <XAxis dataKey="date" stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                    <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} domain={[0, 80]} />
                     <RechartsTooltip contentStyle={{ backgroundColor: "hsl(var(--popover))", borderColor: "hsl(var(--border))", color: "hsl(var(--popover-foreground))" }} />
                     <Legend />
                     <Line type="monotone" dataKey="value" name="LOINC:17861-6 CA 15-3 (U/mL)" stroke="#0284c7" strokeWidth={3} dot={{ r: 5, fill: "#0284c7" }} />

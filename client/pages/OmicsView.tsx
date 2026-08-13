@@ -306,22 +306,22 @@ export default function OmicsView() {
           </TabsContent>
 
           {/* Pathway Enrichment */}
-          <TabsContent value="pathways" className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-6">
-            <h3 className="text-sm font-bold text-white">Signaling Pathway Enrichment & Impact</h3>
+          <TabsContent value="pathways" className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-6">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white">Signaling Pathway Enrichment & Impact</h3>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div className="space-y-3">
-                <span className="text-xs font-mono uppercase text-slate-400">Enrichment Score by Biological Pathway</span>
+                <span className="text-xs font-mono uppercase text-slate-500 dark:text-slate-400">Enrichment Score by Biological Pathway</span>
                 <div className="h-64 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={dataset?.pathways || []} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-                      <XAxis type="number" stroke="#64748b" fontSize={11} />
-                      <YAxis type="category" dataKey="pathway" stroke="#94a3b8" fontSize={10} width={180} />
+                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                      <XAxis type="number" stroke="hsl(var(--muted-foreground))" fontSize={11} />
+                      <YAxis type="category" dataKey="pathway" stroke="hsl(var(--muted-foreground))" fontSize={10} width={180} />
                       <RechartsTooltip
                         contentStyle={{ backgroundColor: "hsl(var(--popover))", borderColor: "hsl(var(--border))", borderRadius: "8px", fontSize: "12px", color: "hsl(var(--popover-foreground))" }}
                       />
-                      <Bar dataKey="enrichmentScore" fill="#a855f7" radius={[0, 4, 4, 0]} />
+                      <Bar dataKey="enrichmentScore" fill="#AB63FA" radius={[0, 4, 4, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -329,17 +329,17 @@ export default function OmicsView() {
 
               {/* Pathway List Details */}
               <div className="space-y-3">
-                <span className="text-xs font-mono uppercase text-slate-400">Statistical Significance Details</span>
+                <span className="text-xs font-mono uppercase text-slate-500 dark:text-slate-400">Statistical Significance Details</span>
                 <div className="space-y-2">
                   {dataset?.pathways.map((p) => (
-                    <div key={p.pathway} className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-1 text-xs font-mono">
-                      <div className="flex justify-between items-center font-bold text-slate-200">
+                    <div key={p.pathway} className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1 text-xs font-mono">
+                      <div className="flex justify-between items-center font-bold text-slate-800 dark:text-slate-200">
                         <span>{p.pathway}</span>
-                        <Badge className="bg-purple-950 text-purple-300 border-purple-800 text-[10px]">
+                        <Badge className="bg-purple-100 dark:bg-purple-950 text-purple-700 dark:text-purple-300 border-purple-300 dark:border-purple-800 text-[10px]">
                           FDR = {p.fdr}
                         </Badge>
                       </div>
-                      <p className="text-slate-400 text-[11px]">
+                      <p className="text-slate-500 dark:text-slate-400 text-[11px]">
                         Gene Count: {p.geneCount} genes • p-value: {p.pValue}
                       </p>
                     </div>
