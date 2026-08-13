@@ -38,6 +38,12 @@ import {
 
 export default function OmicsView() {
   const [dataset, setDataset] = useState<MultiomicsDataset | null>(null);
+  const [riskScore, setRiskScore] = useState<{
+    compositeScore: number;
+    riskTier: "Low" | "Intermediate" | "High";
+    contributingFactors: { factor: string; weight: number; detail: string }[];
+    methodologyNote: string;
+  } | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchGene, setSearchGene] = useState("");
   const [filterPathogenicOnly, setFilterPathogenicOnly] = useState(false);
@@ -91,6 +97,11 @@ export default function OmicsView() {
         console.error("Failed to load multiomics dataset:", err);
         setLoading(false);
       });
+
+    fetch("/api/beacon/patient/risk-score")
+      .then((res) => res.json())
+      .then((data) => setRiskScore(data))
+      .catch((err) => console.error("Failed to load multi-omics risk score:", err));
   }, []);
 
   const filteredVariants = (dataset?.variants || []).filter((v) => {
@@ -163,6 +174,57 @@ export default function OmicsView() {
             </Button>
           </div>
         </div>
+
+        {/* Multi-Omics Composite Risk Score */}
+        {riskScore && (
+          <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="flex flex-wrap items-start justify-between gap-3">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                  <Layers className="w-4 h-4 text-primary dark:text-sky-400" />
+                  Multi-Omics Composite Risk Score
+                </h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 max-w-xl">
+                  Prototype heuristic inspired by multi-omics foundation model research (e.g. SeNMo, HONeYBEE) --
+                  not a trained model, not clinically validated, not for clinical use.
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <div className="text-right">
+                  <div className="text-3xl font-black text-slate-900 dark:text-white">{riskScore.compositeScore}</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">/ 100</div>
+                </div>
+                <Badge
+                  className={
+                    riskScore.riskTier === "High"
+                      ? "bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-300 border-red-300 dark:border-red-800"
+                      : riskScore.riskTier === "Intermediate"
+                      ? "bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800"
+                      : "bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800"
+                  }
+                >
+                  {riskScore.riskTier} Risk Tier
+                </Badge>
+              </div>
+            </div>
+
+            {riskScore.contributingFactors.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-2">
+                {riskScore.contributingFactors.map((f, idx) => (
+                  <div key={idx} className="p-2.5 rounded-lg bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs">
+                    <div className="flex justify-between font-semibold text-slate-800 dark:text-slate-200">
+                      <span>{f.factor}</span>
+                      <span className="font-mono text-primary dark:text-sky-400">+{f.weight}</span>
+                    </div>
+                    <p className="text-slate-500 dark:text-slate-400 text-[11px] mt-0.5">{f.detail}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-xs text-slate-500 dark:text-slate-400 italic">No contributing factors yet -- pending diagnostic workup.</p>
+            )}
+          </div>
+        )}
 
         {/* Main Tabs */}
         <Tabs defaultValue="variants" className="space-y-6">

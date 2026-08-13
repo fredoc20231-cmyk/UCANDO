@@ -32,6 +32,11 @@ export const handleGetPatient360: RequestHandler = (req, res) => {
   res.json(beaconRepo.getPatient360(patientId));
 };
 
+export const handleGetMultiOmicsRiskScore: RequestHandler = (req, res) => {
+  const patientId = (req.query.id as string) || "UC-CCC-89421";
+  res.json(beaconRepo.computeMultiOmicsRiskScore(patientId));
+};
+
 export const handleGetApiContracts: RequestHandler = (_req, res) => {
   res.json(beaconRepo.getApiContracts());
 };

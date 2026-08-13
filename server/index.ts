@@ -6,6 +6,7 @@ import {
   handleGetHubStats,
   handleGetSpokes,
   handleGetPatient360,
+  handleGetMultiOmicsRiskScore,
   handleGetApiContracts,
   handleGetIRBCharter,
   handleCohortQuery,
@@ -40,6 +41,7 @@ export function createServer() {
   app.get("/api/beacon/stats", handleGetHubStats);
   app.get("/api/beacon/spokes", handleGetSpokes);
   app.get("/api/beacon/patient/360", handleGetPatient360);
+  app.get("/api/beacon/patient/risk-score", handleGetMultiOmicsRiskScore);
   app.get("/api/beacon/contracts", handleGetApiContracts);
   app.get("/api/beacon/governance/charter", handleGetIRBCharter);
 

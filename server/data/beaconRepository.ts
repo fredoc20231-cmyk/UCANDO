@@ -1050,6 +1050,100 @@ export function queryCohort(filters: any) {
   };
 }
 
+/**
+ * MULTI-OMICS COMPOSITE RISK SCORE
+ *
+ * Concept credit: inspired by the general approach of multi-omics foundation
+ * models in oncology research (e.g. fusing genomic, proteomic, and clinical
+ * modalities into a single patient-level representation to estimate outcome
+ * risk) -- see Waqas et al., "SeNMo: A Self-Normalizing Deep Learning Model
+ * for Enhanced Multi-Omics Data Analysis in Oncology," Cancer Research 84(6),
+ * 2024, and the broader HONeYBEE/MINDS body of work from the Rasool Lab at
+ * Moffitt Cancer Center (https://lab-rasool.github.io/).
+ *
+ * IMPORTANT HONESTY NOTE: this is NOT that model. This is an original,
+ * transparent, rule-based heuristic written for UCANDO that combines a
+ * patient's variant pathogenicity burden, metabolomics flags, and reported
+ * stage into a single illustrative 0-100 composite score. It is explicitly
+ * NOT a trained neural network, has NOT been clinically validated, and must
+ * never be presented as equivalent to a real foundation-model-derived risk
+ * score. It exists to demonstrate what a real multi-omics fusion score would
+ * look like in the UI, pending a genuine research collaboration and
+ * validation study before any real clinical use.
+ */
+export function computeMultiOmicsRiskScore(patientId: string): {
+  compositeScore: number;
+  riskTier: "Low" | "Intermediate" | "High";
+  contributingFactors: { factor: string; weight: number; detail: string }[];
+  methodologyNote: string;
+} {
+  const record = getPatient360(patientId);
+  const factors: { factor: string; weight: number; detail: string }[] = [];
+  let score = 20; // baseline
+
+  const pathogenicCount = (record.genomics || []).filter(
+    (v) => v.pathogenicity === "Pathogenic" || v.pathogenicity === "Likely Pathogenic"
+  ).length;
+  if (pathogenicCount > 0) {
+    const contribution = Math.min(pathogenicCount * 15, 45);
+    score += contribution;
+    factors.push({
+      factor: "Pathogenic/Likely Pathogenic Variant Burden",
+      weight: contribution,
+      detail: `${pathogenicCount} pathogenic or likely pathogenic variant(s) detected across sequenced genes.`
+    });
+  }
+
+  const highVafVariants = (record.genomics || []).filter((v) => v.vafPercent >= 35).length;
+  if (highVafVariants > 0) {
+    const contribution = Math.min(highVafVariants * 8, 20);
+    score += contribution;
+    factors.push({
+      factor: "High Variant Allele Frequency (Clonal Dominance)",
+      weight: contribution,
+      detail: `${highVafVariants} variant(s) with VAF >= 35%, suggesting clonal dominance.`
+    });
+  }
+
+  const elevatedMetabolites = (record.metabolomics || []).filter((m) => m.flag === "Elevated").length;
+  if (elevatedMetabolites > 0) {
+    const contribution = Math.min(elevatedMetabolites * 5, 15);
+    score += contribution;
+    factors.push({
+      factor: "Elevated Oncometabolite Markers",
+      weight: contribution,
+      detail: `${elevatedMetabolites} metabolomic marker(s) outside reference range.`
+    });
+  }
+
+  const stage = record.demographics.stage || "";
+  if (/Stage III|Stage IV/i.test(stage)) {
+    score += 15;
+    factors.push({
+      factor: "Advanced Disease Stage",
+      weight: 15,
+      detail: `Reported stage: ${stage}`
+    });
+  } else if (/Pending/i.test(stage)) {
+    factors.push({
+      factor: "Staging Not Yet Complete",
+      weight: 0,
+      detail: "Full diagnostic workup pending -- score based on available data only."
+    });
+  }
+
+  score = Math.max(0, Math.min(100, Math.round(score)));
+  const riskTier: "Low" | "Intermediate" | "High" = score >= 65 ? "High" : score >= 35 ? "Intermediate" : "Low";
+
+  return {
+    compositeScore: score,
+    riskTier,
+    contributingFactors: factors,
+    methodologyNote:
+      "Prototype heuristic combining variant pathogenicity burden, VAF, metabolomic flags, and staging. Not a trained model; not clinically validated; not for clinical use."
+  };
+}
+
 export function getMultiomics() {
   return {
     variants: [
