@@ -3,6 +3,7 @@ import { Layout } from "@/components/Layout";
 import { SmartLaunchModal } from "@/components/SmartLaunchModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Globe,
   Database,
@@ -15,7 +16,8 @@ import {
   CheckCircle2,
   Lock,
   Search,
-  BookOpen
+  BookOpen,
+  Loader2
 } from "lucide-react";
 
 interface IntegrationCard {
@@ -108,6 +110,25 @@ export default function GlobalIntegrations() {
     name: "",
     url: ""
   });
+
+  const [gdcPrimarySite, setGdcPrimarySite] = useState("Breast");
+  const [gdcResult, setGdcResult] = useState<any>(null);
+  const [gdcLoading, setGdcLoading] = useState(false);
+  const [gdcError, setGdcError] = useState<string | null>(null);
+
+  const handleGdcQuery = () => {
+    setGdcLoading(true);
+    setGdcError(null);
+    setGdcResult(null);
+    fetch(`/api/beacon/external-cohort/gdc?primarySite=${encodeURIComponent(gdcPrimarySite)}`)
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "GDC query failed");
+        setGdcResult(data);
+      })
+      .catch((err) => setGdcError(err.message || "Could not reach the GDC API"))
+      .finally(() => setGdcLoading(false));
+  };
 
   const handleLaunch = (item: IntegrationCard) => {
     if (item.id === "epic-ehr") {
@@ -226,6 +247,73 @@ export default function GlobalIntegrations() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* External Data Commons Cohort Discovery -- live GDC integration */}
+        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                <Database className="w-4 h-4 text-primary dark:text-sky-400" />
+                External Cohort Discovery: NCI Genomic Data Commons
+              </h3>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+                Query pattern inspired by MINDS (Rasool Lab, Moffitt Cancer Center) --
+                queries the real, public GDC API on demand rather than storing case data locally.
+              </p>
+            </div>
+            <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]">
+              Live External API
+            </Badge>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <Input
+              value={gdcPrimarySite}
+              onChange={(e) => setGdcPrimarySite(e.target.value)}
+              placeholder="Primary site, e.g. Breast, Lung, Ovary"
+              className="max-w-xs bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200"
+            />
+            <Button
+              onClick={handleGdcQuery}
+              disabled={gdcLoading}
+              className="bg-primary dark:bg-brand-maroon text-white text-xs h-9"
+            >
+              {gdcLoading ? <Loader2 className="w-3.5 h-3.5 mr-1.5 animate-spin" /> : <Search className="w-3.5 h-3.5 mr-1.5" />}
+              Query Live GDC Cohort
+            </Button>
+          </div>
+
+          {gdcError && (
+            <div className="p-3 rounded-lg bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800 text-xs text-red-700 dark:text-red-300">
+              {gdcError}
+            </div>
+          )}
+
+          {gdcResult && (
+            <div className="space-y-3 pt-2">
+              <div className="flex items-center gap-4">
+                <div>
+                  <div className="text-2xl font-black text-slate-900 dark:text-white">{gdcResult.totalCases?.toLocaleString()}</div>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400">matching cases in GDC</div>
+                </div>
+                {gdcResult.cached && (
+                  <Badge variant="outline" className="text-[10px] border-slate-300 dark:border-slate-700 text-slate-500 dark:text-slate-400">
+                    Cached result
+                  </Badge>
+                )}
+              </div>
+              <div className="space-y-1">
+                <p className="text-[11px] font-mono uppercase text-slate-500 dark:text-slate-400">Sample matching cases (metadata only)</p>
+                {(gdcResult.sampleCases || []).slice(0, 5).map((c: any) => (
+                  <div key={c.caseId} className="text-xs font-mono text-slate-700 dark:text-slate-300 flex justify-between border-b border-slate-100 dark:border-slate-800 py-1">
+                    <span>{c.submitterId}</span>
+                    <span className="text-slate-500 dark:text-slate-400">{c.project} • {c.diseaseType}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

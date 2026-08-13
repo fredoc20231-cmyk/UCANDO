@@ -1,5 +1,7 @@
 import { RequestHandler } from "express";
 import * as beaconRepo from "../data/beaconRepository";
+import { queryGdcCohort, GdcCohortFilters } from "../services/gdcClient";
+import { getCachedCohort, setCachedCohort } from "../data/cohortCache";
 
 // In-memory rate limiter for Gemini Copilot: max 10 requests per minute per IP
 const ipRateLimitMap = new Map<string, number[]>();
@@ -150,6 +152,35 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
     res.status(500).json({
       status: "Error",
       message: "Failed to call Google Gemini API: " + (err?.message || "Unknown error")
+    });
+  }
+};
+
+export const handleGdcCohortQuery: RequestHandler = async (req, res) => {
+  const filters: GdcCohortFilters = {
+    primarySite: (req.query.primarySite as string) || undefined,
+    diseaseType: (req.query.diseaseType as string) || undefined,
+    projectId: (req.query.projectId as string) || undefined
+  };
+
+  const filterSignature = JSON.stringify(filters);
+  const cached = getCachedCohort(filterSignature);
+  if (cached) {
+    res.json({ ...(cached.result as object), cached: true, cachedAt: cached.cachedAt });
+    return;
+  }
+
+  try {
+    const result = await queryGdcCohort(filters);
+    setCachedCohort(filterSignature, filters as Record<string, unknown>, result);
+    res.json({ ...result, cached: false });
+  } catch (err: any) {
+    console.error("GDC API query failed:", err);
+    res.status(502).json({
+      error: "GDC_UNREACHABLE",
+      message:
+        "Could not reach the live GDC Genomic Data Commons API. This is a connectivity issue (network egress, GDC downtime, or timeout) -- not a query with zero matches. " +
+        (err?.message || "Unknown error")
     });
   }
 };

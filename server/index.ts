@@ -18,6 +18,7 @@ import {
   handleUpdateConsent,
   handleRegisterPatient,
   handleGetAdminStats,
+  handleGdcCohortQuery,
   handleGeminiCopilot
 } from "./routes/beacon";
 
@@ -48,6 +49,7 @@ export function createServer() {
   app.post("/api/beacon/cohort/query", handleCohortQuery);
   app.get("/api/beacon/cohort/query", handleCohortQuery);
   app.get("/api/beacon/omics", handleGetMultiomics);
+  app.get("/api/beacon/external-cohort/gdc", handleGdcCohortQuery);
   app.get("/api/beacon/imaging/details", handleGetImagingDetails);
   app.get("/api/beacon/trials", handleGetTrialMatches);
   app.get("/api/beacon/audit", handleGetAuditLogs);
