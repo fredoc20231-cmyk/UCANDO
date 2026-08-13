@@ -13,7 +13,9 @@ const distPath = path.join(__dirname, "../spa");
 app.use(express.static(distPath));
 
 // Handle React Router - serve index.html for all non-API routes
-app.get("*", (req, res) => {
+// NOTE: Express 5's router (path-to-regexp v7+) no longer accepts a bare "*"
+// wildcard; it must be a named wildcard parameter like "*splat".
+app.get("/*splat", (req, res) => {
   // Don't serve index.html for API routes
   if (req.path.startsWith("/api/") || req.path.startsWith("/health")) {
     return res.status(404).json({ error: "API endpoint not found" });
