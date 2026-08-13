@@ -319,7 +319,7 @@ export default function OmicsView() {
                       <XAxis type="number" stroke="#64748b" fontSize={11} />
                       <YAxis type="category" dataKey="pathway" stroke="#94a3b8" fontSize={10} width={180} />
                       <RechartsTooltip
-                        contentStyle={{ backgroundColor: "#0f172a", borderColor: "#334155", borderRadius: "8px", fontSize: "12px", color: "#fff" }}
+                        contentStyle={{ backgroundColor: "hsl(var(--popover))", borderColor: "hsl(var(--border))", borderRadius: "8px", fontSize: "12px", color: "hsl(var(--popover-foreground))" }}
                       />
                       <Bar dataKey="enrichmentScore" fill="#a855f7" radius={[0, 4, 4, 0]} />
                     </BarChart>
