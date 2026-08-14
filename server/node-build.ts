@@ -40,3 +40,18 @@ process.on("SIGINT", () => {
   console.log("🛑 Received SIGINT, shutting down gracefully");
   process.exit(0);
 });
+
+// Catch anything that slips past Express's own error handling (e.g. an
+// error thrown outside a request context). Log it clearly and exit --
+// Cloud Run (or any container orchestrator) will restart the container
+// automatically. Staying alive with a corrupted process state is worse
+// than a clean, logged restart.
+process.on("uncaughtException", (err) => {
+  console.error("💥 Uncaught exception, exiting:", err);
+  process.exit(1);
+});
+
+process.on("unhandledRejection", (reason) => {
+  console.error("💥 Unhandled promise rejection, exiting:", reason);
+  process.exit(1);
+});
