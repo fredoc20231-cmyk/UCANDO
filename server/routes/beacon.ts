@@ -76,13 +76,68 @@ export const handleGetAdminStats: RequestHandler = (_req, res) => {
   res.json(beaconRepo.getAdminStats());
 };
 
+const VALID_CONSENT_TYPES = ["researchUse", "recontactGranted", "biospecimensUse", "aiModelTraining", "commercialSharing"];
+
 export const handleUpdateConsent: RequestHandler = (req, res) => {
   const { patientId, consentType, enabled, permissions } = req.body || {};
+
+  if (patientId !== undefined && typeof patientId !== "string") {
+    res.status(400).json({ error: "VALIDATION_ERROR", message: "patientId must be a string." });
+    return;
+  }
+
+  if (permissions !== undefined) {
+    if (typeof permissions !== "object" || permissions === null || Array.isArray(permissions)) {
+      res.status(400).json({ error: "VALIDATION_ERROR", message: "permissions must be an object." });
+      return;
+    }
+    const invalidKeys = Object.keys(permissions).filter((k) => !VALID_CONSENT_TYPES.includes(k));
+    if (invalidKeys.length > 0) {
+      res.status(400).json({ error: "VALIDATION_ERROR", message: `Unknown consent permission key(s): ${invalidKeys.join(", ")}` });
+      return;
+    }
+    for (const v of Object.values(permissions)) {
+      if (typeof v !== "boolean") {
+        res.status(400).json({ error: "VALIDATION_ERROR", message: "Every permission value must be a boolean." });
+        return;
+      }
+    }
+  } else if (consentType !== undefined && !VALID_CONSENT_TYPES.includes(consentType)) {
+    res.status(400).json({ error: "VALIDATION_ERROR", message: `Unknown consentType: '${consentType}'. Must be one of: ${VALID_CONSENT_TYPES.join(", ")}` });
+    return;
+  }
+
   res.json(beaconRepo.updateConsent(patientId, consentType, enabled, permissions));
 };
 
 export const handleRegisterPatient: RequestHandler = (req, res) => {
-  const patientData = req.body || {};
+  const body = req.body || {};
+
+  // Validate types and bound string lengths -- this data gets rendered
+  // directly in the UI (Patient360, Admin dashboard), so malformed or
+  // oversized input should be rejected here rather than silently accepted.
+  const stringFields: string[] = ["name", "mrn", "diagnosis", "primarySite", "gender", "treatment"];
+  for (const field of stringFields) {
+    if (body[field] !== undefined && body[field] !== null) {
+      if (typeof body[field] !== "string") {
+        res.status(400).json({ error: "VALIDATION_ERROR", message: `Field '${field}' must be a string.` });
+        return;
+      }
+      if (body[field].length > 200) {
+        res.status(400).json({ error: "VALIDATION_ERROR", message: `Field '${field}' exceeds 200 characters.` });
+        return;
+      }
+    }
+  }
+  if (body.age !== undefined && body.age !== null) {
+    const ageNum = Number(body.age);
+    if (!Number.isFinite(ageNum) || ageNum < 0 || ageNum > 130) {
+      res.status(400).json({ error: "VALIDATION_ERROR", message: "Field 'age' must be a number between 0 and 130." });
+      return;
+    }
+  }
+
+  const patientData = body;
   res.json(beaconRepo.registerPatient(patientData));
 };
 
