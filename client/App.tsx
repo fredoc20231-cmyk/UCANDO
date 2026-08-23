@@ -1,5 +1,7 @@
-import { Toaster } from "@/components/ui/toaster";
+import "./global.css";
+import React from "react";
 import { createRoot } from "react-dom/client";
+import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -68,7 +70,7 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
+export const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <BackgroundProvider>
@@ -194,5 +196,10 @@ const App = () => (
     </AuthProvider>
   </QueryClientProvider>
 );
+
+const rootElement = document.getElementById("root");
+if (rootElement) {
+  createRoot(rootElement).render(<App />);
+}
 
 export default App;
