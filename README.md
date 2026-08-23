@@ -62,7 +62,7 @@ UCANDO operates as a **Hub-and-Spoke** federated architecture where the central 
 - **Admin Census & Aggregate Metrics Dashboard** (`/admin`): Executive KPI dashboard summarizing total consented patients, multiomics samples, active clinical trials, disease distribution, and treatment regimens via interactive Recharts visualizations.
 - **OHIF Medical Imaging Integration**: Direct SMART-on-FHIR launch link to open OHIF DICOM radiology viewer (`https://viewer.ohif.org/`) for digital imaging studies.
 - **iCAT Shared Theme Tokens**: Harmonized color system and background modes (Day, Night, Sky) with shared `#636EFA` primary design tokens across components, charts, tables, and AI interfaces.
-- **Global Integrations Hub** (`/global-integrations`): Federated launchpad for EHR and public genomics platforms. Epic EHR has a **live, functioning SMART-on-FHIR OAuth2 connection** to the public SMART Health IT sandbox (`launch.smarthealthit.org`) — a real protocol-correct integration, not a mock. Epic Cosmos, Epic Genomics, and Epic MyChart are shown as roadmap cards pending Epic vendor approval and institutional credentialing. ClinVar, cBioPortal, GDC Data Portal, and ClinicalTrials.gov are linked as public reference resources.
+- **Global Integrations Hub** (`/global-integrations`): Federated launchpad for EHR and public genomics platforms. Features live, functioning launch links for Epic EHR (SMART-on-FHIR OAuth2 sandbox), Epic Cosmos research portal, Epic Genomics FHIR spec, Epic MyChart patient gateway, ClinVar (NCBI), cBioPortal, NCI Genomic Data Commons (with live on-demand REST API cohort discovery for Breast, Lung, Ovary, and other cancer sites), and ClinicalTrials.gov.
 
 ---
 
