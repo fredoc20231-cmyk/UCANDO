@@ -132,7 +132,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-[1700px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
           
           {/* Brand Logo & Identity */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0 max-w-[380px] sm:max-w-[440px] xl:max-w-[500px]">
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="h-10 w-10 rounded-lg border border-border bg-surface flex items-center justify-center shadow-subtle group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                 <img
@@ -141,13 +141,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="h-full w-full object-contain p-0.5"
                 />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="font-serif font-bold text-sm sm:text-base tracking-tight text-foreground group-hover:text-primary transition-colors">
+              <div className="min-w-0">
+                <div className="flex items-baseline gap-1.5 leading-tight">
+                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-primary group-hover:text-primary/90 transition-colors shrink-0">
+                    {institutionConfig.platformName}
+                  </span>
+                  <span className="font-serif font-medium text-[11px] sm:text-xs text-foreground/90 tracking-tight truncate">
                     {institutionConfig.fullName}
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground hidden sm:block">{institutionConfig.tagline}</p>
+                <p className="text-[10px] sm:text-[11px] text-muted-foreground font-sans truncate leading-tight mt-0.5 hidden sm:block">
+                  {institutionConfig.tagline}
+                </p>
               </div>
             </Link>
           </div>
