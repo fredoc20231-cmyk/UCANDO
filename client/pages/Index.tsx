@@ -81,10 +81,16 @@ export default function Index() {
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Link to="/workspace">
+                <Link to="/omics-view">
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-9 px-5 shadow-subtle">
-                    <Dna className="w-4 h-4 mr-2" /> Launch RNA-seq Platform
+                    <Layers className="w-4 h-4 mr-2" /> Launch Omics View
                     <ArrowRight className="w-4 h-4 ml-1.5" />
+                  </Button>
+                </Link>
+
+                <Link to="/workspace">
+                  <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-semibold text-xs h-9 px-4 shadow-subtle">
+                    <Dna className="w-4 h-4 mr-2 text-accent" /> RNA-seq Analytics
                   </Button>
                 </Link>
 
@@ -212,29 +218,29 @@ export default function Index() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             
-            {/* Premier Card: RNA-seq Scientific Platform */}
+            {/* Premier Card: Omics View (RNA-seq & 8 Other Omics + Integrations) */}
             <div className="p-5 rounded-2xl bg-card border-2 border-primary/40 space-y-3 flex flex-col justify-between hover:border-primary transition-all shadow-subtle group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="p-2.5 rounded-xl bg-primary text-primary-foreground">
                     <Dna className="w-5 h-5" />
                   </div>
-                  <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] font-mono">
-                    RNA-seq Platform v3.2
+                  <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] font-mono font-bold">
+                    9 Omics Layers & Integrations
                   </Badge>
                 </div>
                 <h4 className="font-serif font-bold text-base text-foreground group-hover:text-primary transition-colors">
-                  RNA-seq Scientific Analytics Platform
+                  Omics View
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
-                  Publication-grade RNA-seq suite: Two-pane analysis workspace, DESeq2 GLM differential expression, Volcano scatter, PCA/UMAP embeddings, Clustered Heatmaps, GSEA pathways, and biomarker dossiers.
+                  Comprehensive multi-omics workspace integrating publication-grade <strong>RNA-seq transcriptomics</strong> alongside <strong>8 other omics modalities and integrations</strong>: Somatic & Germline Genomics (WES/WGS variants, OncoPrint matrix), Epigenomics, Proteomics, Phosphoproteomics, Metabolomics, Single-Cell RNA-seq, Spatial Transcriptomics, and Radiomics with PhoenixMO and BioCompute IEEE 2791 provenance.
                 </p>
               </div>
 
               <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
-                <span className="text-muted-foreground font-mono text-[11px]">DESeq2 / Bioconductor</span>
-                <Link to="/workspace" className="text-primary font-semibold flex items-center gap-1 hover:underline">
-                  Launch RNA-seq Suite <ArrowRight className="w-3.5 h-3.5" />
+                <span className="text-muted-foreground font-mono text-[11px]">RNA-seq + 8 Omics & PhoenixMO</span>
+                <Link to="/omics-view" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                  Launch Omics View <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
