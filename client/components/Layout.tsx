@@ -141,15 +141,13 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                   className="h-full w-full object-contain p-0.5"
                 />
               </div>
-              <div className="min-w-0">
-                <div className="flex items-baseline gap-1.5 leading-tight">
-                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-primary group-hover:text-primary/90 transition-colors shrink-0">
-                    {institutionConfig.platformName}
-                  </span>
-                  <span className="font-serif font-medium text-[11px] sm:text-xs text-foreground/90 tracking-tight truncate">
-                    {institutionConfig.fullName}
-                  </span>
-                </div>
+              <div className="min-w-0 flex flex-col justify-center">
+                <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-primary group-hover:text-primary/90 transition-colors leading-none">
+                  {institutionConfig.platformName}
+                </span>
+                <span className="font-serif font-medium text-[11px] sm:text-xs text-foreground/90 tracking-tight leading-tight mt-0.5 truncate">
+                  {institutionConfig.fullName}
+                </span>
                 <p className="text-[10px] sm:text-[11px] text-muted-foreground font-sans truncate leading-tight mt-0.5 hidden sm:block">
                   {institutionConfig.tagline}
                 </p>
