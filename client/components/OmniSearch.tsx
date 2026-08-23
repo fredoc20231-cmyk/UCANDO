@@ -822,7 +822,7 @@ export const OmniSearch: React.FC = () => {
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="h-8 px-2.5 flex items-center gap-1.5 border-r border-border bg-card/60 hover:bg-muted text-xs font-medium text-foreground rounded-l-md transition-colors shrink-0"
+              className="h-8 -mt-px px-2.5 flex items-center gap-1.5 border-r border-border bg-card/60 hover:bg-muted text-xs font-medium text-foreground rounded-l-md transition-colors shrink-0"
               title="Filter search category"
             >
               <CurrentIcon className="w-3.5 h-3.5 text-primary" />
@@ -879,7 +879,7 @@ export const OmniSearch: React.FC = () => {
             }}
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
-            className="w-full h-8 pl-3 pr-16 text-xs bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-sans"
+            className="w-full h-8 -mt-px pl-3 pr-16 text-xs bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-sans"
           />
 
           {/* Shortcut / Clear Badge */}

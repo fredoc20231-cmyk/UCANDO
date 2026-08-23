@@ -46,12 +46,17 @@ export interface EvidenceItem {
   };
   consensusVerdict: string;
   recommendationGrade: "Grade A (Strong)" | "Grade B (Moderate)" | "Grade C (Conditional)";
-  evidenceLevel: "Level 1A (Systematic Review / Meta-Analysis)" | "Level 1B (Randomized Controlled Phase 3)" | "Level 2A (Prospective Multi-Center Cohort)" | "Level 2B (Phase 2 Interventional)";
+  evidenceLevel:
+    | "Level 1A (Systematic Review / Meta-Analysis)"
+    | "Level 1B (Randomized Controlled Phase 3)"
+    | "Level 1B (Randomized Controlled Phase 3 / Pivotal Phase 2)"
+    | "Level 2A (Prospective Multi-Center Cohort)"
+    | "Level 2B (Phase 2 Interventional)";
   confidenceScore: number; // e.g. 96
   guidelineStatus: {
     nccn: "Category 1 Preferred" | "Category 2A Recommended" | "Category 2B Option";
     asco: "Strong Recommendation" | "Moderate Recommendation";
-    esmo: "MCBS Score 4 / 5 (Substantial Benefit)";
+    esmo: "MCBS Score 4 / 5 (Substantial Benefit)" | "MCBS Score 4 (Substantial Benefit)";
     fdaStatus: "FDA Approved Indication" | "Breakthrough Therapy" | "NCCN Off-Label Recognized";
   };
   keyFindings: string[];

@@ -24,7 +24,8 @@ import {
   BarChart2,
   Layers,
   HeartPulse,
-  Scale
+  Scale,
+  Maximize2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
