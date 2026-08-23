@@ -103,38 +103,38 @@ export default function Patient360() {
     <Layout>
       <div className="space-y-6 pb-12">
         {/* Top Demographics Header & Consent Banner */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+        <div className="p-5 rounded-xl bg-card border border-border shadow-subtle space-y-4">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div className="space-y-1">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-brand-maroon hover:bg-brand-maroon text-white font-bold text-xs">
+                <Badge className="bg-[#00CC96]/15 text-[#00CC96] border-[#00CC96]/30 font-semibold text-xs rounded-full">
                   {demographics.consentStatus} Patient
                 </Badge>
-                <span className="font-mono text-xs text-sky-600 dark:text-sky-400 font-semibold">MRN: {demographics.mrn}</span>
-                <span className="text-slate-400 dark:text-slate-600">•</span>
-                <span className="font-mono text-xs text-emerald-700 dark:text-emerald-400 font-semibold">Tokenized ID: {demographics.deIdentifiedId}</span>
+                <span className="font-mono text-xs text-primary font-semibold">MRN: {demographics.mrn}</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="font-mono text-xs text-[#00CC96] font-semibold">Tokenized ID: {demographics.deIdentifiedId}</span>
               </div>
 
-              <h1 className="text-2xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <User className="w-6 h-6 text-brand-maroon" />
+              <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+                <User className="w-6 h-6 text-primary" />
                 Patient 360: {demographics.id}
               </h1>
 
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-                {demographics.age} y/o {demographics.gender} • {demographics.ethnicity} • <strong className="text-slate-900 dark:text-white">{demographics.primaryDiagnosis}</strong> ({demographics.stage})
+              <p className="text-xs text-muted-foreground">
+                {demographics.age} y/o {demographics.gender} • {demographics.ethnicity} • <strong className="text-foreground">{demographics.primaryDiagnosis}</strong> ({demographics.stage})
               </p>
             </div>
 
             {/* SMART Launch Action Toolbar & View Mode Toggle */}
             <div className="flex flex-wrap items-center gap-2">
-              <div className="flex items-center p-1 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl mr-2">
+              <div className="flex items-center p-0.5 bg-muted border border-border rounded-lg mr-2">
                 <button
                   type="button"
                   onClick={() => setViewMode("orbit")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
                     viewMode === "orbit"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-primary text-white shadow-subtle"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Orbit View
@@ -142,10 +142,10 @@ export default function Patient360() {
                 <button
                   type="button"
                   onClick={() => setViewMode("tab")}
-                  className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
+                  className={`px-3 py-1 rounded-md text-xs font-semibold transition-all ${
                     viewMode === "tab"
-                      ? "bg-primary text-white shadow-sm"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-primary text-white shadow-subtle"
+                      : "text-muted-foreground hover:text-foreground"
                   }`}
                 >
                   Tab View
@@ -156,17 +156,17 @@ export default function Patient360() {
                 size="sm"
                 onClick={() => triggerSmartLaunch("omics")}
                 disabled={smartLaunching === "omics"}
-                className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs h-9"
+                className="bg-primary hover:bg-[#4C59E6] text-white font-semibold text-xs h-8 shadow-subtle rounded-lg"
               >
                 <Zap className="w-3.5 h-3.5 mr-1.5" />
-                {smartLaunching === "omics" ? "Launching SMART Context..." : "SMART Launch: Multiomics"}
+                {smartLaunching === "omics" ? "Launching Context..." : "SMART Launch: Multiomics"}
               </Button>
 
               <Button
                 size="sm"
                 onClick={() => triggerSmartLaunch("imaging")}
                 disabled={smartLaunching === "imaging"}
-                className="bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs h-9"
+                className="bg-secondary hover:bg-secondary/90 text-white font-semibold text-xs h-8 shadow-subtle rounded-lg"
               >
                 <ImageIcon className="w-3.5 h-3.5 mr-1.5" />
                 {smartLaunching === "imaging" ? "Launching OHIF..." : "Launch Imaging (OHIF)"}

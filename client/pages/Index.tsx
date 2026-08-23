@@ -110,72 +110,72 @@ export default function Index() {
 
         {/* Real-time KPI Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Consented Patients</span>
-              <Users className="w-4 h-4 text-sky-500 dark:text-sky-400" />
+              <Users className="w-4 h-4 text-primary" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalConsentedPatients.toLocaleString() : "104,280"}
             </p>
-            <p className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+            <p className="text-[10px] text-[#00CC96] flex items-center gap-1 font-semibold">
               <CheckCircle2 className="w-3 h-3" /> 100% Consent Verified
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Multiomics Profiles</span>
-              <Dna className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+              <Dna className="w-4 h-4 text-[#00CC96]" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalOmicsProfiles.toLocaleString() : "84,910"}
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">WES, RNA-seq, Proteomics</p>
+            <p className="text-[10px] text-muted-foreground">WES, RNA-seq, Proteomics</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Imaging Accessions</span>
-              <ImageIcon className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+              <ImageIcon className="w-4 h-4 text-[#AB63FA]" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalImagingStudies.toLocaleString() : "462,100"}
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">PET/CT, MRI, Pathology WSI</p>
+            <p className="text-[10px] text-muted-foreground">PET/CT, MRI, Pathology WSI</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Biospecimen Lineage</span>
-              <FlaskConical className="w-4 h-4 text-amber-500 dark:text-amber-400" />
+              <FlaskConical className="w-4 h-4 text-[#FFA15A]" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalBiospecimens.toLocaleString() : "1,240,500"}
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">HTRC Cryo & FFPE Blocks</p>
+            <p className="text-[10px] text-muted-foreground">HTRC Cryo & FFPE Blocks</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Active Workspaces</span>
-              <Layers className="w-4 h-4 text-rose-500 dark:text-rose-400" />
+              <Layers className="w-4 h-4 text-[#EF553B]" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.activeWorkspaces : "342"}
             </p>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400">GPU Research Sandboxes</p>
+            <p className="text-[10px] text-muted-foreground">GPU Research Sandboxes</p>
           </div>
 
-          <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-1 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-sm">
-            <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 text-xs font-medium">
+          <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
+            <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>OPA Enforcement</span>
-              <ShieldCheck className="w-4 h-4 text-emerald-500 dark:text-emerald-400" />
+              <ShieldCheck className="w-4 h-4 text-[#00CC96]" />
             </div>
-            <p className="text-2xl font-bold text-slate-900 dark:text-white font-mono">
+            <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.opaPolicyEnforcementsToday.toLocaleString() : "49,210"}
             </p>
-            <p className="text-[10px] text-emerald-600 dark:text-emerald-400">Real-time Zero-Trust</p>
+            <p className="text-[10px] text-[#00CC96] font-semibold">Real-time Zero-Trust</p>
           </div>
         </div>
 

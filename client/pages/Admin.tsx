@@ -38,6 +38,7 @@ import {
   CartesianGrid
 } from "recharts";
 import { toast } from "sonner";
+import { CHART_PALETTES } from "@/lib/theme";
 
 interface RegisteredPatient {
   patientId: string;
@@ -132,16 +133,7 @@ export default function Admin() {
     }
   };
 
-  const chartColors = [
-    "#636EFA",
-    "#EF553B",
-    "#00CC96",
-    "#FFA15A",
-    "#AB63FA",
-    "#19D3F3",
-    "#B6E880",
-    "#FF97FF"
-  ];
+  const chartColors = CHART_PALETTES.categorical;
 
   if (loading || !stats) {
     return (

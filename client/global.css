@@ -1,4 +1,3 @@
-/** @import must precede all other statements */
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @tailwind base;
@@ -6,107 +5,89 @@
 @tailwind utilities;
 
 @layer base {
-  /**
-   * Tailwind CSS theme
-   * tailwind.config.ts expects color variables expressed as space-separated HSL values.
-  */
-  /* THEME CONTRACT: every component MUST pair hardcoded slate/white classes with a dark: variant. Never add bg-slate-900, text-white, text-slate-300/400, or border-slate-700/800 without a corresponding dark: pair. See Patient360.tsx for a correct reference implementation after this fix. */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 221 39% 11%;
+    /* Light Mode Neutrals */
+    --background: 0 0% 100%;       /* #FFFFFF */
+    --foreground: 221 39% 11%;      /* #111827 */
 
-    --card: 210 20% 98%;
+    --card: 0 0% 100%;            /* #FFFFFF surfaceElevated */
     --card-foreground: 221 39% 11%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 221 39% 11%;
 
-    /* iCAT Theme Primary: #636EFA */
-    --primary: 236 94% 68%;
+    /* Brand Tokens */
+    --primary: 236 94% 68%;        /* #636EFA */
     --primary-foreground: 0 0% 100%;
+    --primary-dark: 235 77% 60%;   /* #4C59E6 */
+    --primary-light: 234 100% 95%; /* #E8EAFF */
+    --primary-bg: 229 100% 97%;    /* #EEF1FF */
 
-    --secondary: 268 94% 68%;
+    --secondary: 268 94% 68%;      /* #AB63FA */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 218 14% 34%;
-
-    --accent: 164 100% 40%;
+    --accent: 164 100% 40%;        /* #00CC96 */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 9 85% 58%;
-    --destructive-foreground: 0 0% 100%;
+    /* Semantic Tokens */
+    --success: 164 100% 40%;       /* #00CC96 */
+    --success-bg: 152 81% 96%;     /* #ECFDF5 */
+    --warning: 26 100% 68%;        /* #FFA15A */
+    --warning-bg: 33 100% 96%;     /* #FFF7ED */
+    --danger: 9 85% 58%;           /* #EF553B */
+    --danger-bg: 0 100% 97%;       /* #FEF2F2 */
+    --info: 189 89% 53%;           /* #19D3F3 */
+    --info-bg: 186 100% 96%;       /* #ECFEFF */
 
-    --border: 220 13% 91%;
+    --muted: 210 20% 98%;          /* #F9FAFB surface */
+    --muted-foreground: 215 14% 34%; /* #4B5563 textSecondary */
+
+    --border: 220 13% 91%;         /* #E5E7EB */
     --input: 220 13% 91%;
     --ring: 236 94% 68%;
 
-    --radius: 0.75rem;
-
-    --sidebar-background: 221 39% 11%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 236 94% 68%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 217 32% 17%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 32% 17%;
-    --sidebar-ring: 236 94% 68%;
-
-    /* Enterprise Custom iCAT Tokens */
-    --brand-maroon: 236 94% 68%;
-    --brand-dark-maroon: 236 85% 58%;
-    --beacon-cyan: 189 89% 53%;
-    --beacon-teal: 164 100% 40%;
-    --beacon-emerald: 164 100% 40%;
-    --beacon-purple: 268 94% 68%;
-    --beacon-amber: 26 100% 68%;
+    --radius: 0.75rem;             /* 12px for cards */
   }
 
   .dark {
-    --background: 219 48% 8%;
-    --foreground: 210 40% 98%;
+    /* Dark Mode Neutrals */
+    --background: 220 48% 8%;      /* #0B1220 */
+    --foreground: 210 40% 98%;     /* #F9FAFB */
 
-    --card: 220 39% 11%;
+    --card: 217 33% 17%;           /* #1F2937 surfaceElevated */
     --card-foreground: 210 40% 98%;
 
-    --popover: 220 39% 11%;
+    --popover: 217 33% 17%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 236 94% 68%;
+    /* Brand Tokens stay identical in data/viz */
+    --primary: 236 94% 68%;        /* #636EFA */
     --primary-foreground: 0 0% 100%;
+    --primary-dark: 235 77% 60%;
+    --primary-light: 234 100% 95%;
+    --primary-bg: 217 33% 17%;
 
-    --secondary: 268 94% 68%;
+    --secondary: 268 94% 68%;      /* #AB63FA */
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 217 19% 18%;
-    --muted-foreground: 215 14% 82%;
-
-    --accent: 164 100% 40%;
+    --accent: 164 100% 40%;        /* #00CC96 */
     --accent-foreground: 0 0% 100%;
 
-    --destructive: 9 85% 58%;
-    --destructive-foreground: 0 0% 100%;
+    --success: 164 100% 40%;
+    --success-bg: 152 81% 15%;
+    --warning: 26 100% 68%;
+    --warning-bg: 33 100% 15%;
+    --danger: 9 85% 58%;
+    --danger-bg: 0 100% 15%;
+    --info: 189 89% 53%;
+    --info-bg: 186 100% 15%;
 
-    --border: 217 19% 27%;
+    --muted: 222 47% 11%;          /* #111827 surface */
+    --muted-foreground: 218 11% 84%; /* #D1D5DB textSecondary */
+
+    --border: 217 19% 27%;         /* #374151 */
     --input: 217 19% 27%;
-    --ring: 189 90% 53%;
-
-    --sidebar-background: 219 48% 8%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 236 94% 68%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 39% 11%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 19% 27%;
-    --sidebar-ring: 236 94% 68%;
-
-    --brand-maroon: 236 94% 68%;
-    --brand-dark-maroon: 236 85% 58%;
-    --beacon-cyan: 189 89% 53%;
-    --beacon-teal: 164 100% 40%;
-    --beacon-emerald: 164 100% 40%;
-    --beacon-purple: 268 94% 68%;
-    --beacon-amber: 26 100% 68%;
+    --ring: 189 89% 53%;           /* #19D3F3 focus ring in dark mode */
   }
 }
 
@@ -116,8 +97,25 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased selection:bg-rose-900 selection:text-white;
+    @apply bg-background text-foreground font-sans antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Typography scale per design system */
+  h1 {
+    @apply text-2xl sm:text-3xl font-semibold tracking-tight text-foreground;
+  }
+
+  h2 {
+    @apply text-lg sm:text-xl font-semibold tracking-tight text-foreground;
+  }
+
+  h3 {
+    @apply text-base font-semibold tracking-tight text-foreground;
+  }
+
+  p, span, div {
+    line-height: 1.5;
   }
 
   :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
@@ -129,11 +127,19 @@
   code {
     font-family: "JetBrains Mono", monospace;
     overflow-x: auto;
-    white-space: pre;
   }
 }
 
-/* Custom scrollbars for high-density clinical data tables */
+/* Custom Shadows per design system */
+.shadow-subtle {
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.10);
+}
+
+.shadow-elevated {
+  box-shadow: 0 4px 8px rgba(16, 24, 40, 0.10), 0 2px 4px rgba(16, 24, 40, 0.06);
+}
+
+/* Clean scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -142,180 +148,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.3);
+  background: rgba(100, 116, 139, 0.25);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.5);
-}
-
-/* ==========================================================================
-   BACKGROUND THEMES: DAY, NIGHT, SKY
-   ========================================================================== */
-
-/* --- DAY THEME --- */
-[data-bg-theme="day"] {
-  --background: 210 40% 98%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --border: 214.3 31.8% 90%;
-  --input: 214.3 31.8% 90%;
-  color-scheme: light;
-}
-
-[data-bg-theme="day"] body {
-  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 40%, #eaeff5 100%) !important;
-  color: #0f172a !important;
-  background-attachment: fixed !important;
-}
-
-[data-bg-theme="day"] .bg-slate-950,
-[data-bg-theme="day"] .bg-slate-900 {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #e2e8f0 !important;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05) !important;
-}
-
-[data-bg-theme="day"] .bg-slate-900\/95,
-[data-bg-theme="day"] .bg-slate-950\/80 {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-color: #cbd5e1 !important;
-  color: #0f172a !important;
-}
-
-[data-bg-theme="day"] .text-white,
-[data-bg-theme="day"] .text-slate-100,
-[data-bg-theme="day"] .text-slate-200 {
-  color: #0f172a !important;
-}
-
-[data-bg-theme="day"] .text-slate-300,
-[data-bg-theme="day"] .text-slate-400 {
-  color: #334155 !important;
-}
-
-[data-bg-theme="day"] .text-slate-500 {
-  color: #64748b !important;
-}
-
-[data-bg-theme="day"] .border-slate-800,
-[data-bg-theme="day"] .border-slate-700 {
-  border-color: #cbd5e1 !important;
-}
-
-[data-bg-theme="day"] input,
-[data-bg-theme="day"] select,
-[data-bg-theme="day"] textarea {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
-}
-
-[data-bg-theme="day"] input::placeholder {
-  color: #94a3b8 !important;
-}
-
-/* --- NIGHT THEME --- */
-[data-bg-theme="night"] {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 47% 8.5%;
-  --card-foreground: 210 40% 98%;
-  color-scheme: dark;
-}
-
-[data-bg-theme="night"] body {
-  background: linear-gradient(180deg, #020617 0%, #090d16 50%, #020617 100%) !important;
-  color: #f8fafc !important;
-  background-attachment: fixed !important;
-}
-
-/* --- SKY THEME --- */
-[data-bg-theme="sky"] {
-  --background: 200 85% 10%;
-  --foreground: 200 100% 97%;
-  --card: 200 70% 12%;
-  --card-foreground: 200 100% 97%;
-  --border: 200 60% 25%;
-  color-scheme: dark;
-}
-
-[data-bg-theme="sky"] body {
-  background: linear-gradient(170deg, #0284c7 0%, #0369a1 18%, #075985 38%, #0f172a 70%, #020617 100%) !important;
-  color: #f0f9ff !important;
-  background-attachment: fixed !important;
-}
-
-[data-bg-theme="sky"] .bg-slate-950,
-[data-bg-theme="sky"] .bg-white {
-  background-color: rgba(12, 74, 110, 0.5) !important;
-  backdrop-filter: blur(12px) !important;
-  border-color: rgba(56, 189, 248, 0.35) !important;
-  color: #f0f9ff !important;
-}
-
-[data-bg-theme="sky"] .bg-slate-900 {
-  background-color: rgba(15, 23, 42, 0.75) !important;
-  backdrop-filter: blur(12px) !important;
-  border-color: rgba(56, 189, 248, 0.38) !important;
-  box-shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.3) !important;
-  color: #f0f9ff !important;
-}
-
-[data-bg-theme="sky"] .bg-slate-900\/95,
-[data-bg-theme="sky"] .bg-slate-950\/80,
-[data-bg-theme="sky"] header {
-  background-color: rgba(8, 47, 73, 0.88) !important;
-  backdrop-filter: blur(16px) !important;
-  border-color: rgba(56, 189, 248, 0.35) !important;
-}
-
-[data-bg-theme="sky"] .border-slate-800,
-[data-bg-theme="sky"] .border-slate-700,
-[data-bg-theme="sky"] .border-slate-200 {
-  border-color: rgba(56, 189, 248, 0.35) !important;
-}
-
-[data-bg-theme="sky"] .text-slate-900,
-[data-bg-theme="sky"] .text-white,
-[data-bg-theme="sky"] .text-slate-100,
-[data-bg-theme="sky"] .text-slate-200 {
-  color: #ffffff !important;
-}
-
-[data-bg-theme="sky"] .text-slate-300,
-[data-bg-theme="sky"] .text-slate-400,
-[data-bg-theme="sky"] .text-slate-500,
-[data-bg-theme="sky"] .text-slate-600 {
-  color: #bae6fd !important;
-}
-
-[data-bg-theme="sky"] input,
-[data-bg-theme="sky"] select,
-[data-bg-theme="sky"] textarea {
-  background-color: rgba(15, 23, 42, 0.8) !important;
-  color: #ffffff !important;
-  border-color: rgba(56, 189, 248, 0.4) !important;
-}
-
-[data-bg-theme="sky"] input::placeholder {
-  color: #7dd3fc !important;
-}
-
-/* Cloud keyframe animation for Sky mode decorative background */
-@keyframes floatCloud {
-  0%, 100% {
-    transform: translateX(0px) translateY(0px);
-  }
-  50% {
-    transform: translateX(30px) translateY(-10px);
-  }
-}
-
-.animate-cloud-float {
-  animation: floatCloud 12s ease-in-out infinite;
+  background: rgba(100, 116, 139, 0.45);
 }
