@@ -141,6 +141,48 @@ export const handleRegisterPatient: RequestHandler = (req, res) => {
   res.json(beaconRepo.registerPatient(patientData));
 };
 
+function buildLivePlatformContext(): string {
+  try {
+    const hubStats = beaconRepo.getHubStats();
+    const trials = beaconRepo.getTrialMatches();
+    const adminStats = beaconRepo.getAdminStats();
+
+    const activeTrialSummary = (trials || [])
+      .slice(0, 4)
+      .map((t: any) => `- ${t.trialId || t.name || "NCT-TRIAL"}: ${t.title || t.condition || "Oncology Protocol"} (${t.phase || "Phase 2/3"})`)
+      .join("\n");
+
+    const cancerTypes = (adminStats.patientsByCancerType || [])
+      .slice(0, 5)
+      .map((c: any) => `${c.cancerType} (${c.count} patients)`)
+      .join(", ");
+
+    return `LIVE UCANDO PLATFORM CONTEXT:
+- Total Consented Patients: ${hubStats.totalConsentedPatients}
+- Total Biospecimens: ${hubStats.totalBiospecimens}
+- Available Cohort/Disease Categories: ${cancerTypes || "Breast, Lung, Colorectal, Ovarian, Pancreatic"}
+- Active Clinical Trials in Trial Matching: ${trials.length} protocols available
+${activeTrialSummary}
+- Connected Platform Tools:
+  * Patient 360 Orbit (/patient-360): Longitudinal OMOP CDM records & radial domain view
+  * Patient Integration (/patient-integration): Target analysis (RECIST kinetics, CTCAE, DeepSurv survival prediction)
+  * Cohort Builder (/cohort-builder): mCODE & GA4GH Beacon v2 cohort filtering with differential privacy
+  * RNA-seq Workspace (/workspace): Bulk transcriptomics, DESeq2 GLMs (~ batch + condition), Volcano, PCA, Heatmaps
+  * Omics View (/omics-view): Somatic/Germline variants, PhoenixMO OncoPrint, BioCompute IEEE 2791
+  * GSEA Pathways Studio (/pathways/gsea): MSigDB Hallmark, Reactome, and KEGG enrichment
+  * Imaging Launch / OHIF (/imaging-hub): PET/CT DICOM viewer & digital pathology WSI
+  * Dynamic Consent Console (/consent-console): Open Policy Agent (OPA) fine-grained permissions
+  * Trial Matching (/trial-matching): ClinicalTrials.gov molecular pre-screening
+  * iUCADO-Orbit (/iucado-orbit): Literature evidence synthesis grounded in PubMed & NCCN guidelines
+- Global Integrations:
+  * Live: Epic EHR SMART-on-FHIR sandbox, NCI GDC live external cohort discovery
+  * Public: ClinVar genomic annotations, cBioPortal cancer genomics
+  * Roadmap: Epic Cosmos federated research network, Epic Genomics, Epic MyChart`;
+  } catch (err) {
+    return "LIVE UCANDO PLATFORM CONTEXT: Patient 360 (/patient-360), Patient Integration (/patient-integration), Cohort Builder (/cohort-builder), RNA-seq Workspace (/workspace), Omics View (/omics-view), Trial Matching (/trial-matching), Imaging Hub (/imaging-hub), Dynamic Consent (/consent-console), iUCADO-Orbit (/iucado-orbit).";
+  }
+}
+
 export const handleGeminiCopilot: RequestHandler = async (req, res) => {
   const { prompt, patientContext } = req.body || {};
 
@@ -161,6 +203,9 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
     return;
   }
 
+  // Gather live platform context
+  const livePlatformContext = buildLivePlatformContext();
+
   // Helper for generating structured contextual platform answers when API key is not provided
   const generateSimulatedPlatformResponse = (q: string, context?: string) => {
     const query = q.toLowerCase();
@@ -172,50 +217,69 @@ export const handleGeminiCopilot: RequestHandler = async (req, res) => {
 Investigate longitudinal transcriptomic and genomic mechanisms of secondary resistance following targeted kinase or antibody-drug conjugate (ADC) therapy.
 
 **2. Target Cohort & Patient Selection:**
-- **Primary Data Spoke:** Cohort Builder (/cohort-builder)
-- **Cohort Filters:** Stage IIIB-IV Adenocarcinoma with baseline NGS + RNA-seq
-- **Consent Enforcement:** OPA Policy Verified (Dynamic Consent Console: /consent-console)
+- **Primary Tool:** Open **Cohort Builder** (/cohort-builder) to filter by tumor stage, somatic driver mutations, and biospecimen availability.
+- **Cohort Filters:** Stage IIIB-IV Adenocarcinoma with baseline NGS + RNA-seq.
+- **Consent Enforcement:** Verify permissions via **Consent Console** (/consent-console) with OPA policy checks.
 
 **3. Recommended Omics Pipelines & Tools:**
-- **Quantification:** STAR v2.7 + Salmon pseudoalignment (/data/upload)
-- **Differential Expression:** DESeq2 Negative Binomial GLM (\`~ batch + condition\`) (/expression/differential)
-- **Pathway Enrichment:** GSEA Hallmarks, Reactome, and KEGG (/pathways/gsea)
-- **Co-Mutation Matrix:** PhoenixMO OncoPrint & Somatic VEP (/omics-view)
+- **Data Ingestion:** Upload FASTQ or count matrices in **Data Ingestion** (/data/upload).
+- **Differential Expression:** Configure DESeq2 GLM (\`~ batch + condition\`) in **RNA-seq Workspace** (/workspace).
+- **Pathway Enrichment:** Run GSEA across Hallmark, Reactome, and KEGG in **GSEA Pathways** (/pathways/gsea).
+- **Co-Mutation Matrix:** Inspect somatic variants and OncoPrint in **Omics View** (/omics-view).
 
-**4. Imaging & Spatial Correlates:**
-- Link baseline and restaging PET/CT DICOM scans via OHIF Viewer (/imaging-hub) with automated RECIST 1.1 tumor volume quantification.
+**4. Imaging & Clinical Correlates:**
+- Review pre/post therapy imaging in **Imaging Launch (OHIF)** (/imaging-hub) with RECIST 1.1 tumor burden tracking.
+- Track longitudinal response, CTCAE toxicities, and survival curves in **Patient Integration** (/patient-integration).
 
-**5. Evidence Integration:**
-- Ground trial comparisons in iUCADO-Orbit (/iucado-orbit) for GRADE Level 1A/1B literature benchmarking.`;
+**5. Evidence Grounding:**
+- Cross-reference landmark trials in **iUCADO-Orbit** (/iucado-orbit) for GRADE Level 1A/1B clinical trial evidence.`;
     }
 
-    if (query.includes("deseq2") || query.includes("rna-seq") || query.includes("expression") || query.includes("volcano")) {
-      return `### UCANDO RNA-seq Scientific Workflow Guide
+    if (query.includes("trial") || query.includes("match") || query.includes("protocol")) {
+      return `### Clinical Trial Recommendations via Platform Concierge
 
-1. **Data Ingestion:** Upload FASTQ, unnormalized counts, or processed tables at **/data/upload**.
-2. **Experimental Design:** Set formula (\`~ batch + condition\`, \`~ splines::ns(time, df=3)\`) via the Statistical Design Modal in **/workspace**.
+Based on the live UCANDO Trial Matching registry:
+1. **Trial Matching (/trial-matching):** There are active protocols matching targeted biomarkers (such as KEYNOTE-522, OlympiA PARP inhibitor maintenance, and DESTINY-Breast04).
+2. **Patient Integration (/patient-integration):** Inspect the patient's molecular tumor board ranking and NCCN concordance ratings.
+3. **iUCADO-Orbit (/iucado-orbit):** Synthesize published trial outcomes and hazard ratios for these candidate regimens.`;
+    }
+
+    if (query.includes("deseq2") || query.includes("rna-seq") || query.includes("expression") || query.includes("volcano") || query.includes("pathway")) {
+      return `### UCANDO Transcriptomics & RNA-seq Guide
+
+1. **Data Ingestion:** Upload FASTQ, counts, or processed tables at **Data Ingestion** (/data/upload).
+2. **Experimental Design:** Set formula (\`~ batch + condition\`, \`~ splines::ns(time, df=3)\`) via the Statistical Design Modal in **RNA-seq Workspace** (/workspace).
 3. **Exploration Studio:** Inspect Volcano plots with adjustable FDR / Log2FC thresholds, 3D PCA / UMAP clusters, and hierarchical clustering Heatmaps.
-4. **Pathway GSEA:** Run preranked Gene Set Enrichment across Hallmark, Reactome, and KEGG databases in **/pathways/gsea**.`;
+4. **Pathway GSEA:** Run preranked Gene Set Enrichment across Hallmark, Reactome, and KEGG databases in **GSEA Pathways** (/pathways/gsea).`;
+    }
+
+    if (query.includes("cohort") || query.includes("filter") || query.includes("mcode") || query.includes("beacon")) {
+      return `### Cohort Discovery & Filtering via Platform Concierge
+
+1. **Cohort Builder (/cohort-builder):** Interactively filter by diagnosis, stage, biomarker mutations, and biospecimens under differential privacy budgets.
+2. **Global Integrations (/global-integrations):** Query external NCI GDC cohorts live and inspect FHIR mCODE bundles.
+3. **Omics View (/omics-view):** Launch PhoenixMO multi-omics risk scores and OncoPrint analysis for discovered cohorts.`;
     }
 
     if (query.includes("patient") || query.includes("360") || query.includes("orbit") || query.includes("omop")) {
       return `### Patient Domain & Clinical Analytics in UCANDO
 
-- **Patient 360 Orbit (/patient-360):** Radial visualization connecting OMOP CDM v5.4 conditions, drug infusions, LOINC biomarkers, and DICOM imaging studies.
+- **Patient 360 Orbit (/patient-360):** Radial domain visualization connecting OMOP CDM v5.4 conditions, drug infusions, LOINC biomarkers, and DICOM imaging studies.
 - **Patient Integration (/patient-integration):** Longitudinal treatment tracker, RECIST 1.1 response curves, CTCAE adverse event logs, and DeepSurv ML survival risk scores.
 - **iUCADO-Orbit (/iucado-orbit):** Clinical evidence reasoning engine providing PICO trial search and GRADE guideline consensus.`;
     }
 
-    return `### iUCANDO Oncology Copilot Response
+    return `### iUCANDO Platform-Aware Research Concierge
 
-**Context:** ${context || "UCANDO Enterprise Cancer Data Commons"}
+**Platform Context:** ${context || "UCANDO Enterprise Cancer Data Commons"}
 
-Analyzed your inquiry against UCANDO's multi-modal data assets:
-1. **Clinical & OMOP Data:** Linked to consented patient cohorts with Safe Harbor de-identification.
-2. **Transcriptomics & Genomics:** Ready for contrast analysis with DESeq2 (\`~ batch + condition\`) and PhoenixMO multi-omics risk scores.
-3. **Literature & Guidelines:** Synchronized with NCCN Category 1/2A evidence via iUCADO-Orbit.
+Analyzed your inquiry against UCANDO's live platform assets:
+1. **Clinical & OMOP Data:** Accessible via **Patient 360 Orbit** (/patient-360) and **Patient Integration** (/patient-integration).
+2. **Cohort Discovery:** Filter 98,000+ consented records via **Cohort Builder** (/cohort-builder).
+3. **Transcriptomics & Genomics:** Ready for contrast analysis with DESeq2 in **RNA-seq Workspace** (/workspace) and **Omics View** (/omics-view).
+4. **Clinical Trials:** Match candidate protocols in **Trial Matching** (/trial-matching) or synthesize evidence in **iUCADO-Orbit** (/iucado-orbit).
 
-*How would you like to proceed? I can generate a complete study protocol, navigate to a specific cohort in Cohort Builder, or configure an RNA-seq contrast in Workspace.*`;
+*Which tool, trial, or dataset would you like to explore?*`;
   };
 
   // 3. GEMINI_API_KEY check
@@ -231,7 +295,10 @@ Analyzed your inquiry against UCANDO's multi-modal data assets:
   }
 
   try {
-    const systemPrompt = "You are iUCANDO AI, an expert AI oncology assistant and clinical research copilot for the University of Chicago Comprehensive Cancer Center Data Commons (UCANDO). You have deep knowledge of all UCANDO platform functions: Patient 360 Orbit, Patient Integration, RNA-seq Workspace (DESeq2, STAR, Salmon, GSEA), Omics View (PhoenixMO, OncoPrint, BioCompute), Cohort Builder (mCODE, GA4GH Beacon v2), OHIF Imaging Hub, Dynamic Consent (OPA engine), Trial Matching, Governance, and iUCADO-Orbit (evidence synthesis). When asked, suggest concrete study protocols including cohort filtering, omics tools, pipeline parameters, and statistical models.";
+    const systemPrompt = `You are the Platform-Aware Research Concierge for UCANDO (The University of Chicago Comprehensive Cancer Center Data Commons Operations).
+You have knowledge of what tools, trials, and datasets exist on this platform. When a user asks a research or clinical question, proactively recommend the specific UCANDO tool, trial, or dataset most relevant to their question (e.g. 'Trial Matching has 3 active protocols for BRCA1-mutated patients' or 'Cohort Builder can filter by that biomarker'). Be specific about which page or feature to use. If you don't have enough information in the platform context to answer confidently, say so clearly rather than guessing.
+
+${livePlatformContext}`;
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`,
@@ -243,7 +310,7 @@ Analyzed your inquiry against UCANDO's multi-modal data assets:
             {
               role: "user",
               parts: [
-                { text: `${systemPrompt}\n\nPlatform Context:\n${patientContext || "UC-CCC Enterprise Cancer Data Commons"}\n\nUser Question:\n${prompt}` }
+                { text: `${systemPrompt}\n\nPatient/User Context:\n${patientContext || "UC-CCC Enterprise Cancer Data Commons"}\n\nUser Question:\n${prompt}` }
               ]
             }
           ]

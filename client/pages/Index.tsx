@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Layout } from "@/components/Layout";
 import { HubAndSpokeVisualizer } from "@/components/HubAndSpokeVisualizer";
 import { HubStats, SpokeConnection } from "@shared/api";
+import { institutionConfig } from "@/config/institution";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -62,7 +63,7 @@ export default function Index() {
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge className="bg-primary text-primary-foreground font-bold px-3 py-1 text-xs shadow-subtle">
-                  The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
+                  {institutionConfig.fullName}
                 </Badge>
                 <Badge variant="outline" className="border-border bg-surface text-foreground text-xs font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 mr-1 text-accent" /> HIPAA Consented Ecosystem
@@ -74,7 +75,7 @@ export default function Index() {
               </h1>
 
               <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed font-sans">
-                UCANDO connects every consented UC-CCC oncology patient and translational dataset into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, publication-grade RNA-seq analytics, digital radiology, pathology WSI, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
+                {institutionConfig.platformName} connects every consented {institutionConfig.shortName} oncology patient and translational dataset into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, publication-grade RNA-seq analytics, digital radiology, pathology WSI, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -105,15 +106,15 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Featured UCANDO DNA Orb Logo Badge (Scaled 50% smaller) */}
+            {/* Featured Platform DNA Orb Logo Badge (Scaled 50% smaller) */}
             <div className="hidden lg:flex flex-col items-center justify-center p-2 rounded-xl bg-surface border border-border shadow-subtle shrink-0">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
-                alt="UCANDO Logo"
+                src={institutionConfig.logoPath}
+                alt={`${institutionConfig.platformName} Logo`}
                 className="h-20 w-auto max-w-[90px] object-contain rounded-lg border border-border bg-card p-0.5"
               />
               <span className="text-[9px] font-bold text-primary font-mono mt-1 tracking-wider uppercase">
-                UCANDO Core
+                {institutionConfig.platformName} Core
               </span>
             </div>
           </div>
@@ -193,7 +194,7 @@ export default function Index() {
         {/* Interactive Hub-and-Spoke Visual Architecture Diagram */}
         {loading ? (
           <div className="p-12 text-center text-muted-foreground bg-card rounded-2xl border border-border">
-            Initializing UCANDO Architecture Visualizer...
+            Initializing {institutionConfig.platformName} Architecture Visualizer...
           </div>
         ) : (
           <HubAndSpokeVisualizer spokes={spokes} dataZones={stats ? stats.dataZones : []} />
@@ -205,7 +206,7 @@ export default function Index() {
             <div>
               <h3 className="text-lg font-serif font-bold text-foreground flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-accent" />
-                UCANDO Clinical & Scientific Research Portals
+                {institutionConfig.platformName} Clinical & Scientific Research Portals
               </h3>
               <p className="text-xs text-muted-foreground">
                 Unified oncology analytics suite and governed data commons portals.

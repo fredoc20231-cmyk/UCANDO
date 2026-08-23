@@ -22,7 +22,13 @@ import {
   Sliders,
   CheckCircle2,
   ExternalLink,
-  ArrowRight
+  ArrowRight,
+  GitPullRequest,
+  ImageIcon,
+  ShieldCheck,
+  Globe,
+  BarChart3,
+  Network
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -37,7 +43,7 @@ interface ChatMessage {
   sender: "user" | "ai";
   text: string;
   timestamp: string;
-  quickActions?: { label: string; path: string; icon?: string }[];
+  quickActions?: { label: string; path: string }[];
 }
 
 export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProps) {
@@ -54,10 +60,12 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
     {
       id: "msg-1",
       sender: "ai",
-      text: "Hello, I am iUCANDO AI. I am connected across all platform functions: Patient 360 Orbit, Patient Integration, RNA-seq Workspace (DESeq2), Omics View, Cohort Builder, OHIF Imaging, and iUCADO-Orbit. How can I assist you with clinical records, study protocols, or multi-omics analysis today?",
+      text: "Hello, I am the iUCANDO Platform-Aware Research Concierge. I have live knowledge of all datasets, active clinical trials, omics tools, and patient records across this platform. How can I help you find a cohort, recommend a clinical trial, or structure a study protocol today?",
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       quickActions: [
         { label: "Suggest Study Protocol", path: "#protocol" },
+        { label: "Match Clinical Trials", path: "/trial-matching" },
+        { label: "Explore Cohorts", path: "/cohort-builder" },
         { label: "Patient Integration", path: "/patient-integration" },
         { label: "iUCADO-Orbit Engine", path: "/iucado-orbit" },
         { label: "RNA-seq Workspace", path: "/workspace" }
@@ -100,26 +108,56 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
     const actions: { label: string; path: string }[] = [];
     const lower = replyText.toLowerCase();
 
-    if (lower.includes("/patient-integration") || lower.includes("patient integration")) {
-      actions.push({ label: "Open Patient Integration", path: "/patient-integration" });
+    // Map named tools to direct routes
+    if (lower.includes("trial matching") || lower.includes("/trial-matching")) {
+      actions.push({ label: "Open Trial Matching", path: "/trial-matching" });
     }
-    if (lower.includes("/workspace") || lower.includes("rna-seq") || lower.includes("deseq2")) {
-      actions.push({ label: "Launch RNA-seq Studio", path: "/workspace" });
-    }
-    if (lower.includes("/iucado-orbit") || lower.includes("orbit") || lower.includes("evidence")) {
-      actions.push({ label: "Launch iUCADO-Orbit", path: "/iucado-orbit" });
-    }
-    if (lower.includes("/cohort-builder") || lower.includes("cohort")) {
+    if (lower.includes("cohort builder") || lower.includes("/cohort-builder")) {
       actions.push({ label: "Open Cohort Builder", path: "/cohort-builder" });
     }
-    if (lower.includes("/omics-view") || lower.includes("phoenixmo")) {
+    if (lower.includes("patient integration") || lower.includes("/patient-integration")) {
+      actions.push({ label: "Open Patient Integration", path: "/patient-integration" });
+    }
+    if (lower.includes("patient 360") || lower.includes("/patient-360")) {
+      actions.push({ label: "Open Patient 360 Orbit", path: "/patient-360" });
+    }
+    if (lower.includes("rna-seq") || lower.includes("workspace") || lower.includes("/workspace") || lower.includes("deseq2")) {
+      actions.push({ label: "Launch RNA-seq Workspace", path: "/workspace" });
+    }
+    if (lower.includes("gsea") || lower.includes("pathway") || lower.includes("/pathways/gsea")) {
+      actions.push({ label: "Open GSEA Pathways", path: "/pathways/gsea" });
+    }
+    if (lower.includes("omics view") || lower.includes("/omics-view") || lower.includes("phoenixmo")) {
       actions.push({ label: "Open Omics View", path: "/omics-view" });
     }
-    if (lower.includes("/imaging-hub") || lower.includes("ohif") || lower.includes("dicom")) {
+    if (lower.includes("imaging") || lower.includes("ohif") || lower.includes("dicom") || lower.includes("/imaging-hub")) {
       actions.push({ label: "Launch Imaging Hub (OHIF)", path: "/imaging-hub" });
     }
+    if (lower.includes("consent") || lower.includes("/consent-console")) {
+      actions.push({ label: "Consent Console", path: "/consent-console" });
+    }
+    if (lower.includes("orbit") || lower.includes("/iucado-orbit")) {
+      actions.push({ label: "Launch iUCADO-Orbit", path: "/iucado-orbit" });
+    }
+    if (lower.includes("global integrations") || lower.includes("/global-integrations")) {
+      actions.push({ label: "Global Integrations", path: "/global-integrations" });
+    }
+    if (lower.includes("governance") || lower.includes("/governance")) {
+      actions.push({ label: "Governance & IRB", path: "/governance" });
+    }
+    if (lower.includes("data ingestion") || lower.includes("/data/upload")) {
+      actions.push({ label: "Data Ingestion", path: "/data/upload" });
+    }
 
-    return actions.slice(0, 3);
+    // Deduplicate by path
+    const seen = new Set<string>();
+    const unique = actions.filter(a => {
+      if (seen.has(a.path)) return false;
+      seen.add(a.path);
+      return true;
+    });
+
+    return unique.slice(0, 4);
   };
 
   const handleSend = async (textToSend?: string) => {
@@ -255,7 +293,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
               <div className="flex items-center gap-1.5">
                 <h2 className="font-serif font-bold text-base text-foreground">iUCANDO AI</h2>
                 <Badge variant="outline" className="text-[9px] border-primary/40 bg-primary/10 text-primary px-1.5 py-0 font-mono font-bold">
-                  v3.4 Platform Copilot
+                  Platform-Aware Concierge
                 </Badge>
               </div>
               <p className="text-[11px] text-muted-foreground font-sans">
@@ -272,6 +310,14 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
           >
             <X className="w-4 h-4" />
           </Button>
+        </div>
+
+        {/* Permanent Clinical Disclaimer */}
+        <div className="px-4 py-2 bg-amber-500/10 border-b border-amber-500/20 text-[11px] text-amber-900 dark:text-amber-200 flex items-start gap-2">
+          <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
+          <span className="leading-tight">
+            iUCANDO recommendations are based on platform data, not a substitute for clinical judgment or a systematic literature review.
+          </span>
         </div>
 
         {/* Mode Selector */}
@@ -302,7 +348,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
 
           <div className="flex items-center gap-1">
             <Badge variant="outline" className="text-[9px] font-mono border-border text-muted-foreground">
-              Connected to 9 Modules
+              Platform Connected
             </Badge>
           </div>
         </div>
@@ -347,7 +393,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
                   {msg.text}
                 </div>
 
-                {/* Quick action buttons attached to AI messages */}
+                {/* Direct Action Recommendation Buttons */}
                 {msg.quickActions && msg.quickActions.length > 0 && (
                   <div className="pt-2 border-t border-border/60 flex flex-wrap gap-1.5">
                     {msg.quickActions.map((action, i) => (
@@ -355,13 +401,13 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
                         key={i}
                         onClick={() => {
                           if (action.path === "#protocol") {
-                            handleSend("Suggest a translational research study protocol combining Cohort Builder, RNA-seq DESeq2, and iUCADO-Orbit evidence");
+                            handleSend("Suggest a multi-modal translational research study protocol combining Cohort Builder, RNA-seq DESeq2, and iUCADO-Orbit evidence");
                           } else {
                             onClose();
                             navigate(action.path);
                           }
                         }}
-                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-card hover:bg-muted text-[11px] font-semibold text-primary border border-border transition-colors"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-card hover:bg-muted text-[11px] font-semibold text-primary border border-border shadow-subtle transition-all"
                       >
                         <span>{action.label}</span>
                         <ArrowRight className="w-3 h-3 text-accent" />
@@ -386,7 +432,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
               </div>
               <div className="p-3 rounded-xl bg-surface border border-border flex items-center gap-2 text-xs text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin text-primary" />
-                <span>iUCANDO AI is reasoning across platform data...</span>
+                <span>Research Concierge is querying platform tools & clinical records...</span>
               </div>
             </div>
           )}
@@ -403,6 +449,18 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
             📋 Build Study Protocol
           </button>
           <button
+            onClick={() => handleSend("Which active clinical trials in Trial Matching match BRCA1 or EGFR mutations?")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            🎯 Match Clinical Trials
+          </button>
+          <button
+            onClick={() => handleSend("How can I filter patients by stage and pathogenic mutations in Cohort Builder?")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            👥 Cohort Builder
+          </button>
+          <button
             onClick={() => handleSend("How do I configure DESeq2 design formulas and batch correction in Workspace?")}
             className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
           >
@@ -413,12 +471,6 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
             className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
           >
             🩺 Patient Integration
-          </button>
-          <button
-            onClick={() => handleSend("What is iUCADO-Orbit and how does it synthesize clinical trial evidence?")}
-            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
-          >
-            ✨ iUCADO-Orbit
           </button>
         </div>
 
@@ -446,7 +498,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
                   handleSend();
                 }
               }}
-              placeholder="Ask iUCANDO AI about cohorts, protocols, omics..."
+              placeholder="Ask research concierge about trials, cohorts, omics..."
               className="text-xs h-9 bg-surface border-border"
             />
 

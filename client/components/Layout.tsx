@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth, DEMO_USERS } from "@/context/AuthContext";
 import { useBackgroundTheme } from "@/context/BackgroundContext";
 import { useRnaSeq } from "@/context/RnaSeqContext";
+import { institutionConfig } from "@/config/institution";
 import { SyntheticDataBanner } from "./SyntheticDataBanner";
 import { AnalysisStatusPanel } from "./AnalysisStatusPanel";
 import { ApiContractsModal } from "./ApiContractsModal";
@@ -135,18 +136,18 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <Link to="/" className="flex items-center gap-2.5 group">
               <div className="h-10 w-10 rounded-lg border border-border bg-surface flex items-center justify-center shadow-subtle group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
-                  alt="UCANDO Logo"
+                  src={institutionConfig.logoPath}
+                  alt={`${institutionConfig.platformName} Logo`}
                   className="h-full w-full object-contain p-0.5"
                 />
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-serif font-bold text-sm sm:text-base tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
+                    {institutionConfig.fullName}
                   </span>
                 </div>
-                <p className="text-[11px] text-muted-foreground hidden sm:block">Enterprise Oncology Integration Hub & RNA-seq Analytics</p>
+                <p className="text-[11px] text-muted-foreground hidden sm:block">{institutionConfig.tagline}</p>
               </div>
             </Link>
           </div>
@@ -645,7 +646,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-[1700px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span className="font-serif font-semibold text-foreground">
-              The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
+              {institutionConfig.fullName}
             </span>
           </div>
 
@@ -656,7 +657,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               GA4GH Contracts
             </button>
             <span className="text-border">|</span>
-            <span>© 2026 UC-CCC. All rights reserved.</span>
+            <span>© {institutionConfig.copyrightYear} {institutionConfig.shortName}. All rights reserved.</span>
           </div>
         </div>
       </footer>
