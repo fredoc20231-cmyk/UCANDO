@@ -96,6 +96,19 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     "/methods"
   ].some((prefix) => location.pathname.startsWith(prefix));
 
+  const isResearcherRoute = [
+    "/researcher-portal",
+    "/workspace",
+    "/data",
+    "/expression",
+    "/pathways",
+    "/visualization",
+    "/advanced",
+    "/reports",
+    "/methods",
+    "/omics-view"
+  ].some((prefix) => location.pathname.startsWith(prefix));
+
   const isActive = (path: string) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
@@ -263,8 +276,8 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Global Horizontal Sub-Navigation Bar */}
         <div className="border-t border-border bg-surface/80 px-4 sm:px-6 overflow-x-auto scrollbar-none">
           <div className="max-w-[1700px] mx-auto flex items-center gap-1 py-1.5 text-xs font-sans min-w-max">
-            
-            {/* Integration Hub */}
+
+            {/* 1. Integration Hub */}
             <Link
               to="/"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -277,81 +290,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Integration Hub</span>
             </Link>
 
-            {/* RNA-seq Scientific Platform Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
-                    isRnaSeqRoute
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted"
-                  }`}
-                >
-                  <Dna className="w-3.5 h-3.5" />
-                  <span>RNA-seq Platform</span>
-                  <Badge variant="outline" className="text-[9px] px-1 py-0 font-mono ml-0.5 border-current">
-                    v3.2
-                  </Badge>
-                  <ChevronDown className="w-3 h-3 opacity-60" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-64 font-sans text-xs">
-                <DropdownMenuLabel className="text-[11px] uppercase tracking-wider text-muted-foreground">
-                  RNA-seq Analysis Core
-                </DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigate("/workspace")} className="cursor-pointer font-semibold">
-                  <Sliders className="w-3.5 h-3.5 mr-2 text-primary" />
-                  <span>Analysis Workspace (2-Pane Studio)</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground">
-                  Data & Quant
-                </DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigate("/data/upload")} className="cursor-pointer">
-                  <Download className="w-3.5 h-3.5 mr-2 text-accent" />
-                  <span>Upload Counts & Metadata</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/expression/differential")} className="cursor-pointer">
-                  <LineChart className="w-3.5 h-3.5 mr-2 text-primary" />
-                  <span>Differential Expression (DESeq2)</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/expression/normalization")} className="cursor-pointer">
-                  <SlidersHorizontal className="w-3.5 h-3.5 mr-2 text-accent" />
-                  <span>Normalization (rlog / VST / TPM)</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-[10px] uppercase text-muted-foreground">
-                  Visualization & Pathways
-                </DropdownMenuLabel>
-                <DropdownMenuItem onClick={() => navigate("/visualization/volcano")} className="cursor-pointer">
-                  <span className="w-2 h-2 rounded-full bg-primary mr-2" />
-                  <span>Volcano Plot Studio</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/visualization/pca")} className="cursor-pointer">
-                  <span className="w-2 h-2 rounded-full bg-accent mr-2" />
-                  <span>PCA / UMAP Projections</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/visualization/heatmap")} className="cursor-pointer">
-                  <span className="w-2 h-2 rounded-full bg-primary mr-2" />
-                  <span>Clustered Heatmap</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/pathways/gsea")} className="cursor-pointer">
-                  <BarChart2 className="w-3.5 h-3.5 mr-2 text-primary" />
-                  <span>Gene Set Enrichment (GSEA)</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate("/reports")} className="cursor-pointer">
-                  <FileSpreadsheet className="w-3.5 h-3.5 mr-2 text-foreground" />
-                  <span>Biomarker Dossier Report</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/methods")} className="cursor-pointer">
-                  <BookOpen className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
-                  <span>Statistical Methods & Citations</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Patient 360 */}
+            {/* 2. Patient 360 Orbit */}
             <Link
               to="/patient-360"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -364,7 +303,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Patient 360 Orbit</span>
             </Link>
 
-            {/* iUCANDO AI trigger */}
+            {/* 3. iUCANDO AI */}
             <button
               onClick={() => setChatOpen(true)}
               className="flex items-center gap-1.5 px-3 py-1 rounded-md font-medium text-foreground hover:bg-muted transition-colors"
@@ -373,20 +312,111 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>iUCANDO AI</span>
             </button>
 
-            {/* Researcher Portal */}
-            <Link
-              to="/researcher-portal"
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
-                isActive("/researcher-portal")
-                  ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              <Layers className="w-3.5 h-3.5" />
-              <span>Researcher Portal</span>
-            </Link>
+            {/* 4. Researcher Portal (Subgroups: RNA-seq Platform & Omics View) */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                    isResearcherRoute
+                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5" />
+                  <span>Researcher Portal</span>
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-72 font-sans text-xs p-1.5 shadow-elevated">
+                <DropdownMenuItem onClick={() => navigate("/researcher-portal")} className="cursor-pointer font-bold bg-muted/60 mb-1 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-primary" />
+                    <span>Researcher Portal Overview</span>
+                  </div>
+                  <ChevronDown className="w-3 h-3 -rotate-90 text-muted-foreground" />
+                </DropdownMenuItem>
 
-            {/* Cohort Builder */}
+                {/* Major Subgroup 1: RNA-seq Platform */}
+                <div className="p-1.5 rounded-lg border border-border/80 bg-surface/40 my-1 space-y-1">
+                  <div className="flex items-center justify-between px-1.5 py-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary flex items-center gap-1">
+                      <Dna className="w-3 h-3" /> RNA-seq Platform
+                    </span>
+                    <Badge variant="outline" className="text-[9px] font-mono py-0 px-1 border-primary/30 text-primary">v3.2</Badge>
+                  </div>
+
+                  <DropdownMenuItem onClick={() => navigate("/workspace")} className="cursor-pointer font-semibold py-1">
+                    <Sliders className="w-3.5 h-3.5 mr-2 text-primary" />
+                    <span>Analysis Workspace (2-Pane Studio)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/data/upload")} className="cursor-pointer py-1">
+                    <Download className="w-3.5 h-3.5 mr-2 text-accent" />
+                    <span>Data Upload (FASTQ / Counts / Final)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/expression/differential")} className="cursor-pointer py-1">
+                    <LineChart className="w-3.5 h-3.5 mr-2 text-primary" />
+                    <span>Differential Expression (DESeq2 GLM)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/expression/normalization")} className="cursor-pointer py-1">
+                    <SlidersHorizontal className="w-3.5 h-3.5 mr-2 text-accent" />
+                    <span>Normalization (VST / Median of Ratios)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/visualization/volcano")} className="cursor-pointer py-1">
+                    <span className="w-2 h-2 rounded-full bg-primary mr-2" />
+                    <span>Volcano Plot Studio</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/visualization/pca")} className="cursor-pointer py-1">
+                    <span className="w-2 h-2 rounded-full bg-accent mr-2" />
+                    <span>PCA / UMAP Projections</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/visualization/heatmap")} className="cursor-pointer py-1">
+                    <span className="w-2 h-2 rounded-full bg-primary mr-2" />
+                    <span>Clustered Heatmap</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/pathways/gsea")} className="cursor-pointer py-1">
+                    <BarChart2 className="w-3.5 h-3.5 mr-2 text-primary" />
+                    <span>Gene Set Enrichment (GSEA MSigDB)</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/reports")} className="cursor-pointer py-1">
+                    <FileSpreadsheet className="w-3.5 h-3.5 mr-2 text-foreground" />
+                    <span>Biomarker Dossier Report</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/methods")} className="cursor-pointer py-1">
+                    <BookOpen className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
+                    <span>Statistical Methods & Citations</span>
+                  </DropdownMenuItem>
+                </div>
+
+                {/* Major Subgroup 2: Omics View */}
+                <div className="p-1.5 rounded-lg border border-border/80 bg-surface/40 my-1 space-y-1">
+                  <div className="flex items-center justify-between px-1.5 py-0.5">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-accent flex items-center gap-1">
+                      <Cpu className="w-3 h-3" /> Omics View (9 Modalities)
+                    </span>
+                    <Badge variant="outline" className="text-[9px] font-mono py-0 px-1 border-accent/30 text-accent">PhoenixMO</Badge>
+                  </div>
+
+                  <DropdownMenuItem onClick={() => navigate("/omics-view")} className="cursor-pointer font-semibold py-1">
+                    <Dna className="w-3.5 h-3.5 mr-2 text-accent" />
+                    <span>Omics View & Somatic Variants</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/omics-view#oncoprint")} className="cursor-pointer py-1">
+                    <Table className="w-3.5 h-3.5 mr-2 text-primary" />
+                    <span>OncoPrint Mutation Matrix</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/omics-view#risk-score")} className="cursor-pointer py-1">
+                    <Activity className="w-3.5 h-3.5 mr-2 text-accent" />
+                    <span>Multi-Omics Composite Risk Score</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate("/omics-view#biocompute")} className="cursor-pointer py-1">
+                    <FileCode className="w-3.5 h-3.5 mr-2 text-muted-foreground" />
+                    <span>BioCompute IEEE 2791 Provenance</span>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* 5. Cohort Builder */}
             <Link
               to="/cohort-builder"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -399,7 +429,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Cohort Builder</span>
             </Link>
 
-            {/* Dynamic Consent */}
+            {/* 6. Consent Console */}
             <Link
               to="/consent-console"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -412,7 +442,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Consent Console</span>
             </Link>
 
-            {/* Imaging Hub */}
+            {/* 7. Imaging Launch (OHIF) */}
             <Link
               to="/imaging-hub"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -425,20 +455,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Imaging Launch (OHIF)</span>
             </Link>
 
-            {/* Omics View */}
-            <Link
-              to="/omics-view"
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
-                isActive("/omics-view")
-                  ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              <Dna className="w-3.5 h-3.5" />
-              <span>Omics View</span>
-            </Link>
-
-            {/* Trial Matching */}
+            {/* 8. Trial Matching */}
             <Link
               to="/trial-matching"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -451,20 +468,48 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Trial Matching</span>
             </Link>
 
-            {/* Governance */}
-            <Link
-              to="/governance"
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
-                isActive("/governance")
-                  ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              <Shield className="w-3.5 h-3.5" />
-              <span>Governance</span>
-            </Link>
+            {/* 9. Governance & Data Governance */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                    isActive("/governance")
+                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Shield className="w-3.5 h-3.5" />
+                  <span>Governance</span>
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80 font-sans text-xs p-2 shadow-elevated space-y-1">
+                <div className="p-2.5 rounded-lg bg-surface border border-border">
+                  <div className="font-serif font-bold text-xs text-foreground flex items-center gap-1.5">
+                    <Landmark className="w-3.5 h-3.5 text-primary" />
+                    <span>Data Governance, IRB & Policy Center</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-1 leading-snug">
+                    Governed access control, Data Use Committee (DUC) workflows, and IRB protocol compliance.
+                  </p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/governance")} className="cursor-pointer font-semibold">
+                  <ShieldCheck className="w-3.5 h-3.5 mr-2 text-primary" />
+                  <span>Open Governance & Policy Console</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setCharterOpen(true)} className="cursor-pointer">
+                  <BookOpen className="w-3.5 h-3.5 mr-2 text-accent" />
+                  <span>Inspect IRB Charter & Ethical Guidelines</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setContractsOpen(true)} className="cursor-pointer">
+                  <FileCode className="w-3.5 h-3.5 mr-2 text-foreground" />
+                  <span>GA4GH & OMOP API Interoperability Contracts</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
-            {/* Admin Census */}
+            {/* 10. Admin Census */}
             <Link
               to="/admin"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -477,7 +522,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Admin Census</span>
             </Link>
 
-            {/* Audit */}
+            {/* 11. Audit */}
             <Link
               to="/audit-dashboard"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -490,7 +535,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Audit</span>
             </Link>
 
-            {/* Global Integrations */}
+            {/* 12. Global Integrations */}
             <Link
               to="/global-integrations"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
@@ -503,7 +548,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Global Integrations</span>
             </Link>
 
-            {/* Manual */}
+            {/* 13. Manual */}
             <Link
               to="/manual"
               className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${

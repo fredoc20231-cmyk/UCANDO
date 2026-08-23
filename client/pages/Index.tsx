@@ -64,9 +64,6 @@ export default function Index() {
                 <Badge className="bg-primary text-primary-foreground font-bold px-3 py-1 text-xs shadow-subtle">
                   The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
                 </Badge>
-                <Badge variant="outline" className="border-accent/40 text-accent bg-accent/10 text-xs font-mono font-bold">
-                  RNA-seq v3.2 & Multiomics
-                </Badge>
                 <Badge variant="outline" className="border-border bg-surface text-foreground text-xs font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 mr-1 text-accent" /> HIPAA Consented Ecosystem
                 </Badge>
