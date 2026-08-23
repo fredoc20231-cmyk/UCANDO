@@ -89,10 +89,10 @@ export const Reports: React.FC = () => {
               </div>
               <div>
                 <div className="font-serif font-bold text-lg text-foreground">
-                  University of Chicago Comprehensive Cancer Center
+                  The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider font-sans">
-                  Genomic Medicine & Transcriptomics Scientific Core
+                  Genomic Medicine & Translational Analytics Core
                 </div>
               </div>
             </div>

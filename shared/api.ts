@@ -1,5 +1,5 @@
 /**
- * Shared API types for UC-CCC Cancer Data Commons ("UCANDO")
+ * Shared API types for The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
  */
 
 export interface DemoResponse {

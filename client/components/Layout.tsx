@@ -9,6 +9,7 @@ import { ApiContractsModal } from "./ApiContractsModal";
 import { IRBCharterModal } from "./IRBCharterModal";
 import { LoginModal } from "./LoginModal";
 import { IUCANDOChat } from "./iUCANDOChat";
+import { OmniSearch } from "./OmniSearch";
 import {
   LayoutDashboard,
   Dna,
@@ -83,8 +84,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [charterOpen, setCharterOpen] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchFocused, setSearchFocused] = useState(false);
 
   const isRnaSeqRoute = [
     "/workspace",
@@ -101,15 +100,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     if (path === "/") return location.pathname === "/";
     return location.pathname.startsWith(path);
   };
-
-  const searchSuggestions = [
-    { label: "RNA-seq Workspace: TCGA-BRCA", path: "/workspace" },
-    { label: "Differential Expression Studio", path: "/expression/differential" },
-    { label: "Volcano Plot Visualizer", path: "/visualization/volcano" },
-    { label: "Patient 360: UC-CCC-89421 (TNBC)", path: "/patient-360?id=UC-CCC-89421" },
-    { label: "OHIF Imaging Viewer Hub", path: "/imaging-hub" },
-    { label: "GSEA Pathway Enrichment (MSigDB)", path: "/pathways/gsea" }
-  ];
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground font-sans antialiased selection:bg-accent/20">
@@ -133,50 +123,16 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="font-serif font-bold text-sm sm:text-base tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    UC-CCC Cancer Data Commons
+                    The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
                   </span>
-                  <Badge variant="outline" className="border-primary/40 bg-primary/10 text-primary text-[10px] px-1.5 py-0 font-mono font-bold">
-                    UCANDO
-                  </Badge>
                 </div>
                 <p className="text-[11px] text-muted-foreground hidden sm:block">Enterprise Oncology Integration Hub & RNA-seq Analytics</p>
               </div>
             </Link>
           </div>
 
-          {/* Search Bar */}
-          <div className="relative flex-1 max-w-md hidden md:block">
-            <div className="relative">
-              <Search className="w-3.5 h-3.5 absolute left-3 top-2.5 text-muted-foreground" />
-              <input
-                type="text"
-                placeholder="Search patients, genes, transcripts, pathways..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setSearchFocused(true)}
-                onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
-                className="w-full h-8 pl-8 pr-3 text-xs rounded-md bg-surface border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-              />
-            </div>
-
-            {searchFocused && (
-              <div className="absolute top-9 left-0 right-0 bg-card border border-border rounded-md shadow-elevated p-2 z-50 text-xs font-sans space-y-1">
-                <div className="text-[10px] uppercase font-semibold text-muted-foreground px-2 py-1">
-                  Quick Navigation
-                </div>
-                {searchSuggestions.map((sug) => (
-                  <button
-                    key={sug.label}
-                    onMouseDown={() => navigate(sug.path)}
-                    className="w-full text-left px-2 py-1.5 rounded hover:bg-muted text-foreground flex items-center justify-between text-xs"
-                  >
-                    <span>{sug.label}</span>
-                    <ChevronDown className="w-3 h-3 text-muted-foreground -rotate-90" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          {/* OmniSearch Multi-Category Search Bar */}
+          <OmniSearch />
 
           {/* Upper Panel Action Controls */}
           <div className="flex items-center gap-2 shrink-0">
@@ -599,9 +555,9 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       <footer className="border-t border-border bg-card/60 px-6 py-4 text-xs text-muted-foreground font-sans">
         <div className="max-w-[1700px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="font-serif font-semibold text-foreground">University of Chicago Comprehensive Cancer Center (UC-CCC)</span>
-            <span>•</span>
-            <span>UCANDO Cancer Data Commons & RNA-seq Core</span>
+            <span className="font-serif font-semibold text-foreground">
+              The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
+            </span>
           </div>
 
           <div className="flex items-center gap-4 text-[11px]">

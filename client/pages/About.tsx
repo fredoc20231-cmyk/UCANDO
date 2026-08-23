@@ -26,11 +26,11 @@ export const About: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ScientificCard
             title="Institutional Mission & Core Infrastructure"
-            subtitle="University of Chicago Comprehensive Cancer Center (UC-CCC)"
+            subtitle="The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)"
           >
             <div className="space-y-3 text-xs font-sans text-muted-foreground leading-relaxed">
               <p>
-                The <strong>UC-CCC Transcriptomics Scientific Platform</strong> serves clinicians, translational researchers, and bioinformaticians with publication-grade RNA-seq analytics, high-dimensional visualization, and rigorous statistical pipelines.
+                <strong>The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)</strong> serves clinicians, translational researchers, and bioinformaticians with publication-grade RNA-seq analytics, high-dimensional multi-omics visualization, and rigorous statistical pipelines.
               </p>
               <p>
                 Engineered with academic rigor, the platform avoids generic SaaS design conventions in favor of dense tabular numerals, colorblind-safe palettes, reproducible mathematical parameters, and cryptographic provenance ledgers.

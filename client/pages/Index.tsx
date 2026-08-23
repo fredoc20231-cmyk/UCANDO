@@ -62,10 +62,10 @@ export default function Index() {
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
                 <Badge className="bg-primary text-primary-foreground font-bold px-3 py-1 text-xs shadow-subtle">
-                  UC-CCC Cancer Data Commons
+                  The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO)
                 </Badge>
                 <Badge variant="outline" className="border-accent/40 text-accent bg-accent/10 text-xs font-mono font-bold">
-                  UCANDO • RNA-seq v3.2
+                  RNA-seq v3.2 & Multiomics
                 </Badge>
                 <Badge variant="outline" className="border-border bg-surface text-foreground text-xs font-bold">
                   <ShieldCheck className="w-3.5 h-3.5 mr-1 text-accent" /> HIPAA Consented Ecosystem
@@ -102,14 +102,14 @@ export default function Index() {
               </div>
             </div>
 
-            {/* Featured UCANDO DNA Orb Logo Badge */}
-            <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-surface border border-border shadow-subtle shrink-0">
+            {/* Featured UCANDO DNA Orb Logo Badge (Scaled 50% smaller) */}
+            <div className="hidden lg:flex flex-col items-center justify-center p-2 rounded-xl bg-surface border border-border shadow-subtle shrink-0">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
                 alt="UCANDO Logo"
-                className="h-40 w-auto max-w-[180px] object-contain rounded-xl border border-border bg-card p-1"
+                className="h-20 w-auto max-w-[90px] object-contain rounded-lg border border-border bg-card p-0.5"
               />
-              <span className="text-[11px] font-bold text-primary font-mono mt-2 tracking-widest uppercase">
+              <span className="text-[9px] font-bold text-primary font-mono mt-1 tracking-wider uppercase">
                 UCANDO Core
               </span>
             </div>

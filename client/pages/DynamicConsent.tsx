@@ -166,7 +166,7 @@ export default function DynamicConsent() {
                   </Badge>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Patient-centric consent control for UC-CCC Cancer Data Commons. Patient ID:{" "}
+                  Patient-centric consent control for The University of Chicago Comprehensive Cancer Center Data Commons Operations (UCANDO). Patient ID:{" "}
                   <code className="bg-slate-100 dark:bg-slate-950 px-2 py-0.5 rounded text-brand-maroon dark:text-sky-300 font-mono font-semibold">{patientId}</code>
                 </p>
               </div>

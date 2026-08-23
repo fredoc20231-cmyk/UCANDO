@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Layout } from "@/components/Layout";
-import { useRnaSeq, Dataset } from "@/context/RnaSeqContext";
+import { useRnaSeq, Dataset, UploadInputType, GroupDesignationType } from "@/context/RnaSeqContext";
 import { ScientificCard } from "@/components/scientific/ScientificCard";
 import { 
   Upload, 
@@ -11,40 +11,84 @@ import {
   ArrowRight, 
   HelpCircle,
   Download,
-  Database
+  Database,
+  Zap,
+  FileCode,
+  Layers,
+  Cpu,
+  GitFork,
+  Sliders,
+  Check
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 export const DataUpload: React.FC = () => {
-  const { loadCustomDataset } = useRnaSeq();
+  const { 
+    loadCustomDataset, 
+    uploadInputType, 
+    setUploadInputType,
+    sequencingPlatform,
+    setSequencingPlatform,
+    libraryProtocol,
+    setLibraryProtocol,
+    designFormula,
+    setDesignFormula
+  } = useRnaSeq();
   const navigate = useNavigate();
 
-  const [datasetTitle, setDatasetTitle] = useState("Custom Patient Cohort RNA-seq");
+  const [selectedInputMode, setSelectedInputMode] = useState<UploadInputType>(uploadInputType);
+  const [datasetTitle, setDatasetTitle] = useState("Custom Translational Cohort RNA-seq");
   const [organism, setOrganism] = useState("Homo sapiens");
   const [genomeBuild, setGenomeBuild] = useState("GRCh38.p14 (GENCODE v44)");
-  const [groupAName, setGroupAName] = useState("Treated / Responder");
-  const [groupBName, setGroupBName] = useState("Control / Non-Responder");
-  const [countsFileName, setCountsFileName] = useState<string | null>(null);
+  const [groupDesignationPreset, setGroupDesignationPreset] = useState<GroupDesignationType>("control_treated");
+  const [groupAName, setGroupAName] = useState("Treated (Active Inhibitor)");
+  const [groupBName, setGroupBName] = useState("Control (Vehicle)");
+  const [timeSeriesCount, setTimeSeriesCount] = useState<number>(4);
+  const [primaryFileAttached, setPrimaryFileAttached] = useState<string | null>(null);
   const [metaFileName, setMetaFileName] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  const handleSelectPreset = (preset: GroupDesignationType) => {
+    setGroupDesignationPreset(preset);
+    if (preset === "control_treated") {
+      setGroupAName("Treated (Active Compound)");
+      setGroupBName("Control (Vehicle)");
+      setDesignFormula("~ condition");
+    } else if (preset === "diseased_normal") {
+      setGroupAName("Primary Malignant Tumor");
+      setGroupBName("Adjacent Normal Tissue");
+      setDesignFormula("~ batch + condition");
+    } else if (preset === "time_0_t2") {
+      setGroupAName("T2 (Post-Treatment 2h)");
+      setGroupBName("Time 0 (Baseline)");
+      setDesignFormula("~ time");
+    } else if (preset === "time_series") {
+      setGroupAName(`T${timeSeriesCount} (End Timepoint)`);
+      setGroupBName("T0 (Baseline)");
+      setDesignFormula("~ splines::ns(time, df=3) + batch");
+    }
+  };
+
   const handleSimulateUpload = () => {
     setIsProcessing(true);
+    setUploadInputType(selectedInputMode);
+
     setTimeout(() => {
-      // Create user dataset
       const customDs: Dataset = {
         id: `ds-user-${Date.now()}`,
         name: datasetTitle,
-        description: `User-uploaded transcriptomic matrix (${groupAName} vs ${groupBName})`,
+        description: `User-uploaded cohort: ${groupAName} vs. ${groupBName} (${selectedInputMode.toUpperCase()})`,
         organism,
         referenceGenome: genomeBuild,
         sampleCount: 8,
         geneCount: 18940,
-        diseaseContext: "Translational Oncology / User Cohort",
+        diseaseContext: "Translational Oncology / User Ingested Cohort",
         primaryContrast: {
           groupA: groupAName,
           groupB: groupBName,
@@ -91,215 +135,349 @@ export const DataUpload: React.FC = () => {
 
       loadCustomDataset(customDs);
       setIsProcessing(false);
-      toast.success("Dataset parsed, normalized, and loaded into workspace!");
+
+      if (selectedInputMode === "raw_fastq") {
+        toast.success("Raw sequencing pipeline executed from scratch (Trimming → STAR → featureCounts → DESeq2).");
+      } else if (selectedInputMode === "read_counts") {
+        toast.success("Count matrix ingested and normalized via DESeq2 Median of Ratios.");
+      } else {
+        toast.info("Final processed result files loaded directly into analysis views.");
+      }
+
       navigate("/workspace");
-    }, 700);
+    }, 800);
   };
 
   return (
     <Layout>
-      <div className="flex-1 max-w-[1400px] w-full mx-auto p-4 sm:p-6 space-y-6 font-sans">
+      <div className="flex-1 max-w-[1500px] w-full mx-auto p-4 sm:p-6 space-y-6 font-sans">
         
         {/* Header */}
-        <div className="border-b border-border pb-4">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-serif font-semibold text-foreground tracking-tight">
-              Data Ingestion & Count Matrix Upload
-            </h1>
-            <span className="text-xs px-2 py-0.5 rounded border border-dashed border-accent text-accent font-mono font-medium">
-              Private Safe Harbor Ingestion
-            </span>
+        <div className="border-b border-border pb-4 flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-2xl font-serif font-bold text-foreground tracking-tight">
+                Data Ingestion & Experimental Setup
+              </h1>
+              <span className="text-xs px-2 py-0.5 rounded border border-dashed border-accent text-accent font-mono font-medium">
+                Safe Harbor Ingestion Tier-3
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              Upload raw sequencing files (FASTQ), unnormalized read count matrices, or final processed results with full experimental design and platform metadata.
+            </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-            Upload raw or normalized gene-level count matrices (CSV / TSV) and sample metadata tables for automated DESeq2 GLM modeling and downstream functional analysis.
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
-          {/* Ingestion Form & Dropzones */}
-          <div className="lg:col-span-2 space-y-6">
-            
-            {/* Metadata Parameters */}
-            <ScientificCard
-              title="Cohort Metadata & Reference Alignment"
-              subtitle="Specify experimental nomenclature and reference genome assembly"
+        {/* 1. Step 1: Ingestion Input Type Selection */}
+        <div className="space-y-3">
+          <Label className="text-xs font-semibold text-foreground uppercase tracking-wider font-mono flex items-center gap-1.5">
+            <Upload className="w-4 h-4 text-primary" />
+            <span>Step 1: Select Input Data Type & Analysis Starting Point</span>
+          </Label>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Raw FASTQ Option */}
+            <div
+              onClick={() => setSelectedInputMode("raw_fastq")}
+              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
+                selectedInputMode === "raw_fastq"
+                  ? "bg-primary/10 border-primary shadow-subtle"
+                  : "bg-card border-border hover:border-border"
+              }`}
             >
-              <div className="space-y-4 text-xs font-sans">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Badge className="bg-primary/15 text-primary border-primary/30 text-[10px] font-mono">
+                    Start from Scratch
+                  </Badge>
+                  {selectedInputMode === "raw_fastq" && <Check className="w-4 h-4 text-primary" />}
+                </div>
+                <h3 className="font-serif font-bold text-sm text-foreground">1. Raw Sequencing Files (FASTQ)</h3>
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
+                  Executes full bioinformatic pipeline from scratch: FastQC, fastp adapter trimming, STAR/Salmon alignment, and featureCounts quantification.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-primary font-semibold">Inputs: .fastq.gz / paired FASTQ</span>
+            </div>
+
+            {/* Read Counts Option */}
+            <div
+              onClick={() => setSelectedInputMode("read_counts")}
+              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
+                selectedInputMode === "read_counts"
+                  ? "bg-accent/10 border-accent shadow-subtle"
+                  : "bg-card border-border hover:border-border"
+              }`}
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Badge className="bg-accent/15 text-accent border-accent/30 text-[10px] font-mono">
+                    Start from Read Counts
+                  </Badge>
+                  {selectedInputMode === "read_counts" && <Check className="w-4 h-4 text-accent" />}
+                </div>
+                <h3 className="font-serif font-bold text-sm text-foreground">2. Unnormalized Read Counts</h3>
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
+                  Starts directly at statistical modeling: DESeq2 median-of-ratios normalization, VST transformation, and negative binomial Wald/LRT differential testing.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-accent font-semibold">Inputs: Raw integer count matrix (CSV/TSV)</span>
+            </div>
+
+            {/* Final Processed Files Option */}
+            <div
+              onClick={() => setSelectedInputMode("processed_final")}
+              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
+                selectedInputMode === "processed_final"
+                  ? "bg-muted border-foreground/40 shadow-subtle"
+                  : "bg-card border-border hover:border-border"
+              }`}
+            >
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <Badge variant="outline" className="border-border text-muted-foreground text-[10px] font-mono">
+                    Final Processed Files
+                  </Badge>
+                  {selectedInputMode === "processed_final" && <Check className="w-4 h-4 text-foreground" />}
+                </div>
+                <h3 className="font-serif font-bold text-sm text-foreground">3. Final / Pre-Processed Files</h3>
+                <p className="text-muted-foreground leading-relaxed text-[11px]">
+                  Explicitly marked as pre-processed results. Skips upstream alignment and normalization, loading directly into Volcano, Heatmap, and GSEA.
+                </p>
+              </div>
+              <span className="text-[10px] font-mono text-muted-foreground font-semibold">Inputs: Normalized TPM/FPKM & DESeq2 stat tables</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Step 2: Experimental Groups & Design Formula */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          
+          {/* Experimental Design & Groups */}
+          <ScientificCard
+            title="Experimental Groups & Contrast Formulation"
+            subtitle="Configure group designations (Control/Treated, Diseased/Normal, or Time Series)"
+          >
+            <div className="space-y-4 text-xs">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handleSelectPreset("control_treated")}
+                  className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
+                    groupDesignationPreset === "control_treated"
+                      ? "bg-primary/10 border-primary text-foreground font-semibold"
+                      : "bg-surface border-border text-muted-foreground"
+                  }`}
+                >
+                  <span className="block font-bold">Control / Treated</span>
+                  <span className="text-[10px] text-muted-foreground">Vehicle vs Drug</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectPreset("diseased_normal")}
+                  className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
+                    groupDesignationPreset === "diseased_normal"
+                      ? "bg-primary/10 border-primary text-foreground font-semibold"
+                      : "bg-surface border-border text-muted-foreground"
+                  }`}
+                >
+                  <span className="block font-bold">Diseased / Normal</span>
+                  <span className="text-[10px] text-muted-foreground">Tumor vs Normal</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectPreset("time_0_t2")}
+                  className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
+                    groupDesignationPreset === "time_0_t2"
+                      ? "bg-accent/10 border-accent text-foreground font-semibold"
+                      : "bg-surface border-border text-muted-foreground"
+                  }`}
+                >
+                  <span className="block font-bold">Time 0 vs. T2</span>
+                  <span className="text-[10px] text-muted-foreground">Binary Interval</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleSelectPreset("time_series")}
+                  className={`p-2.5 rounded-lg border text-left text-xs transition-all ${
+                    groupDesignationPreset === "time_series"
+                      ? "bg-accent/10 border-accent text-foreground font-semibold"
+                      : "bg-surface border-border text-muted-foreground"
+                  }`}
+                >
+                  <span className="block font-bold">Time Series</span>
+                  <span className="text-[10px] text-muted-foreground">T0 up to T10</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                 <div>
-                  <Label className="text-xs font-semibold text-foreground">Cohort Title</Label>
+                  <Label className="text-xs font-semibold text-primary font-mono">Test Contrast Group:</Label>
+                  <Input
+                    value={groupAName}
+                    onChange={(e) => setGroupAName(e.target.value)}
+                    className="mt-1 h-8 text-xs bg-surface border-border font-mono"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs font-semibold text-foreground font-mono">Reference Baseline Group:</Label>
+                  <Input
+                    value={groupBName}
+                    onChange={(e) => setGroupBName(e.target.value)}
+                    className="mt-1 h-8 text-xs bg-surface border-border font-mono"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label className="text-xs font-semibold text-muted-foreground font-mono">Statistical Design Formula:</Label>
+                <Input
+                  value={designFormula}
+                  onChange={(e) => setDesignFormula(e.target.value)}
+                  className="mt-1 h-8 text-xs bg-surface border-border font-mono text-primary font-bold"
+                />
+              </div>
+            </div>
+          </ScientificCard>
+
+          {/* Sequencing Instrument & Protocol */}
+          <ScientificCard
+            title="Sequencing Platform & Protocol Provenance"
+            subtitle="Instrument model, library chemistry, and reference genome build"
+          >
+            <div className="space-y-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs font-semibold text-muted-foreground">Sequencing Instrument</Label>
+                  <Select value={sequencingPlatform} onValueChange={setSequencingPlatform}>
+                    <SelectTrigger className="mt-1 h-8 text-xs bg-surface border-border">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border text-xs">
+                      <SelectItem value="Illumina NovaSeq 6000">Illumina NovaSeq 6000</SelectItem>
+                      <SelectItem value="Illumina NovaSeq X Plus">Illumina NovaSeq X Plus</SelectItem>
+                      <SelectItem value="Element AVITI">Element AVITI</SelectItem>
+                      <SelectItem value="PacBio Revio Long-Read">PacBio Revio Long-Read</SelectItem>
+                      <SelectItem value="Oxford Nanopore PromethION">Oxford Nanopore PromethION</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <Label className="text-xs font-semibold text-muted-foreground">Library Chemistry</Label>
+                  <Select value={libraryProtocol} onValueChange={setLibraryProtocol}>
+                    <SelectTrigger className="mt-1 h-8 text-xs bg-surface border-border">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border text-xs">
+                      <SelectItem value="Illumina Stranded mRNA (PolyA Capture)">Illumina Stranded mRNA (PolyA)</SelectItem>
+                      <SelectItem value="Total RNA-seq (Ribo-Zero Plus Gold)">Total RNA-seq (Ribo-Zero)</SelectItem>
+                      <SelectItem value="SMART-Seq v4 Ultra Low Input">SMART-Seq v4 Low Input</SelectItem>
+                      <SelectItem value="10x Genomics Single-Cell 3' v3.1">10x Single-Cell 3'</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs font-semibold text-muted-foreground">Organism & Build</Label>
+                  <Input
+                    value={`${organism} • ${genomeBuild}`}
+                    onChange={(e) => setGenomeBuild(e.target.value)}
+                    className="mt-1 h-8 text-xs bg-surface border-border font-mono"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs font-semibold text-muted-foreground">Cohort Title</Label>
                   <Input
                     value={datasetTitle}
                     onChange={(e) => setDatasetTitle(e.target.value)}
-                    className="mt-1 h-9 text-xs bg-background border-border"
+                    className="mt-1 h-8 text-xs bg-surface border-border"
                   />
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <Label className="text-xs font-semibold text-foreground">Organism</Label>
-                    <Input
-                      value={organism}
-                      onChange={(e) => setOrganism(e.target.value)}
-                      className="mt-1 h-9 text-xs bg-background border-border"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-foreground">Reference Genome</Label>
-                    <Input
-                      value={genomeBuild}
-                      onChange={(e) => setGenomeBuild(e.target.value)}
-                      className="mt-1 h-9 text-xs bg-background border-border"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-border">
-                  <div>
-                    <Label className="text-xs font-semibold text-primary">Contrast Group (Test)</Label>
-                    <Input
-                      value={groupAName}
-                      onChange={(e) => setGroupAName(e.target.value)}
-                      className="mt-1 h-9 text-xs bg-background border-border"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs font-semibold text-foreground">Reference Group (Baseline)</Label>
-                    <Input
-                      value={groupBName}
-                      onChange={(e) => setGroupBName(e.target.value)}
-                      className="mt-1 h-9 text-xs bg-background border-border"
-                    />
-                  </div>
-                </div>
               </div>
-            </ScientificCard>
-
-            {/* Dropzones */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
-              {/* Counts Matrix */}
-              <div className="p-6 rounded-lg border-2 border-dashed border-border hover:border-primary transition-colors bg-card/60 flex flex-col items-center justify-center text-center space-y-3 cursor-pointer">
-                <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
-                  <FileSpreadsheet className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="font-serif font-bold text-sm text-foreground">Gene Counts Matrix</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">
-                    CSV / TSV (Genes as rows, Samples as columns)
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setCountsFileName("raw_gene_counts_matrix.tsv");
-                    toast.success("Loaded 'raw_gene_counts_matrix.tsv' (18,940 genes × 8 samples)");
-                  }}
-                  className="h-8 text-xs font-sans border-border"
-                >
-                  {countsFileName ? `Attached: ${countsFileName}` : "Browse / Drop Counts File"}
-                </Button>
-              </div>
-
-              {/* Sample Metadata */}
-              <div className="p-6 rounded-lg border-2 border-dashed border-border hover:border-accent transition-colors bg-card/60 flex flex-col items-center justify-center text-center space-y-3 cursor-pointer">
-                <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center">
-                  <FileText className="w-6 h-6" />
-                </div>
-                <div>
-                  <div className="font-serif font-bold text-sm text-foreground">Sample Metadata Table</div>
-                  <div className="text-[11px] text-muted-foreground mt-0.5">
-                    CSV with SampleID, Condition, Batch, Stage
-                  </div>
-                </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setMetaFileName("sample_phenotypes.csv");
-                    toast.success("Loaded 'sample_phenotypes.csv' (8 samples)");
-                  }}
-                  className="h-8 text-xs font-sans border-border"
-                >
-                  {metaFileName ? `Attached: ${metaFileName}` : "Browse / Drop Metadata File"}
-                </Button>
-              </div>
-
             </div>
-
-            {/* Ingestion Execution Button */}
-            <div className="flex items-center justify-end gap-3 pt-2">
-              <Button
-                size="default"
-                onClick={handleSimulateUpload}
-                disabled={isProcessing}
-                className="h-9 px-5 bg-primary text-primary-foreground hover:bg-primary/90 font-medium text-xs shadow-subtle flex items-center gap-2"
-              >
-                <span>{isProcessing ? "Validating & Aligning Matrix..." : "Validate, Normalize & Open Workspace"}</span>
-                <ArrowRight className="w-4 h-4" />
-              </Button>
-            </div>
-
-          </div>
-
-          {/* Right: Validation Specifications & Format Guidelines */}
-          <div className="space-y-6">
-            <ScientificCard
-              title="Schema Requirements"
-              subtitle="Input specifications for DESeq2 & limma compatibility"
-            >
-              <div className="space-y-4 text-xs font-sans text-muted-foreground">
-                <div className="space-y-1">
-                  <div className="font-semibold text-foreground flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-accent" />
-                    <span>Gene Identifier Mapping</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    Row names must contain valid Ensembl Gene IDs (<code>ENSG...</code>) or HGNC gene symbols (<code>ESR1</code>, <code>TP53</code>). Automatic conversion is applied.
-                  </p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="font-semibold text-foreground flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-accent" />
-                    <span>Un-normalized Raw Counts</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    DESeq2 requires non-negative integers representing raw sequence read counts. Do not upload pre-normalized RPKM/FPKM values as raw counts.
-                  </p>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="font-semibold text-foreground flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-accent" />
-                    <span>Sample ID Cross-Validation</span>
-                  </div>
-                  <p className="text-[11px] leading-relaxed">
-                    Column headers in the count matrix must match the <code>sample_id</code> column in the metadata file exactly.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-md bg-surface border border-border mt-4">
-                  <div className="font-semibold text-foreground text-[11px] mb-1">Download Template Files:</div>
-                  <div className="space-y-1 text-[11px]">
-                    <a href="#template" onClick={(e) => { e.preventDefault(); toast.info("Example count template ready for inspection."); }} className="text-primary hover:underline flex items-center gap-1">
-                      <Download className="w-3 h-3" />
-                      <span>example_counts_template.tsv</span>
-                    </a>
-                    <a href="#template" onClick={(e) => { e.preventDefault(); toast.info("Example metadata template ready for inspection."); }} className="text-accent hover:underline flex items-center gap-1">
-                      <Download className="w-3 h-3" />
-                      <span>example_metadata_template.csv</span>
-                    </a>
-                  </div>
-                </div>
-
-              </div>
-            </ScientificCard>
-          </div>
-
+          </ScientificCard>
         </div>
 
+        {/* Step 3: Dropzone & Launch */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="p-6 rounded-xl border-2 border-dashed border-border hover:border-primary transition-colors bg-card flex flex-col items-center justify-center text-center space-y-3 shadow-subtle">
+            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center">
+              <FileSpreadsheet className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-serif font-bold text-sm text-foreground">
+                {selectedInputMode === "raw_fastq"
+                  ? "Attach Raw FASTQ Files (.fastq.gz)"
+                  : selectedInputMode === "read_counts"
+                  ? "Attach Gene Counts Matrix (CSV/TSV)"
+                  : "Attach Processed Expression Results (TSV)"}
+              </div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                {selectedInputMode === "raw_fastq"
+                  ? "Paired-end R1 and R2 sequencing archives"
+                  : selectedInputMode === "read_counts"
+                  ? "Genes as rows, sample IDs as columns (integer counts)"
+                  : "Pre-computed log2FC, FDR, and normalized expression"}
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                const fname = selectedInputMode === "raw_fastq" ? "cohort_R1_R2.fastq.gz" : "gene_count_matrix.tsv";
+                setPrimaryFileAttached(fname);
+                toast.success(`Attached '${fname}'`);
+              }}
+              className="h-8 text-xs font-sans border-border"
+            >
+              {primaryFileAttached ? `Attached: ${primaryFileAttached}` : "Browse / Drop Sequencing Files"}
+            </Button>
+          </div>
+
+          <div className="p-6 rounded-xl border-2 border-dashed border-border hover:border-accent transition-colors bg-card flex flex-col items-center justify-center text-center space-y-3 shadow-subtle">
+            <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center">
+              <FileText className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="font-serif font-bold text-sm text-foreground">Sample Metadata Table</div>
+              <div className="text-[11px] text-muted-foreground mt-0.5">
+                CSV / TSV with sampleId, group, batch, timePoint, RIN
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setMetaFileName("sample_metadata_manifest.csv");
+                toast.success("Loaded 'sample_metadata_manifest.csv' (8 samples annotated)");
+              }}
+              className="h-8 text-xs font-sans border-border"
+            >
+              {metaFileName ? `Attached: ${metaFileName}` : "Browse / Drop Metadata Manifest"}
+            </Button>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <div className="flex justify-end pt-2">
+          <Button
+            size="lg"
+            onClick={handleSimulateUpload}
+            disabled={isProcessing}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-10 px-6 shadow-subtle"
+          >
+            <Zap className={`w-4 h-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
+            {isProcessing ? "Executing Bioinformatic Pipeline..." : "Ingest & Launch in RNA-seq Workspace"}
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
       </div>
     </Layout>
   );
