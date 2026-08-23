@@ -1,93 +1,71 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Light Mode Neutrals */
-    --background: 0 0% 100%;       /* #FFFFFF */
-    --foreground: 221 39% 11%;      /* #111827 */
+    /* LIGHT COLOR TOKENS (Academic Maroon & Teal) */
+    --background: oklch(0.985 0.004 90);
+    --foreground: oklch(0.22 0.02 40);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.22 0.02 40);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.22 0.02 40);
 
-    --card: 0 0% 100%;            /* #FFFFFF surfaceElevated */
-    --card-foreground: 221 39% 11%;
+    --primary: oklch(0.38 0.14 20);
+    --primary-foreground: oklch(0.985 0.008 80);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 221 39% 11%;
+    --secondary: oklch(0.94 0.012 80);
+    --secondary-foreground: oklch(0.30 0.03 40);
 
-    /* Brand Tokens */
-    --primary: 236 94% 68%;        /* #636EFA */
-    --primary-foreground: 0 0% 100%;
-    --primary-dark: 235 77% 60%;   /* #4C59E6 */
-    --primary-light: 234 100% 95%; /* #E8EAFF */
-    --primary-bg: 229 100% 97%;    /* #EEF1FF */
+    --muted: oklch(0.95 0.008 85);
+    --muted-foreground: oklch(0.50 0.02 60);
 
-    --secondary: 268 94% 68%;      /* #AB63FA */
-    --secondary-foreground: 0 0% 100%;
+    --accent: oklch(0.50 0.08 200);
+    --accent-foreground: oklch(0.985 0.005 200);
 
-    --accent: 164 100% 40%;        /* #00CC96 */
-    --accent-foreground: 0 0% 100%;
+    --destructive: oklch(0.55 0.20 27);
+    --destructive-foreground: oklch(0.985 0.003 80);
 
-    /* Semantic Tokens */
-    --success: 164 100% 40%;       /* #00CC96 */
-    --success-bg: 152 81% 96%;     /* #ECFDF5 */
-    --warning: 26 100% 68%;        /* #FFA15A */
-    --warning-bg: 33 100% 96%;     /* #FFF7ED */
-    --danger: 9 85% 58%;           /* #EF553B */
-    --danger-bg: 0 100% 97%;       /* #FEF2F2 */
-    --info: 189 89% 53%;           /* #19D3F3 */
-    --info-bg: 186 100% 96%;       /* #ECFEFF */
+    --border: oklch(0.89 0.01 80);
+    --input: oklch(0.89 0.01 80);
+    --ring: oklch(0.50 0.08 200);
 
-    --muted: 210 20% 98%;          /* #F9FAFB surface */
-    --muted-foreground: 215 14% 34%; /* #4B5563 textSecondary */
+    --surface: oklch(0.97 0.006 85);
+    --surface-foreground: oklch(0.28 0.02 40);
 
-    --border: 220 13% 91%;         /* #E5E7EB */
-    --input: 220 13% 91%;
-    --ring: 236 94% 68%;
-
-    --radius: 0.75rem;             /* 12px for cards */
+    --radius: 0.5rem; /* 8px default */
   }
 
   .dark {
-    /* Dark Mode Neutrals */
-    --background: 220 48% 8%;      /* #0B1220 */
-    --foreground: 210 40% 98%;     /* #F9FAFB */
+    /* DARK COLOR TOKENS */
+    --background: oklch(0.20 0.015 45);
+    --foreground: oklch(0.95 0.006 80);
+    --card: oklch(0.25 0.018 45);
+    --card-foreground: oklch(0.95 0.006 80);
+    --popover: oklch(0.25 0.018 45);
+    --popover-foreground: oklch(0.95 0.006 80);
 
-    --card: 217 33% 17%;           /* #1F2937 surfaceElevated */
-    --card-foreground: 210 40% 98%;
+    --primary: oklch(0.60 0.15 22);
+    --primary-foreground: oklch(0.15 0.01 40);
 
-    --popover: 217 33% 17%;
-    --popover-foreground: 210 40% 98%;
+    --secondary: oklch(0.30 0.02 45);
+    --secondary-foreground: oklch(0.95 0.006 80);
 
-    /* Brand Tokens stay identical in data/viz */
-    --primary: 236 94% 68%;        /* #636EFA */
-    --primary-foreground: 0 0% 100%;
-    --primary-dark: 235 77% 60%;
-    --primary-light: 234 100% 95%;
-    --primary-bg: 217 33% 17%;
+    --muted: oklch(0.30 0.02 45);
+    --muted-foreground: oklch(0.72 0.015 70);
 
-    --secondary: 268 94% 68%;      /* #AB63FA */
-    --secondary-foreground: 0 0% 100%;
+    --accent: oklch(0.65 0.10 200);
+    --accent-foreground: oklch(0.15 0.01 40);
 
-    --accent: 164 100% 40%;        /* #00CC96 */
-    --accent-foreground: 0 0% 100%;
+    --destructive: oklch(0.58 0.22 25);
+    --destructive-foreground: oklch(0.985 0.003 80);
 
-    --success: 164 100% 40%;
-    --success-bg: 152 81% 15%;
-    --warning: 26 100% 68%;
-    --warning-bg: 33 100% 15%;
-    --danger: 9 85% 58%;
-    --danger-bg: 0 100% 15%;
-    --info: 189 89% 53%;
-    --info-bg: 186 100% 15%;
-
-    --muted: 222 47% 11%;          /* #111827 surface */
-    --muted-foreground: 218 11% 84%; /* #D1D5DB textSecondary */
-
-    --border: 217 19% 27%;         /* #374151 */
-    --input: 217 19% 27%;
-    --ring: 189 89% 53%;           /* #19D3F3 focus ring in dark mode */
+    --border: oklch(1 0 0 / 12%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.65 0.10 200);
+    --surface: oklch(0.24 0.018 45);
+    --surface-foreground: oklch(0.95 0.006 80);
   }
 }
 
@@ -97,60 +75,77 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground font-sans antialiased selection:bg-accent/20;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
-  /* Typography scale per design system */
+  /* Typography scale per academic scientific standard */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif tracking-tight text-foreground;
+  }
+
   h1 {
-    @apply text-2xl sm:text-3xl font-semibold tracking-tight text-foreground;
+    @apply text-2xl sm:text-3xl font-semibold;
   }
 
   h2 {
-    @apply text-lg sm:text-xl font-semibold tracking-tight text-foreground;
+    @apply text-lg sm:text-xl font-semibold;
   }
 
   h3 {
-    @apply text-base font-semibold tracking-tight text-foreground;
+    @apply text-base font-semibold;
   }
 
   p, span, div {
     line-height: 1.5;
   }
 
-  :where(p, span, li, h1, h2, h3, h4, h5, h6, a, button, label, td, th) {
-    overflow-wrap: anywhere;
-    word-break: break-word;
+  /* Tabular numerals for data density */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 
-  pre,
-  code {
-    font-family: "JetBrains Mono", monospace;
-    overflow-x: auto;
+  /* Academic scientific scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-foreground);
   }
 }
 
-/* Custom Shadows per design system */
+/* Restrained Scientific Shadows */
 .shadow-subtle {
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.10);
+  box-shadow: 0 1px 2px oklch(0.2 0.02 40 / 0.06), 0 1px 3px oklch(0.2 0.02 40 / 0.08);
 }
 
 .shadow-elevated {
-  box-shadow: 0 4px 8px rgba(16, 24, 40, 0.10), 0 2px 4px rgba(16, 24, 40, 0.06);
+  box-shadow: 0 3px 6px oklch(0.2 0.02 40 / 0.08), 0 1px 3px oklch(0.2 0.02 40 / 0.04);
 }
 
-/* Clean scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+/* Subtle scientific card entrance */
+.scientific-fade-in {
+  animation: sciFadeIn 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.25);
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 0.45);
+
+@keyframes sciFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
