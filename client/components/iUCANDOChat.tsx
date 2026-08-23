@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -12,8 +13,18 @@ import {
   AlertCircle,
   Bot,
   User,
-  Loader2
+  Loader2,
+  Layers,
+  Dna,
+  Users,
+  Stethoscope,
+  FileText,
+  Sliders,
+  CheckCircle2,
+  ExternalLink,
+  ArrowRight
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface iUCANDOChatProps {
   isOpen: boolean;
@@ -26,9 +37,11 @@ interface ChatMessage {
   sender: "user" | "ai";
   text: string;
   timestamp: string;
+  quickActions?: { label: string; path: string; icon?: string }[];
 }
 
 export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProps) {
+  const navigate = useNavigate();
   const [mode, setMode] = useState<"text" | "voice" | "both">("both");
   const [inputText, setInputText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,8 +54,14 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
     {
       id: "msg-1",
       sender: "ai",
-      text: "Hello, I am iUCANDO, powered by iPhoenix-Can. How can I assist with patient records, cohort analysis, or clinical protocol decisions today?",
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      text: "Hello, I am iUCANDO AI. I am connected across all platform functions: Patient 360 Orbit, Patient Integration, RNA-seq Workspace (DESeq2), Omics View, Cohort Builder, OHIF Imaging, and iUCADO-Orbit. How can I assist you with clinical records, study protocols, or multi-omics analysis today?",
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      quickActions: [
+        { label: "Suggest Study Protocol", path: "#protocol" },
+        { label: "Patient Integration", path: "/patient-integration" },
+        { label: "iUCADO-Orbit Engine", path: "/iucado-orbit" },
+        { label: "RNA-seq Workspace", path: "/workspace" }
+      ]
     }
   ]);
 
@@ -69,11 +88,38 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
   const speakText = (text: string) => {
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+    const cleanText = text.replace(/[*#`_\[\]()]/g, "");
+    const utterance = new SpeechSynthesisUtterance(cleanText);
     utterance.onstart = () => setSpeaking(true);
     utterance.onend = () => setSpeaking(false);
     utterance.onerror = () => setSpeaking(false);
     window.speechSynthesis.speak(utterance);
+  };
+
+  const parseQuickActions = (replyText: string) => {
+    const actions: { label: string; path: string }[] = [];
+    const lower = replyText.toLowerCase();
+
+    if (lower.includes("/patient-integration") || lower.includes("patient integration")) {
+      actions.push({ label: "Open Patient Integration", path: "/patient-integration" });
+    }
+    if (lower.includes("/workspace") || lower.includes("rna-seq") || lower.includes("deseq2")) {
+      actions.push({ label: "Launch RNA-seq Studio", path: "/workspace" });
+    }
+    if (lower.includes("/iucado-orbit") || lower.includes("orbit") || lower.includes("evidence")) {
+      actions.push({ label: "Launch iUCADO-Orbit", path: "/iucado-orbit" });
+    }
+    if (lower.includes("/cohort-builder") || lower.includes("cohort")) {
+      actions.push({ label: "Open Cohort Builder", path: "/cohort-builder" });
+    }
+    if (lower.includes("/omics-view") || lower.includes("phoenixmo")) {
+      actions.push({ label: "Open Omics View", path: "/omics-view" });
+    }
+    if (lower.includes("/imaging-hub") || lower.includes("ohif") || lower.includes("dicom")) {
+      actions.push({ label: "Launch Imaging Hub (OHIF)", path: "/imaging-hub" });
+    }
+
+    return actions.slice(0, 3);
   };
 
   const handleSend = async (textToSend?: string) => {
@@ -98,7 +144,7 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           prompt,
-          patientContext: patientContext || "UC-CCC-89421 Stage IIIB Breast Cancer"
+          patientContext: patientContext || "UC-CCC-89421 Stage IIIB Breast Cancer with BRCA1 and PD-L1 CPS 12"
         })
       });
 
@@ -109,7 +155,8 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
         id: `ai-${Date.now()}`,
         sender: "ai",
         text: aiReply,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        quickActions: parseQuickActions(aiReply)
       };
 
       setMessages((prev) => [...prev, aiMsg]);
@@ -195,24 +242,24 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white dark:bg-slate-900 h-full border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col justify-between">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs animate-in fade-in duration-200 font-sans">
+      <div className="w-full max-w-lg bg-card h-full border-l border-border shadow-elevated flex flex-col justify-between">
         
         {/* Header */}
-        <div className="p-4 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 flex items-center justify-between">
+        <div className="p-4 border-b border-border bg-surface flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-primary/10 text-primary dark:bg-indigo-950 dark:text-primary border border-primary/20">
+            <div className="p-2 rounded-xl bg-primary/10 text-primary border border-primary/20">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h2 className="text-base font-bold text-slate-900 dark:text-white">iUCANDO</h2>
-                <Badge variant="outline" className="text-[9px] border-primary/40 bg-primary/10 text-primary px-1.5 py-0 font-mono">
-                  v2.4
+                <h2 className="font-serif font-bold text-base text-foreground">iUCANDO AI</h2>
+                <Badge variant="outline" className="text-[9px] border-primary/40 bg-primary/10 text-primary px-1.5 py-0 font-mono font-bold">
+                  v3.4 Platform Copilot
                 </Badge>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400 font-mono">
-                Powered by iPhoenix-Can
+              <p className="text-[11px] text-muted-foreground font-sans">
+                Cross-Platform Oncology & Study Protocol Intelligence
               </p>
             </div>
           </div>
@@ -221,57 +268,57 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
             size="icon"
             variant="ghost"
             onClick={onClose}
-            className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+            className="h-8 w-8 text-muted-foreground hover:text-foreground"
           >
             <X className="w-4 h-4" />
           </Button>
         </div>
 
-        {/* Disclaimer Banner */}
-        <div className="px-4 py-2 bg-amber-50 dark:bg-amber-950/40 border-b border-amber-200/60 dark:border-amber-900/60 text-[11px] text-amber-800 dark:text-amber-300 flex items-start gap-2">
-          <AlertCircle className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0 mt-0.5" />
-          <span>
-            iPhoenix-Can is in early access. A dedicated reliability and validation layer for clinical use is in development.
-          </span>
-        </div>
-
         {/* Mode Selector */}
-        <div className="p-2 border-b border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-950/40 flex items-center justify-center gap-1">
-          {(["text", "voice", "both"] as const).map((m) => (
-            <button
-              key={m}
-              onClick={() => {
-                if (m !== "text" && !voiceSupported) {
-                  setSpeechError("Voice input isn't supported in this browser — switching to text");
-                  setMode("text");
-                  return;
-                }
-                setMode(m);
-                setSpeechError(null);
-              }}
-              className={`px-3 py-1 rounded-md text-xs font-semibold capitalize transition-all ${
-                mode === m
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-800"
-              }`}
-            >
-              {m} Mode
-            </button>
-          ))}
+        <div className="p-2 border-b border-border bg-surface/60 flex items-center justify-between px-4">
+          <div className="flex items-center gap-1 text-xs">
+            {(["text", "voice", "both"] as const).map((m) => (
+              <button
+                key={m}
+                onClick={() => {
+                  if (m !== "text" && !voiceSupported) {
+                    setSpeechError("Voice input isn't supported in this browser — switching to text");
+                    setMode("text");
+                    return;
+                  }
+                  setMode(m);
+                  setSpeechError(null);
+                }}
+                className={`px-2.5 py-1 rounded-md text-xs font-semibold capitalize transition-all ${
+                  mode === m
+                    ? "bg-primary text-primary-foreground shadow-subtle"
+                    : "text-muted-foreground hover:bg-muted"
+                }`}
+              >
+                {m}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1">
+            <Badge variant="outline" className="text-[9px] font-mono border-border text-muted-foreground">
+              Connected to 9 Modules
+            </Badge>
+          </div>
         </div>
 
         {/* Inline Speech Error Message */}
         {speechError && (
-          <div className="px-4 py-1.5 bg-red-50 dark:bg-red-950/60 border-b border-red-200 dark:border-red-900 text-[11px] text-red-600 dark:text-red-300 flex items-center justify-between">
+          <div className="px-4 py-1.5 bg-destructive/10 border-b border-destructive/20 text-[11px] text-destructive flex items-center justify-between">
             <span>{speechError}</span>
-            <button onClick={() => setSpeechError(null)} className="text-red-400 hover:text-red-600">
+            <button onClick={() => setSpeechError(null)} className="text-destructive hover:opacity-80">
               <X className="w-3 h-3" />
             </button>
           </div>
         )}
 
-        {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3.5">
+        {/* Chat Messages Body */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((msg) => (
             <div
               key={msg.id}
@@ -282,90 +329,135 @@ export function IUCANDOChat({ isOpen, onClose, patientContext }: iUCANDOChatProp
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-xs shrink-0 ${
                   msg.sender === "user"
-                    ? "bg-primary text-white"
-                    : "bg-slate-800 text-cyan-300 border border-slate-700"
+                    ? "bg-primary text-primary-foreground font-bold"
+                    : "bg-surface text-primary border border-border"
                 }`}
               >
                 {msg.sender === "user" ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
               </div>
 
               <div
-                className={`p-3 rounded-2xl max-w-[82%] text-xs space-y-1 shadow-xs ${
+                className={`max-w-[85%] rounded-xl p-3 text-xs leading-relaxed ${
                   msg.sender === "user"
-                    ? "bg-primary text-white rounded-tr-none"
-                    : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 rounded-tl-none"
+                    ? "bg-primary text-primary-foreground font-medium shadow-subtle"
+                    : "bg-surface border border-border text-foreground shadow-subtle space-y-2"
                 }`}
               >
-                <p className="leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                <div className="text-[9px] opacity-70 text-right">{msg.timestamp}</div>
+                <div className="whitespace-pre-wrap font-sans">
+                  {msg.text}
+                </div>
+
+                {/* Quick action buttons attached to AI messages */}
+                {msg.quickActions && msg.quickActions.length > 0 && (
+                  <div className="pt-2 border-t border-border/60 flex flex-wrap gap-1.5">
+                    {msg.quickActions.map((action, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          if (action.path === "#protocol") {
+                            handleSend("Suggest a translational research study protocol combining Cohort Builder, RNA-seq DESeq2, and iUCADO-Orbit evidence");
+                          } else {
+                            onClose();
+                            navigate(action.path);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-card hover:bg-muted text-[11px] font-semibold text-primary border border-border transition-colors"
+                      >
+                        <span>{action.label}</span>
+                        <ArrowRight className="w-3 h-3 text-accent" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className={`text-[9px] mt-1 text-right font-mono ${
+                  msg.sender === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
+                }`}>
+                  {msg.timestamp}
+                </div>
               </div>
             </div>
           ))}
 
           {loading && (
-            <div className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 p-2">
-              <Loader2 className="w-4 h-4 animate-spin text-primary" />
-              <span>iUCANDO is synthesizing response...</span>
+            <div className="flex items-start gap-2.5">
+              <div className="w-7 h-7 rounded-full bg-surface text-primary border border-border flex items-center justify-center text-xs shrink-0">
+                <Bot className="w-3.5 h-3.5" />
+              </div>
+              <div className="p-3 rounded-xl bg-surface border border-border flex items-center gap-2 text-xs text-muted-foreground">
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+                <span>iUCANDO AI is reasoning across platform data...</span>
+              </div>
             </div>
           )}
 
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Speech Output Indicator */}
-        {speaking && (
-          <div className="px-4 py-1.5 bg-sky-50 dark:bg-sky-950/60 border-t border-sky-200 text-sky-700 dark:text-sky-300 text-xs flex items-center justify-between">
-            <span className="flex items-center gap-1.5">
-              <Volume2 className="w-3.5 h-3.5 animate-pulse text-sky-500" />
-              Speaking response...
-            </span>
-            <button
-              onClick={() => window.speechSynthesis.cancel()}
-              className="text-xs underline hover:text-sky-900"
-            >
-              Stop
-            </button>
-          </div>
-        )}
+        {/* Quick Question Prompt Chips */}
+        <div className="px-3 py-2 bg-surface/40 border-t border-border flex items-center gap-1.5 overflow-x-auto scrollbar-none">
+          <button
+            onClick={() => handleSend("Suggest a multi-modal study protocol with cohort selection and omics tools")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            📋 Build Study Protocol
+          </button>
+          <button
+            onClick={() => handleSend("How do I configure DESeq2 design formulas and batch correction in Workspace?")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            🧬 RNA-seq & DESeq2
+          </button>
+          <button
+            onClick={() => handleSend("Explain Patient Integration, RECIST 1.1 tracking, and DeepSurv survival prediction")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            🩺 Patient Integration
+          </button>
+          <button
+            onClick={() => handleSend("What is iUCADO-Orbit and how does it synthesize clinical trial evidence?")}
+            className="text-[10px] px-2.5 py-1 rounded-full bg-card border border-border hover:bg-muted text-foreground shrink-0 font-medium transition-colors"
+          >
+            ✨ iUCADO-Orbit
+          </button>
+        </div>
 
         {/* Input Bar */}
-        <div className="p-3 border-t border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-950/80 space-y-2">
+        <div className="p-3 border-t border-border bg-card space-y-2">
           <div className="flex items-center gap-2">
-            {(mode === "text" || mode === "both") && (
-              <Input
-                placeholder="Ask iUCANDO about patients, cohorts, trials..."
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                disabled={loading}
-                className="text-xs bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800"
-              />
-            )}
-
-            {(mode === "voice" || mode === "both") && (
+            {(mode === "voice" || mode === "both") && voiceSupported && (
               <Button
                 size="icon"
-                onClick={toggleVoiceRecognition}
+                type="button"
                 variant={isListening ? "destructive" : "outline"}
-                className={`h-9 w-9 shrink-0 ${
-                  isListening ? "animate-pulse" : "border-slate-300 dark:border-slate-700"
-                }`}
-                title={isListening ? "Stop listening" : "Start voice input"}
+                onClick={toggleVoiceRecognition}
+                className="h-9 w-9 shrink-0 border-border"
               >
-                {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4 text-primary" />}
+                {isListening ? <MicOff className="w-4 h-4 animate-pulse" /> : <Mic className="w-4 h-4 text-primary" />}
               </Button>
             )}
 
-            {(mode === "text" || mode === "both") && (
-              <Button
-                size="icon"
-                onClick={() => handleSend()}
-                disabled={loading || !inputText.trim()}
-                className="h-9 w-9 bg-primary hover:bg-primary/90 text-white shrink-0"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
-            )}
+            <Input
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              placeholder="Ask iUCANDO AI about cohorts, protocols, omics..."
+              className="text-xs h-9 bg-surface border-border"
+            />
+
+            <Button
+              size="icon"
+              disabled={loading || !inputText.trim()}
+              onClick={() => handleSend()}
+              className="h-9 w-9 shrink-0 bg-primary text-primary-foreground"
+            >
+              <Send className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>

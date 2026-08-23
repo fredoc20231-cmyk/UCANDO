@@ -55,6 +55,8 @@ import About from "./pages/About";
 
 // Existing Supplementary Hub Pages
 import Patient360 from "./pages/Patient360";
+import PatientIntegration from "./pages/PatientIntegration";
+import IucadoOrbitPage from "./pages/IucadoOrbit";
 import ResearcherPortal from "./pages/ResearcherPortal";
 import CohortBuilder from "./pages/CohortBuilder";
 import DynamicConsent from "./pages/DynamicConsent";
@@ -142,6 +144,15 @@ export const App = () => (
                     </RequireAuth>
                   }
                 />
+                <Route
+                  path="/patient-integration"
+                  element={
+                    <RequireAuth>
+                      <PatientIntegration />
+                    </RequireAuth>
+                  }
+                />
+                <Route path="/iucado-orbit" element={<IucadoOrbitPage />} />
                 <Route path="/researcher-portal" element={<ResearcherPortal />} />
                 <Route path="/cohort-builder" element={<CohortBuilder />} />
                 <Route

@@ -258,9 +258,42 @@ const TCGA_BRCA_HEATMAP: HeatmapRow[] = [
 ];
 
 const TCGA_BRCA_PATHWAYS: PathwayResult[] = [
+  // Hallmark Pathways
   { pathwayId: "M5921", pathwayName: "HALLMARK_INTERFERON_GAMMA_RESPONSE", database: "Hallmark", size: 200, nes: 2.84, pvalue: 1.2e-9, padj: 4.8e-8, leadingEdge: ["CD274", "STAT1", "IRF1", "CXCL9", "CXCL10", "HLA-A"] },
   { pathwayId: "M5925", pathwayName: "HALLMARK_E2F_TARGETS", database: "Hallmark", size: 200, nes: 2.61, pvalue: 3.4e-8, padj: 8.9e-7, leadingEdge: ["MKI67", "CDK1", "TOP2A", "CCNB1", "E2F1"] },
-  { pathwayId: "M5907", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_EARLY", database: "Hallmark", size: 200, nes: -3.12, pvalue: 4.1e-12, padj: 2.1e-10, leadingEdge: ["ESR1", "BCL2", "PGR", "GATA3", "XBP1"] }
+  { pathwayId: "M5901", pathwayName: "HALLMARK_G2M_CHECKPOINT", database: "Hallmark", size: 198, nes: 2.45, pvalue: 1.5e-6, padj: 3.2e-5, leadingEdge: ["AURKB", "CCNB1", "CDK1", "PLK1", "TOP2A"] },
+  { pathwayId: "M5930", pathwayName: "HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION", database: "Hallmark", size: 200, nes: 2.38, pvalue: 3.2e-6, padj: 6.4e-5, leadingEdge: ["VIM", "FN1", "SNAI1", "ZEB1", "TWIST1"] },
+  { pathwayId: "M5926", pathwayName: "HALLMARK_MYC_TARGETS_V1", database: "Hallmark", size: 200, nes: 2.18, pvalue: 1.8e-5, padj: 2.5e-4, leadingEdge: ["MYC", "NPM1", "HSPD1", "MCM4", "CAD"] },
+  { pathwayId: "M5932", pathwayName: "HALLMARK_INFLAMMATORY_RESPONSE", database: "Hallmark", size: 200, nes: 2.05, pvalue: 4.2e-5, padj: 5.1e-4, leadingEdge: ["IL6", "CXCL8", "CCL2", "ICAM1", "NFKB1"] },
+  { pathwayId: "M5903", pathwayName: "HALLMARK_DNA_REPAIR", database: "Hallmark", size: 150, nes: 1.92, pvalue: 8.8e-5, padj: 9.8e-4, leadingEdge: ["RAD51", "BRCA1", "PARP1", "PCNA", "FEN1"] },
+  { pathwayId: "M5933", pathwayName: "HALLMARK_OXIDATIVE_PHOSPHORYLATION", database: "Hallmark", size: 200, nes: -1.88, pvalue: 1.1e-4, padj: 1.2e-3, leadingEdge: ["NDUFA1", "COX4I1", "ATP5F1A", "UQCRC1"] },
+  { pathwayId: "M5905", pathwayName: "HALLMARK_FATTY_ACID_METABOLISM", database: "Hallmark", size: 158, nes: -2.25, pvalue: 4.2e-6, padj: 8.1e-5, leadingEdge: ["ACACA", "FASN", "CPT1A", "ACSL1"] },
+  { pathwayId: "M5906", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_LATE", database: "Hallmark", size: 200, nes: -2.76, pvalue: 8.4e-9, padj: 2.1e-7, leadingEdge: ["ESR1", "GATA3", "FOXA1", "TFF1", "PGR"] },
+  { pathwayId: "M5907", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_EARLY", database: "Hallmark", size: 200, nes: -3.12, pvalue: 4.1e-12, padj: 2.1e-10, leadingEdge: ["ESR1", "BCL2", "PGR", "GATA3", "XBP1"] },
+
+  // Reactome Pathways
+  { pathwayId: "R-HSA-5685642", pathwayName: "REACTOME_HOMOLOGOUS_RECOMBINATION_REPAIR", database: "Reactome", size: 115, nes: 2.72, pvalue: 2.4e-7, padj: 5.8e-6, leadingEdge: ["RAD51", "BRCA1", "BRCA2", "PALB2", "RAD51C"] },
+  { pathwayId: "R-HSA-69620", pathwayName: "REACTOME_CELL_CYCLE_CHECKPOINTS", database: "Reactome", size: 190, nes: 2.54, pvalue: 6.8e-7, padj: 1.4e-5, leadingEdge: ["CDK1", "CCNB1", "CHEK1", "PLK1", "MCM2"] },
+  { pathwayId: "R-HSA-913531", pathwayName: "REACTOME_INTERFERON_SIGNALING", database: "Reactome", size: 172, nes: 2.35, pvalue: 3.1e-6, padj: 6.2e-5, leadingEdge: ["STAT1", "IFNGR1", "IRF1", "OAS1", "MX1"] },
+  { pathwayId: "R-HSA-389948", pathwayName: "REACTOME_PD_1_SIGNALING", database: "Reactome", size: 88, nes: 2.12, pvalue: 2.8e-5, padj: 3.8e-4, leadingEdge: ["CD274", "PDCD1LG2", "PTPN11", "ZAP70"] },
+  { pathwayId: "R-HSA-5693532", pathwayName: "REACTOME_DNA_DOUBLE_STRAND_BREAK_REPAIR", database: "Reactome", size: 134, nes: 1.96, pvalue: 7.5e-5, padj: 8.9e-4, leadingEdge: ["ATM", "XRCC6", "XRCC5", "PRKDC", "LIG4"] },
+  { pathwayId: "R-HSA-1474244", pathwayName: "REACTOME_EXTRA_CELLULAR_MATRIX_ORGANIZATION", database: "Reactome", size: 284, nes: 1.85, pvalue: 1.2e-4, padj: 1.4e-3, leadingEdge: ["COL1A1", "MMP9", "FN1", "ITGA1", "LAMA1"] },
+  { pathwayId: "R-HSA-109581", pathwayName: "REACTOME_APOPTOSIS_EXECUTION_PHASE", database: "Reactome", size: 102, nes: 1.74, pvalue: 3.5e-4, padj: 3.2e-3, leadingEdge: ["CASP3", "CASP7", "DFFA", "PARP1", "LMNA"] },
+  { pathwayId: "R-HSA-191273", pathwayName: "REACTOME_CHOLESTEROL_BIOSYNTHESIS", database: "Reactome", size: 78, nes: -1.95, pvalue: 9.1e-5, padj: 1.1e-3, leadingEdge: ["HMGCR", "HMGCS1", "SQLE", "FDFT1", "DHCR7"] },
+  { pathwayId: "R-HSA-9006934", pathwayName: "REACTOME_NUCLEAR_RECEPTOR_TRANSCRIPTION_PATHWAY", database: "Reactome", size: 145, nes: -2.48, pvalue: 8.2e-7, padj: 1.8e-5, leadingEdge: ["ESR1", "NCOA1", "NCOA3", "MED1", "GATA3"] },
+  { pathwayId: "R-HSA-9018519", pathwayName: "REACTOME_ESTROGEN_DEPENDENT_GENE_EXPRESSION", database: "Reactome", size: 160, nes: -2.98, pvalue: 5.4e-9, padj: 1.5e-7, leadingEdge: ["ESR1", "GATA3", "FOXA1", "TFF1", "GREB1"] },
+
+  // KEGG Pathways
+  { pathwayId: "hsa05322", pathwayName: "KEGG_SYSTEMIC_LUPUS_ERYTHEMATOSUS", database: "KEGG", size: 138, nes: 2.68, pvalue: 4.2e-7, padj: 9.2e-6, leadingEdge: ["HIST1H2BK", "C1QA", "C1QB", "HLA-DRB1", "FCGR2A"] },
+  { pathwayId: "hsa03440", pathwayName: "KEGG_HOMOLOGOUS_RECOMBINATION", database: "KEGG", size: 68, nes: 2.52, pvalue: 8.5e-7, padj: 1.8e-5, leadingEdge: ["RAD51", "BRCA1", "BRCA2", "RAD52", "POLD1"] },
+  { pathwayId: "hsa04110", pathwayName: "KEGG_CELL_CYCLE", database: "KEGG", size: 124, nes: 2.41, pvalue: 1.8e-6, padj: 3.5e-5, leadingEdge: ["CDK1", "CCNB1", "CCNE1", "CDC20", "E2F1"] },
+  { pathwayId: "hsa04115", pathwayName: "KEGG_P53_SIGNALING_PATHWAY", database: "KEGG", size: 68, nes: 2.15, pvalue: 2.1e-5, padj: 3.1e-4, leadingEdge: ["TP53", "CDKN1A", "MDM2", "BAX", "GADD45A"] },
+  { pathwayId: "hsa04060", pathwayName: "KEGG_CYTOKINE_CYTOKINE_RECEPTOR_INTERACTION", database: "KEGG", size: 265, nes: 2.02, pvalue: 5.6e-5, padj: 6.8e-4, leadingEdge: ["IL6", "CXCL8", "TNFRSF1A", "CXCL10", "CCR5"] },
+  { pathwayId: "hsa03430", pathwayName: "KEGG_MISMATCH_REPAIR", database: "KEGG", size: 42, nes: 1.89, pvalue: 1.1e-4, padj: 1.2e-3, leadingEdge: ["MSH2", "MSH6", "MLH1", "PMS2", "PCNA"] },
+  { pathwayId: "hsa05340", pathwayName: "KEGG_PRIMARY_IMMUNODEFICIENCY", database: "KEGG", size: 36, nes: 1.71, pvalue: 4.2e-4, padj: 4.1e-3, leadingEdge: ["CD4", "CD8A", "IL2RG", "ZAP70", "TAP1"] },
+  { pathwayId: "hsa00071", pathwayName: "KEGG_FATTY_ACID_METABOLISM", database: "KEGG", size: 45, nes: -2.18, pvalue: 1.9e-5, padj: 2.8e-4, leadingEdge: ["ACADS", "ACADM", "HADHA", "CPT1A", "EHHADH"] },
+  { pathwayId: "hsa03320", pathwayName: "KEGG_PPAR_SIGNALING_PATHWAY", database: "KEGG", size: 69, nes: -2.55, pvalue: 5.8e-7, padj: 1.2e-5, leadingEdge: ["PPARG", "FABP4", "PLIN1", "CD36", "LPL"] },
+  { pathwayId: "hsa00140", pathwayName: "KEGG_STEROID_HORMONE_BIOSYNTHESIS", database: "KEGG", size: 58, nes: -2.88, pvalue: 1.2e-8, padj: 3.5e-7, leadingEdge: ["CYP19A1", "HSD17B1", "STS", "UGT2B7", "CYP1A1"] }
 ];
 
 export const REFERENCE_DATASETS: Dataset[] = [

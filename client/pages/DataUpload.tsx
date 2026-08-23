@@ -336,7 +336,17 @@ export const DataUpload: React.FC = () => {
           { geneSymbol: "TP53", geneId: "ENSG00000141510", category: "DNA Damage", values: heatmapValues }
         ],
         pathways: [
-          { pathwayId: "M5921", pathwayName: "HALLMARK_INTERFERON_GAMMA_RESPONSE", database: "Hallmark", size: 200, nes: 2.65, pvalue: 2.1e-9, padj: 7.4e-8, leadingEdge: ["CD274", "STAT1", "IRF1", "CXCL9"] }
+          { pathwayId: "M5921", pathwayName: "HALLMARK_INTERFERON_GAMMA_RESPONSE", database: "Hallmark", size: 200, nes: 2.65, pvalue: 2.1e-9, padj: 7.4e-8, leadingEdge: ["CD274", "STAT1", "IRF1", "CXCL9"] },
+          { pathwayId: "M5925", pathwayName: "HALLMARK_E2F_TARGETS", database: "Hallmark", size: 200, nes: 2.45, pvalue: 4.8e-8, padj: 9.1e-7, leadingEdge: ["MKI67", "CDK1", "TOP2A"] },
+          { pathwayId: "M5930", pathwayName: "HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION", database: "Hallmark", size: 200, nes: 2.22, pvalue: 1.2e-6, padj: 4.5e-5, leadingEdge: ["VIM", "FN1", "SNAI1"] },
+          { pathwayId: "M5907", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_EARLY", database: "Hallmark", size: 200, nes: -2.95, pvalue: 1.1e-11, padj: 3.4e-10, leadingEdge: ["ESR1", "GATA3", "FOXA1"] },
+          { pathwayId: "M5905", pathwayName: "HALLMARK_FATTY_ACID_METABOLISM", database: "Hallmark", size: 158, nes: -2.15, pvalue: 6.2e-6, padj: 9.5e-5, leadingEdge: ["FASN", "ACACA"] },
+          { pathwayId: "R-HSA-5685642", pathwayName: "REACTOME_HOMOLOGOUS_RECOMBINATION_REPAIR", database: "Reactome", size: 115, nes: 2.58, pvalue: 5.1e-7, padj: 1.1e-5, leadingEdge: ["RAD51", "BRCA1", "BRCA2"] },
+          { pathwayId: "R-HSA-69620", pathwayName: "REACTOME_CELL_CYCLE_CHECKPOINTS", database: "Reactome", size: 190, nes: 2.38, pvalue: 1.4e-6, padj: 2.8e-5, leadingEdge: ["CDK1", "CCNB1", "CHEK1"] },
+          { pathwayId: "R-HSA-9018519", pathwayName: "REACTOME_ESTROGEN_DEPENDENT_GENE_EXPRESSION", database: "Reactome", size: 160, nes: -2.82, pvalue: 1.8e-8, padj: 4.2e-7, leadingEdge: ["ESR1", "GATA3", "FOXA1"] },
+          { pathwayId: "hsa05322", pathwayName: "KEGG_SYSTEMIC_LUPUS_ERYTHEMATOSUS", database: "KEGG", size: 138, nes: 2.55, pvalue: 6.4e-7, padj: 1.2e-5, leadingEdge: ["HIST1H2BK", "HLA-DRB1"] },
+          { pathwayId: "hsa04110", pathwayName: "KEGG_CELL_CYCLE", database: "KEGG", size: 124, nes: 2.32, pvalue: 2.5e-6, padj: 4.1e-5, leadingEdge: ["CDK1", "CCNB1", "E2F1"] },
+          { pathwayId: "hsa00140", pathwayName: "KEGG_STEROID_HORMONE_BIOSYNTHESIS", database: "KEGG", size: 58, nes: -2.75, pvalue: 3.1e-8, padj: 6.8e-7, leadingEdge: ["CYP19A1", "HSD17B1"] }
         ],
         isoforms: [],
         deconvolution: []

@@ -49,7 +49,8 @@ import {
   Globe,
   FileCode,
   Landmark,
-  Bot
+  Bot,
+  Stethoscope
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +108,12 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
     "/reports",
     "/methods",
     "/omics-view"
+  ].some((prefix) => location.pathname.startsWith(prefix));
+
+  const isPatientRoute = [
+    "/patient-360",
+    "/patient-integration",
+    "/iucado-orbit"
   ].some((prefix) => location.pathname.startsWith(prefix));
 
   const isActive = (path: string) => {
@@ -290,18 +297,55 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>Integration Hub</span>
             </Link>
 
-            {/* 2. Patient 360 Orbit */}
-            <Link
-              to="/patient-360"
-              className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
-                isActive("/patient-360")
-                  ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                  : "text-foreground hover:bg-muted"
-              }`}
-            >
-              <Users className="w-3.5 h-3.5" />
-              <span>Patient 360 Orbit</span>
-            </Link>
+            {/* 2. Patient 360 Orbit Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`flex items-center gap-1.5 px-3 py-1 rounded-md font-medium transition-colors ${
+                    isPatientRoute
+                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
+                      : "text-foreground hover:bg-muted"
+                  }`}
+                >
+                  <Users className="w-3.5 h-3.5" />
+                  <span>Patient 360 Orbit</span>
+                  <ChevronDown className="w-3 h-3 opacity-60" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-80 font-sans text-xs p-2 shadow-elevated space-y-1">
+                <div className="p-2 rounded-lg bg-surface border border-border">
+                  <div className="font-serif font-bold text-xs text-foreground flex items-center gap-1.5">
+                    <Users className="w-3.5 h-3.5 text-primary" />
+                    <span>Patient Domain & Analytics</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">
+                    Radial domain visualization, longitudinal clinical records, and multi-modal integration.
+                  </p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/patient-360")} className="cursor-pointer font-semibold py-1.5">
+                  <Users className="w-3.5 h-3.5 mr-2 text-primary" />
+                  <div className="flex flex-col">
+                    <span>Patient 360 Orbit</span>
+                    <span className="text-[10px] text-muted-foreground font-normal">Radial domain visualization, timeline & OMOP records</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/patient-integration")} className="cursor-pointer font-semibold py-1.5">
+                  <Stethoscope className="w-3.5 h-3.5 mr-2 text-accent" />
+                  <div className="flex flex-col">
+                    <span>Patient Integration</span>
+                    <span className="text-[10px] text-muted-foreground font-normal">Targeted analysis: treatments, RECIST, survival & CDS</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/iucado-orbit")} className="cursor-pointer font-semibold py-1.5">
+                  <Sparkles className="w-3.5 h-3.5 mr-2 text-primary" />
+                  <div className="flex flex-col">
+                    <span>iUCADO-Orbit Engine</span>
+                    <span className="text-[10px] text-muted-foreground font-normal">Literature consensus, clinical trials & GRADE evidence</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* 3. iUCANDO AI */}
             <button
