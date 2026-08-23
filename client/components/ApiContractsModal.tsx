@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -45,135 +45,133 @@ export function ApiContractsModal({ open, onOpenChange }: ApiContractsModalProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-800">
+      <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto bg-card text-foreground border-border shadow-elevated">
         <DialogHeader>
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            <div className="p-2 rounded-lg bg-accent/10 text-accent border border-accent/20">
               <FileCode className="w-5 h-5" />
             </div>
             <div>
-              <DialogTitle className="text-xl font-bold flex items-center gap-2 text-white">
+              <DialogTitle className="text-xl font-bold font-serif text-foreground">
                 Platform Integration API Contracts (G1 & G2)
               </DialogTitle>
-              <DialogDescription className="text-slate-400 text-xs mt-0.5">
+              <DialogDescription className="text-muted-foreground text-xs mt-0.5">
                 Exact OpenAPI 3.0 specs and Kafka event schemas for Multiomics and Digital Imaging platform teams.
               </DialogDescription>
             </div>
           </div>
         </DialogHeader>
 
-        {loading ? (
-          <div className="p-8 text-center text-slate-400">Loading API Contract documentation...</div>
-        ) : contracts ? (
-          <Tabs defaultValue="multiomics" className="mt-2">
-            <TabsList className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-1">
+        {loading || !contracts ? (
+          <div className="p-8 text-center text-muted-foreground text-sm font-sans">
+            Loading API contracts specification...
+          </div>
+        ) : (
+          <Tabs defaultValue="multiomics" className="space-y-4 pt-2">
+            <TabsList className="bg-muted p-1 border border-border">
               <TabsTrigger
                 value="multiomics"
-                className="flex items-center gap-2 text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300"
+                className="data-[state=active]:bg-card data-[state=active]:text-foreground text-xs font-semibold"
               >
-                <Cpu className="w-3.5 h-3.5" />
-                G1. Multiomics Platform
+                <Cpu className="w-3.5 h-3.5 mr-1.5 text-primary" />
+                G1: Multiomics Spec
               </TabsTrigger>
               <TabsTrigger
                 value="imaging"
-                className="flex items-center gap-2 text-xs data-[state=active]:bg-primary dark:data-[state=active]:bg-brand-maroon data-[state=active]:text-white text-slate-700 dark:text-slate-300 font-medium"
+                className="data-[state=active]:bg-card data-[state=active]:text-foreground text-xs font-semibold"
               >
-                <Image className="w-3.5 h-3.5" />
-                G2. Digital Imaging Platform
+                <Image className="w-3.5 h-3.5 mr-1.5 text-accent" />
+                G2: Digital Imaging Spec
               </TabsTrigger>
             </TabsList>
 
             {Object.entries(contracts).map(([key, spec]) => (
-              <TabsContent key={key} value={key} className="space-y-4 mt-4">
-                <div className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3 text-xs">
+              <TabsContent key={key} value={key} className="space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-surface border border-border text-xs">
                   <div>
-                    <span className="text-slate-500 dark:text-slate-400">Platform: </span>
-                    <span className="font-semibold text-slate-900 dark:text-white">{spec.platformName}</span>
-                    <span className="mx-2 text-slate-400 dark:text-slate-600">|</span>
-                    <span className="text-slate-500 dark:text-slate-400">Version: </span>
-                    <span className="text-emerald-700 dark:text-emerald-400 font-mono font-bold">{spec.version}</span>
+                    <h3 className="font-bold text-foreground font-serif">{spec.platformName}</h3>
+                    <p className="text-muted-foreground text-[11px] mt-0.5">{spec.complianceNote}</p>
                   </div>
-                  <Badge variant="outline" className="border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40">
-                    <ShieldCheck className="w-3 h-3 mr-1" /> Zero PHI Invariant Active
-                  </Badge>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-mono text-[10px]">
+                      {spec.version}
+                    </Badge>
+                    <Badge className="bg-primary/10 text-primary border-primary/30 font-mono text-[10px]">
+                      {spec.protocol}
+                    </Badge>
+                  </div>
                 </div>
 
-                <div className="p-3 rounded-lg bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800/80 text-xs text-slate-700 dark:text-slate-300">
-                  <p className="font-medium text-amber-700 dark:text-amber-400 mb-1 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-3.5 h-3.5" /> Authorization & Scope Constraint
-                  </p>
-                  <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">{spec.complianceNote}</p>
-                </div>
-
-                {/* Endpoints */}
                 <div className="space-y-3">
-                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">REST OpenAPI Endpoints</h4>
-                  {spec.endpoints.map((ep, idx) => (
-                    <div key={idx} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2">
-                          <Badge
-                            className={
-                              ep.method === "POST"
-                                ? "bg-emerald-600 hover:bg-emerald-600 text-white"
-                                : "bg-sky-600 hover:bg-sky-600 text-white"
-                            }
-                          >
-                            {ep.method}
-                          </Badge>
-                          <span className="font-mono text-emerald-700 dark:text-emerald-300 font-medium">{ep.path}</span>
-                        </div>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          className="h-7 text-[10px] text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-                          onClick={() => copyCode(ep.requestBodySample || ep.responseBodySample || ep.path, `ep-${key}-${idx}`)}
-                        >
-                          {copiedKey === `ep-${key}-${idx}` ? (
-                            <Check className="w-3 h-3 text-emerald-600 dark:text-emerald-400 mr-1" />
-                          ) : (
-                            <Copy className="w-3 h-3 mr-1" />
-                          )}
-                          Copy Schema
-                        </Button>
-                      </div>
-                      <p className="text-slate-700 dark:text-slate-300 text-[11px]">{ep.summary}</p>
-                      <p className="text-slate-500 dark:text-slate-400 text-[11px]">{ep.description}</p>
-                      {ep.requestBodySample && (
-                        <div className="mt-2">
-                          <span className="text-[10px] text-slate-500 uppercase font-mono">Sample Request Payload:</span>
-                          <pre className="mt-1 p-2.5 rounded bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-800 dark:text-sky-300 font-mono overflow-x-auto">
-                            {ep.requestBodySample}
-                          </pre>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-mono">
+                      Endpoints & Operations
+                    </span>
+                  </div>
 
-                {/* Event Schema */}
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">Kafka Event Bus Schemas</h4>
-                  {spec.eventSchema.map((ev, idx) => (
-                    <div key={idx} className="p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-mono text-amber-700 dark:text-amber-300 font-semibold">{ev.eventName}</span>
-                        <Badge variant="outline" className="border-amber-300 dark:border-amber-500/30 text-amber-800 dark:text-amber-400">
-                          Kafka Topic
+                  <div className="space-y-2">
+                    {spec.endpoints.map((ep, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-lg bg-surface border border-border flex items-start justify-between gap-3 text-xs"
+                      >
+                        <div className="space-y-1 font-mono">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                ep.method === "POST"
+                                  ? "bg-accent/15 text-accent border border-accent/30"
+                                  : "bg-primary/15 text-primary border border-primary/30"
+                              }`}
+                            >
+                              {ep.method}
+                            </span>
+                            <span className="font-semibold text-foreground">{ep.path}</span>
+                          </div>
+                          <p className="font-sans text-muted-foreground text-[11px]">{ep.summary}</p>
+                        </div>
+                        <Badge variant="outline" className="border-border text-muted-foreground text-[10px] font-mono">
+                          {spec.authMethod}
                         </Badge>
                       </div>
-                      <p className="text-slate-500 dark:text-slate-400 text-[11px]">{ev.description}</p>
-                      <pre className="p-2.5 rounded bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] text-emerald-800 dark:text-emerald-300 font-mono overflow-x-auto">
-                        {ev.payloadSample}
-                      </pre>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider font-mono">
+                      Event Schema Payload
+                    </span>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => copyCode(JSON.stringify(spec.eventSchema, null, 2), key)}
+                      className="h-7 text-xs border-border hover:bg-muted text-foreground"
+                    >
+                      {copiedKey === key ? (
+                        <>
+                          <Check className="w-3 h-3 mr-1 text-primary" /> Copied
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3 h-3 mr-1 text-muted-foreground" /> Copy Schema
+                        </>
+                      )}
+                    </Button>
+                  </div>
+
+                  <div className="p-3.5 rounded-lg bg-surface border border-border font-mono text-[11px] text-foreground overflow-x-auto max-h-56">
+                    <pre>{JSON.stringify(spec.eventSchema, null, 2)}</pre>
+                  </div>
                 </div>
               </TabsContent>
             ))}
           </Tabs>
-        ) : null}
+        )}
       </DialogContent>
     </Dialog>
   );
 }
+
+export default ApiContractsModal;

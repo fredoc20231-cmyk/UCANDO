@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { ClinicalTrialMatch } from "@shared/api";
 import { Badge } from "@/components/ui/badge";
@@ -18,8 +18,12 @@ import {
   Info,
   Check,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Dna,
+  ShieldCheck,
+  FileCheck2
 } from "lucide-react";
+import { toast } from "sonner";
 
 export default function TrialMatching() {
   const [trials, setTrials] = useState<ClinicalTrialMatch[]>([]);
@@ -51,67 +55,69 @@ export default function TrialMatching() {
 
   const handleSendPrescreen = () => {
     setPrescreenSuccess(true);
+    toast.success("IRB Pre-Screen packet submitted to Clinical Trials Office");
     setTimeout(() => {
       setPrescreenSuccess(false);
       setSelectedTrialForPrescreen(null);
-    }, 2000);
+    }, 1800);
   };
 
   return (
     <Layout>
       <div className="space-y-6 pb-12">
         {/* Header */}
-        <div className="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-xl">
+        <div className="p-6 rounded-xl bg-card border border-border space-y-4 shadow-subtle">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-xl bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border border-amber-300 dark:border-amber-700/50 shadow-md">
-                <FlaskConical className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              <div className="p-3 rounded-lg bg-primary/10 text-primary border border-primary/20">
+                <FlaskConical className="w-6 h-6 text-primary" />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-bold text-slate-900 dark:text-white">AI Clinical Trial Matching Engine</h1>
-                  <Badge variant="outline" className="border-amber-300 dark:border-amber-500/40 text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 text-[10px]">
+                  <h1 className="text-2xl font-bold font-serif text-foreground">AI Clinical Trial Matching Engine</h1>
+                  <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-mono text-[10px]">
                     mCODE Automated Extraction
                   </Badge>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                  Real-time eligibility matching against active UC-CCC Comprehensive Cancer Center protocol catalog.
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Real-time molecular eligibility matching against active UC-CCC Comprehensive Cancer Center protocol catalog.
                 </p>
               </div>
             </div>
 
-            <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-xs py-1 px-3">
-              <Sparkles className="w-3.5 h-3.5 mr-1 text-amber-500 dark:text-amber-400" /> Patient UC-CCC-89421 Evaluated
+            <Badge className="bg-accent/15 text-accent border-accent/30 text-xs py-1 px-3 font-mono">
+              <Sparkles className="w-3.5 h-3.5 mr-1 text-accent" /> Patient UC-CCC-89421 Evaluated
             </Badge>
           </div>
 
           {/* Active Patient Profile Snapshot */}
-          <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <div className="p-4 rounded-xl bg-surface border border-border grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div>
-              <span className="text-[10px] text-slate-500 font-mono uppercase block">Active Patient</span>
-              <span className="font-bold text-slate-900 dark:text-white">UC-CCC-89421 (58 y/o Female)</span>
+              <span className="text-[10px] text-muted-foreground font-mono uppercase block">Active Patient Context</span>
+              <span className="font-bold text-foreground">UC-CCC-89421 (58 y/o Female)</span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 font-mono uppercase block">Diagnosis</span>
-              <span className="font-bold text-sky-600 dark:text-sky-300">Stage III Invasive Breast Carcinoma</span>
+              <span className="text-[10px] text-muted-foreground font-mono uppercase block">Primary Diagnosis</span>
+              <span className="font-bold text-primary">Stage III Invasive Breast Carcinoma (TNBC)</span>
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 font-mono uppercase block">Matching Biomarkers</span>
+              <span className="text-[10px] text-muted-foreground font-mono uppercase block">Matching Biomarkers</span>
               <div className="flex flex-wrap gap-1 mt-0.5">
-                <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[9px]">BRCA1 Pathogenic</Badge>
-                <Badge className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[9px]">PD-L1 CPS &gt;= 10</Badge>
+                <Badge className="bg-accent/15 text-accent border-accent/30 text-[9px] font-mono">BRCA1 Pathogenic</Badge>
+                <Badge className="bg-accent/15 text-accent border-accent/30 text-[9px] font-mono">PD-L1 CPS &gt;= 10</Badge>
+                <Badge className="bg-primary/15 text-primary border-primary/30 text-[9px] font-mono">HRD Score: 52</Badge>
               </div>
             </div>
           </div>
 
           {/* Search Bar */}
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
+            <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-2.5" />
             <Input
               placeholder="Filter matched trials by drug name, NCT ID, or biomarker (e.g., Olaparib, BRCA1, NCT05214820)..."
               value={searchFilter}
               onChange={(e) => setSearchFilter(e.target.value)}
-              className="pl-9 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-xs text-slate-900 dark:text-slate-200"
+              className="pl-9 bg-surface border-border text-xs text-foreground placeholder:text-muted-foreground"
             />
           </div>
         </div>
@@ -119,155 +125,183 @@ export default function TrialMatching() {
         {/* Trial Match List */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">
+            <span className="text-xs font-bold text-foreground uppercase tracking-wider font-mono">
               Matched Protocol Catalog ({filteredTrials.length} High Confidence Matches)
             </span>
-            <span className="text-[10px] text-slate-500 font-mono">
-              Matching Engine: mCODE NLP Criteria Matcher v3.0
+            <span className="text-[10px] text-muted-foreground font-mono">
+              Matching Engine: mCODE NLP Criteria Matcher v3.2
             </span>
           </div>
 
-          {filteredTrials.map((trial) => {
-            const isExpanded = expandedTrialId === trial.nctId;
-            return (
-              <div
-                key={trial.nctId}
-                className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-4 shadow-lg hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
-              >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="space-y-1.5 max-w-2xl">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge className="bg-amber-100 dark:bg-amber-950 text-amber-800 dark:text-amber-300 border-amber-300 dark:border-amber-800 font-mono text-xs">
-                        {trial.matchScorePercent}% Match
-                      </Badge>
-                      <Badge variant="outline" className="border-sky-300 dark:border-sky-500/40 text-sky-800 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/40 text-[10px]">
-                        {trial.phase}
-                      </Badge>
-                      <a
-                        href={`https://clinicaltrials.gov/study/${trial.nctId}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-xs font-mono text-brand-maroon dark:text-rose-300 hover:underline inline-flex items-center font-semibold"
+          {loading ? (
+            <div className="p-12 text-center text-muted-foreground bg-card rounded-xl border border-border text-sm">
+              Evaluating clinical trial eligibility criteria against molecular profile...
+            </div>
+          ) : (
+            filteredTrials.map((trial) => {
+              const isExpanded = expandedTrialId === trial.nctId;
+              return (
+                <div
+                  key={trial.nctId}
+                  className="p-5 rounded-xl bg-card border border-border space-y-4 shadow-subtle hover:border-accent/40 transition-colors"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="space-y-1.5 max-w-2xl">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Badge className="bg-primary/15 text-primary border-primary/30 font-mono text-xs tabular-nums">
+                          {trial.matchScorePercent}% Match
+                        </Badge>
+                        <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 text-[10px] font-mono">
+                          {trial.phase}
+                        </Badge>
+                        <a
+                          href={`https://clinicaltrials.gov/study/${trial.nctId}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-mono text-accent hover:underline inline-flex items-center font-semibold"
+                        >
+                          {trial.nctId} <ExternalLink className="w-3 h-3 ml-1" />
+                        </a>
+                      </div>
+
+                      <h3 className="text-base font-bold font-serif text-foreground leading-snug">{trial.title}</h3>
+
+                      <p className="text-xs text-muted-foreground">
+                        PI: <strong className="text-foreground">{trial.principalInvestigator}</strong> • Site:{" "}
+                        <span className="text-foreground/90">{trial.primaryLocation}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        onClick={() => setSelectedTrialForPrescreen(trial)}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-subtle"
                       >
-                        {trial.nctId} <ExternalLink className="w-3 h-3 ml-1" />
-                      </a>
+                        <Send className="w-3.5 h-3.5 mr-1.5" /> Submit IRB Pre-Screen
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => setExpandedTrialId(isExpanded ? null : trial.nctId)}
+                        className="h-8 text-xs text-muted-foreground hover:text-foreground px-2"
+                      >
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                      </Button>
                     </div>
-
-                    <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">{trial.title}</h3>
-
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
-                      PI: <strong className="text-slate-800 dark:text-slate-200">{trial.principalInvestigator}</strong> • Site:{" "}
-                      <span className="text-slate-700 dark:text-slate-300">{trial.primaryLocation}</span>
-                    </p>
                   </div>
 
-                  <div className="flex items-center gap-2">
-                    <Button
-                      size="sm"
-                      onClick={() => setSelectedTrialForPrescreen(trial)}
-                      className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
-                    >
-                      <Send className="w-3.5 h-3.5 mr-1.5" /> Submit IRB Pre-Screen
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => setExpandedTrialId(isExpanded ? null : trial.nctId)}
-                      className="h-8 text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white px-2"
-                    >
-                      {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                    </Button>
+                  {/* Matching Biomarkers */}
+                  <div className="flex flex-wrap items-center gap-2 pt-1">
+                    <span className="text-[11px] font-semibold text-muted-foreground">Matching Criteria:</span>
+                    {trial.matchingBiomarkers.map((b) => (
+                      <Badge key={b} className="bg-accent/10 text-accent border-accent/30 text-[10px] font-mono">
+                        <CheckCircle2 className="w-3 h-3 mr-1 text-accent" /> {b}
+                      </Badge>
+                    ))}
                   </div>
+
+                  {/* Expanded Inclusion / Exclusion Criteria Breakdown */}
+                  {isExpanded && (
+                    <div className="pt-3 border-t border-border grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                      <div className="space-y-2 p-3.5 rounded-lg bg-surface border border-border">
+                        <span className="font-bold text-accent flex items-center gap-1.5 font-mono text-[11px] uppercase">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-accent" /> Inclusion Criteria ({trial.inclusionCriteria?.length || 0})
+                        </span>
+                        <ul className="space-y-1 text-foreground/90 text-[11px]">
+                          {(trial.inclusionCriteria || []).map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-1.5">
+                              <span className="text-accent">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      <div className="space-y-2 p-3.5 rounded-lg bg-surface border border-border">
+                        <span className="font-bold text-muted-foreground flex items-center gap-1.5 font-mono text-[11px] uppercase">
+                          <Info className="w-3.5 h-3.5 text-muted-foreground" /> Exclusion Criteria ({trial.exclusionCriteria?.length || 0})
+                        </span>
+                        <ul className="space-y-1 text-muted-foreground text-[11px]">
+                          {(trial.exclusionCriteria || []).map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-1.5">
+                              <span className="text-muted-foreground">•</span>
+                              <span>{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </div>
-
-                {/* Matching Biomarkers */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Matching Criteria:</span>
-                  {trial.matchingBiomarkers.map((b) => (
-                    <Badge key={b} className="bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-800 text-[10px]">
-                      <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-600 dark:text-emerald-400" /> {b}
-                    </Badge>
-                  ))}
-                </div>
-
-                {/* Expandable Criteria Details */}
-                {isExpanded && (
-                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-3">
-                    <div className="space-y-2">
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400 uppercase font-mono text-[10px] block">
-                        Inclusion Criteria Met
-                      </span>
-                      <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
-                        {trial.inclusionCriteria.map((inc, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-                            <span>{inc}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    <div className="space-y-2">
-                      <span className="font-bold text-red-600 dark:text-red-400 uppercase font-mono text-[10px] block">
-                        Exclusion Criteria Rules Evaluated
-                      </span>
-                      <ul className="space-y-1.5 text-slate-700 dark:text-slate-300">
-                        {trial.exclusionCriteria.map((exc, i) => (
-                          <li key={i} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />
-                            <span>{exc} (Patient Cleared)</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })}
+              );
+            })
+          )}
         </div>
 
-        {/* Pre-screen Submission Dialog */}
-        <Dialog open={!!selectedTrialForPrescreen} onOpenChange={() => setSelectedTrialForPrescreen(null)}>
-          <DialogContent className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-900 dark:text-slate-100 max-w-md">
+        {/* Pre-Screen Dispatch Modal */}
+        <Dialog open={!!selectedTrialForPrescreen} onOpenChange={(open) => !open && setSelectedTrialForPrescreen(null)}>
+          <DialogContent className="max-w-xl bg-card border-border text-foreground shadow-elevated">
             <DialogHeader>
-              <DialogTitle className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Send className="w-5 h-5 text-amber-600 dark:text-amber-400" /> Confirm IRB Pre-Screen Request
+              <DialogTitle className="text-lg font-bold font-serif text-foreground flex items-center gap-2">
+                <FileCheck2 className="w-5 h-5 text-primary" />
+                Dispatch Clinical Trial Pre-Screen Dossier
               </DialogTitle>
-              <DialogDescription className="text-xs text-slate-500 dark:text-slate-400">
-                Submit de-identified eligibility packet to Clinical Trials Office.
+              <DialogDescription className="text-xs text-muted-foreground">
+                Routing automated mCODE eligibility bundle for {selectedTrialForPrescreen?.nctId} to UC-CCC Clinical Trials Office (CTO).
               </DialogDescription>
             </DialogHeader>
 
-            {prescreenSuccess ? (
-              <div className="p-6 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-500/60 text-center space-y-2">
-                <CheckCircle2 className="w-10 h-10 text-emerald-600 dark:text-emerald-400 mx-auto" />
-                <p className="text-sm font-bold text-emerald-900 dark:text-emerald-200">Pre-Screen Request Submitted!</p>
-                <p className="text-xs text-emerald-800 dark:text-emerald-300">
-                  Notification transmitted to {selectedTrialForPrescreen?.principalInvestigator}.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-4 pt-2">
-                <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1 text-xs font-mono">
-                  <p><span className="text-slate-500">Trial:</span> {selectedTrialForPrescreen?.nctId}</p>
-                  <p><span className="text-slate-500">PI:</span> {selectedTrialForPrescreen?.principalInvestigator}</p>
-                  <p><span className="text-slate-500">Match Score:</span> {selectedTrialForPrescreen?.matchScorePercent}%</p>
+            <div className="space-y-4 pt-2">
+              <div className="p-3.5 rounded-lg bg-surface border border-border space-y-2 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Protocol:</span>
+                  <span className="font-bold text-foreground">{selectedTrialForPrescreen?.nctId}</span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Patient:</span>
+                  <span className="font-mono text-foreground">UC-CCC-89421 (Consent Verified)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Principal Investigator:</span>
+                  <span className="text-foreground">{selectedTrialForPrescreen?.principalInvestigator}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Eligibility Confidence:</span>
+                  <span className="font-mono text-accent font-bold">{selectedTrialForPrescreen?.matchScorePercent}%</span>
+                </div>
+              </div>
 
-                <div className="flex justify-end gap-3 pt-2">
-                  <Button variant="ghost" onClick={() => setSelectedTrialForPrescreen(null)} className="text-xs text-slate-500 dark:text-slate-400">
-                    Cancel
-                  </Button>
-                  <Button
-                    onClick={handleSendPrescreen}
-                    className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-semibold text-xs"
-                  >
-                    Confirm Submission
-                  </Button>
-                </div>
+              <div className="p-3 rounded-lg bg-accent/5 border border-accent/20 flex items-center gap-2 text-xs text-accent">
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                <span>Encrypted FHIR pre-screen transaction logged to audit ledger.</span>
               </div>
-            )}
+
+              <div className="flex justify-end gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setSelectedTrialForPrescreen(null)}
+                  className="text-xs border-border hover:bg-muted"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSendPrescreen}
+                  disabled={prescreenSuccess}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-subtle"
+                >
+                  {prescreenSuccess ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 mr-1" /> Submitted
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5 mr-1.5" /> Confirm & Dispatch
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
           </DialogContent>
         </Dialog>
       </div>

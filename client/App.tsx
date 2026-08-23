@@ -11,6 +11,9 @@ import { AuthProvider } from "@/context/AuthContext";
 import { RnaSeqProvider } from "@/context/RnaSeqContext";
 import { RequireAuth } from "@/components/RequireAuth";
 
+// Integration Hub Homepage
+import Index from "./pages/Index";
+
 // Core Scientific Modules
 import Workspace from "./pages/Workspace";
 import Login from "./pages/Login";
@@ -80,12 +83,15 @@ export const App = () => (
             <Sonner />
             <BrowserRouter>
               <Routes>
+                {/* Integration Hub Homepage */}
+                <Route path="/" element={<Index />} />
+
                 {/* Scientific Authentication */}
                 <Route path="/login" element={<Login />} />
 
                 {/* Primary Scientific Workspace */}
-                <Route path="/" element={<Workspace />} />
                 <Route path="/workspace" element={<Workspace />} />
+                <Route path="/rnaseq" element={<Workspace />} />
 
                 {/* Data Sub-Module */}
                 <Route path="/data" element={<Navigate to="/data/upload" replace />} />
@@ -199,7 +205,11 @@ export const App = () => (
 
 const rootElement = document.getElementById("root");
 if (rootElement) {
-  createRoot(rootElement).render(<App />);
+  const globalWithRoot = window as any;
+  if (!globalWithRoot.__reactRoot) {
+    globalWithRoot.__reactRoot = createRoot(rootElement);
+  }
+  globalWithRoot.__reactRoot.render(<App />);
 }
 
 export default App;

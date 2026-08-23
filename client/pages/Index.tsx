@@ -23,7 +23,12 @@ import {
   FileCode,
   SlidersHorizontal,
   CheckCircle2,
-  AlertTriangle
+  AlertTriangle,
+  Sliders,
+  LineChart,
+  BarChart2,
+  PieChart,
+  Database
 } from "lucide-react";
 
 export default function Index() {
@@ -49,60 +54,63 @@ export default function Index() {
 
   return (
     <Layout>
-      <div className="space-y-8 pb-10">
+      <div className="max-w-[1700px] w-full mx-auto p-4 sm:p-6 space-y-8 font-sans">
+        
         {/* Master Hero Banner */}
-        <div className="relative rounded-2xl bg-gradient-to-r from-slate-100 via-white to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 border-2 border-slate-200 dark:border-slate-700 p-6 md:p-8 overflow-hidden shadow-2xl">
-          {/* Subtle Glow & Background Deco */}
-          <div className="absolute top-0 right-0 w-96 h-96 bg-red-600/10 dark:bg-red-600/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-0 left-1/3 w-64 h-64 bg-sky-500/10 dark:bg-sky-500/15 rounded-full blur-2xl pointer-events-none" />
-
+        <div className="relative rounded-2xl bg-card border border-border p-6 md:p-8 overflow-hidden shadow-subtle">
           <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div className="max-w-3xl space-y-4">
               <div className="flex flex-wrap items-center gap-2">
-                <Badge className="bg-primary dark:bg-brand-maroon text-white font-bold px-3 py-1 text-xs shadow-md">
+                <Badge className="bg-primary text-primary-foreground font-bold px-3 py-1 text-xs shadow-subtle">
                   UC-CCC Cancer Data Commons
                 </Badge>
-                <Badge variant="outline" className="border-cyan-500/40 text-cyan-800 dark:text-cyan-200 bg-cyan-100/90 dark:bg-cyan-950/90 text-xs font-mono font-bold shadow-md">
-                  UCANDO • UC-CCC
+                <Badge variant="outline" className="border-accent/40 text-accent bg-accent/10 text-xs font-mono font-bold">
+                  UCANDO • RNA-seq v3.2
                 </Badge>
-                <Badge variant="outline" className="border-emerald-500/40 text-emerald-800 dark:text-emerald-200 bg-emerald-100/90 dark:bg-emerald-950/90 text-xs font-bold shadow-md">
-                  <ShieldCheck className="w-3.5 h-3.5 mr-1 text-emerald-600 dark:text-emerald-400" /> HIPAA Consented Ecosystem
+                <Badge variant="outline" className="border-border bg-surface text-foreground text-xs font-bold">
+                  <ShieldCheck className="w-3.5 h-3.5 mr-1 text-accent" /> HIPAA Consented Ecosystem
                 </Badge>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-4xl font-serif font-bold text-foreground tracking-tight leading-tight">
                 Central Oncology Integration Hub & Governed Data Commons
               </h1>
 
-              <p className="text-sm md:text-base text-slate-700 dark:text-slate-100 font-medium leading-relaxed">
-                UCANDO connects every consented UC-CCC patient into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, multiomics, digital radiology, whole slide pathology, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
+              <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed font-sans">
+                UCANDO connects every consented UC-CCC oncology patient and translational dataset into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, publication-grade RNA-seq analytics, digital radiology, pathology WSI, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
-                <Link to="/patient-360?id=UC-CCC-89421">
-                  <Button className="bg-primary hover:bg-primary/90 dark:bg-brand-maroon dark:hover:bg-brand-maroon/90 text-white font-bold text-xs h-10 px-5 shadow-lg border border-primary/50 dark:border-red-500/50">
-                    <Users className="w-4 h-4 mr-2" /> Launch Clinician Patient 360
+                <Link to="/workspace">
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-9 px-5 shadow-subtle">
+                    <Dna className="w-4 h-4 mr-2" /> Launch RNA-seq Platform
                     <ArrowRight className="w-4 h-4 ml-1.5" />
                   </Button>
                 </Link>
 
+                <Link to="/patient-360?id=UC-CCC-89421">
+                  <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-semibold text-xs h-9 px-4 shadow-subtle">
+                    <Users className="w-4 h-4 mr-2 text-primary" /> Clinician Patient 360 Orbit
+                  </Button>
+                </Link>
+
                 <Link to="/cohort-builder">
-                  <Button variant="outline" className="border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold text-xs h-10 px-4 shadow-md">
-                    <SlidersHorizontal className="w-4 h-4 mr-2 text-sky-600 dark:text-sky-400" /> Visual Cohort Query Builder
+                  <Button variant="outline" className="border-border bg-card hover:bg-muted text-foreground font-semibold text-xs h-9 px-4 shadow-subtle">
+                    <SlidersHorizontal className="w-4 h-4 mr-2 text-accent" /> Cohort Query Builder
                   </Button>
                 </Link>
               </div>
             </div>
 
             {/* Featured UCANDO DNA Orb Logo Badge */}
-            <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-white/90 dark:bg-slate-950/80 border border-cyan-500/30 shadow-2xl shadow-cyan-950/20 shrink-0">
+            <div className="hidden lg:flex flex-col items-center justify-center p-3 rounded-2xl bg-surface border border-border shadow-subtle shrink-0">
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Ffc7eb0036adc46ad99a19a10591f08da?format=webp&width=800&height=1200"
                 alt="UCANDO Logo"
-                className="h-44 w-auto max-w-[200px] object-contain rounded-xl shadow-lg border border-cyan-400/20 bg-slate-100 dark:bg-slate-950/60 p-1"
+                className="h-40 w-auto max-w-[180px] object-contain rounded-xl border border-border bg-card p-1"
               />
-              <span className="text-[11px] font-bold text-cyan-700 dark:text-cyan-300 font-mono mt-2 tracking-widest uppercase">
-                UCANDO
+              <span className="text-[11px] font-bold text-primary font-mono mt-2 tracking-widest uppercase">
+                UCANDO Core
               </span>
             </div>
           </div>
@@ -118,37 +126,37 @@ export default function Index() {
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalConsentedPatients.toLocaleString() : "104,280"}
             </p>
-            <p className="text-[10px] text-[#00CC96] flex items-center gap-1 font-semibold">
+            <p className="text-[10px] text-accent flex items-center gap-1 font-semibold">
               <CheckCircle2 className="w-3 h-3" /> 100% Consent Verified
             </p>
           </div>
 
           <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
             <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
-              <span>Multiomics Profiles</span>
-              <Dna className="w-4 h-4 text-[#00CC96]" />
+              <span>RNA-seq & Multiomics</span>
+              <Dna className="w-4 h-4 text-accent" />
             </div>
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalOmicsProfiles.toLocaleString() : "84,910"}
             </p>
-            <p className="text-[10px] text-muted-foreground">WES, RNA-seq, Proteomics</p>
+            <p className="text-[10px] text-muted-foreground">DESeq2, WES, Proteomics</p>
           </div>
 
           <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
             <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Imaging Accessions</span>
-              <ImageIcon className="w-4 h-4 text-[#AB63FA]" />
+              <ImageIcon className="w-4 h-4 text-primary" />
             </div>
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalImagingStudies.toLocaleString() : "462,100"}
             </p>
-            <p className="text-[10px] text-muted-foreground">PET/CT, MRI, Pathology WSI</p>
+            <p className="text-[10px] text-muted-foreground">PET/CT, MRI, OHIF DICOM</p>
           </div>
 
           <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
             <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Biospecimen Lineage</span>
-              <FlaskConical className="w-4 h-4 text-[#FFA15A]" />
+              <FlaskConical className="w-4 h-4 text-accent" />
             </div>
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.totalBiospecimens.toLocaleString() : "1,240,500"}
@@ -159,7 +167,7 @@ export default function Index() {
           <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
             <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>Active Workspaces</span>
-              <Layers className="w-4 h-4 text-[#EF553B]" />
+              <Layers className="w-4 h-4 text-primary" />
             </div>
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.activeWorkspaces : "342"}
@@ -170,181 +178,205 @@ export default function Index() {
           <div className="p-4 rounded-xl bg-card border border-border space-y-1 hover:border-primary/40 transition-colors shadow-subtle">
             <div className="flex items-center justify-between text-muted-foreground text-xs font-medium">
               <span>OPA Enforcement</span>
-              <ShieldCheck className="w-4 h-4 text-[#00CC96]" />
+              <ShieldCheck className="w-4 h-4 text-accent" />
             </div>
             <p className="text-2xl font-bold text-foreground font-mono">
               {stats ? stats.opaPolicyEnforcementsToday.toLocaleString() : "49,210"}
             </p>
-            <p className="text-[10px] text-[#00CC96] font-semibold">Real-time Zero-Trust</p>
+            <p className="text-[10px] text-accent font-semibold">Real-time Zero-Trust</p>
           </div>
         </div>
 
         {/* Interactive Hub-and-Spoke Visual Architecture Diagram */}
         {loading ? (
-          <div className="p-12 text-center text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800">
+          <div className="p-12 text-center text-muted-foreground bg-card rounded-2xl border border-border">
             Initializing UCANDO Architecture Visualizer...
           </div>
         ) : (
           <HubAndSpokeVisualizer spokes={spokes} dataZones={stats ? stats.dataZones : []} />
         )}
 
-        {/* Featured Clinical Applications Launchpad */}
+        {/* Featured Clinical & Scientific Applications Launchpad */}
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-500 dark:text-amber-400" />
-                UCANDO Clinical & Research Portals
+              <h3 className="text-lg font-serif font-bold text-foreground flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-accent" />
+                UCANDO Clinical & Scientific Research Portals
               </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-400">
-                Custom React components registered inside Builder.io layout composition layer.
+              <p className="text-xs text-muted-foreground">
+                Unified oncology analytics suite and governed data commons portals.
               </p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {/* Card 1: Patient 360 */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col justify-between hover:border-red-500/50 transition-all shadow-lg group">
+            
+            {/* Premier Card: RNA-seq Scientific Platform */}
+            <div className="p-5 rounded-2xl bg-card border-2 border-primary/40 space-y-3 flex flex-col justify-between hover:border-primary transition-all shadow-subtle group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-primary dark:bg-brand-maroon text-white">
-                    <Users className="w-5 h-5" />
+                  <div className="p-2.5 rounded-xl bg-primary text-primary-foreground">
+                    <Dna className="w-5 h-5" />
                   </div>
-                  <Badge className="bg-red-950 text-red-300 border-red-800/60 text-[10px]">
-                    Clinician View
+                  <Badge className="bg-primary/10 text-primary border-primary/20 text-[10px] font-mono">
+                    RNA-seq Platform v3.2
                   </Badge>
                 </div>
-                <h4 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-300 transition-colors">
-                  Clinician Patient 360
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  RNA-seq Scientific Analytics Platform
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                  Longitudinal clinical timeline (diagnosis → treatment → toxicity → recurrence → survival). Integrated labs, genomics, DICOM imaging, and SMART-on-FHIR launch toolbar.
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Publication-grade RNA-seq suite: Two-pane analysis workspace, DESeq2 GLM differential expression, Volcano scatter, PCA/UMAP embeddings, Clustered Heatmaps, GSEA pathways, and biomarker dossiers.
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-mono text-[11px]">Patient: UC-CCC-89421</span>
-                <Link to="/patient-360?id=UC-CCC-89421" className="text-primary dark:text-red-400 font-semibold flex items-center gap-1 hover:underline">
-                  Launch View <ArrowRight className="w-3.5 h-3.5" />
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">DESeq2 / Bioconductor</span>
+                <Link to="/workspace" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                  Launch RNA-seq Suite <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Card 2: Cohort Builder */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col justify-between hover:border-sky-500/50 transition-all shadow-lg group">
+            {/* Card 2: Clinician Patient 360 */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3 flex flex-col justify-between hover:border-primary/50 transition-all shadow-subtle group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-sky-950 text-sky-300 border border-sky-800/50">
+                  <div className="p-2.5 rounded-xl bg-surface border border-border text-primary">
+                    <Users className="w-5 h-5" />
+                  </div>
+                  <Badge variant="outline" className="text-[10px]">
+                    Clinician View
+                  </Badge>
+                </div>
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  Clinician Patient 360 Orbit
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Radial Patient Orbit View with 6 domain satellites: EHR Demographics, Genomics & Omics, Metabolomics, Lab Results, Pathology WSI, and Radiology DICOM (OHIF).
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">Patient: UC-CCC-89421</span>
+                <Link to="/patient-360?id=UC-CCC-89421" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                  Open Orbit View <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Card 3: Visual Cohort Builder */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3 flex flex-col justify-between hover:border-accent/50 transition-all shadow-subtle group">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-surface border border-border text-accent">
                     <SlidersHorizontal className="w-5 h-5" />
                   </div>
-                  <Badge className="bg-sky-950 text-sky-300 border-sky-800/60 text-[10px]">
+                  <Badge variant="outline" className="text-[10px]">
                     Researcher View
                   </Badge>
                 </div>
-                <h4 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-sky-600 dark:group-hover:text-sky-300 transition-colors">
-                  Visual Cohort Builder
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-accent transition-colors">
+                  Visual Cohort Query Builder
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Query demographics, ICD-10/SNOMED codes, genomic biomarkers (gene, VAF, expression), treatment lines, and outcomes with live de-identified patient counts.
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-mono text-[11px]">De-identified Analytics</span>
-                <Link to="/cohort-builder" className="text-sky-600 dark:text-sky-400 font-semibold flex items-center gap-1 hover:underline">
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">De-identified Analytics</span>
+                <Link to="/cohort-builder" className="text-accent font-semibold flex items-center gap-1 hover:underline">
                   Open Query Builder <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
 
-            {/* Card 3: Dynamic Consent Console */}
-            <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3 flex flex-col justify-between hover:border-emerald-500/50 transition-all shadow-lg group">
+            {/* Card 4: Dynamic Consent Console */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3 flex flex-col justify-between hover:border-accent/50 transition-all shadow-subtle group">
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="p-2.5 rounded-xl bg-emerald-950 text-emerald-300 border border-emerald-800/50">
+                  <div className="p-2.5 rounded-xl bg-surface border border-border text-accent">
                     <Lock className="w-5 h-5" />
                   </div>
-                  <Badge className="bg-emerald-950 text-emerald-300 border-emerald-800/60 text-[10px]">
+                  <Badge variant="outline" className="text-[10px]">
                     Governance / Patient
                   </Badge>
                 </div>
-                <h4 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-300 transition-colors">
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-accent transition-colors">
                   Dynamic Consent Console
                 </h4>
-                <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-xs text-muted-foreground leading-relaxed">
                   Granular toggles for research use, recontact, biospecimens, AI model training, and partner data sharing with withdraw-anytime propagation under 24h.
                 </p>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-between text-xs">
-                <span className="text-slate-500 font-mono text-[11px]">OPA Policy Driven</span>
-                <Link to="/consent-console" className="text-emerald-600 dark:text-emerald-400 font-semibold flex items-center gap-1 hover:underline">
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">OPA Policy Driven</span>
+                <Link to="/consent-console" className="text-accent font-semibold flex items-center gap-1 hover:underline">
                   Inspect Console <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Builder.io PHI-Free Non-Negotiable Rules Showcase */}
-        <div className="p-6 rounded-2xl bg-white/90 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 space-y-4 shadow-md">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-lg bg-red-950 text-red-400 border border-red-800/50">
-                <FileCode className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Builder.io Non-Negotiable Invariants & Component Registry
-                </h3>
-                <p className="text-xs text-slate-600 dark:text-slate-400">
-                  Builder.io delivers layout, help text, and visual composition. All PHI is strictly rendered via authenticated React API calls.
+            {/* Card 5: Imaging Launch Hub (OHIF) */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3 flex flex-col justify-between hover:border-primary/50 transition-all shadow-subtle group">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-surface border border-border text-primary">
+                    <ImageIcon className="w-5 h-5" />
+                  </div>
+                  <Badge variant="outline" className="text-[10px]">
+                    Imaging & Pathology
+                  </Badge>
+                </div>
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  Imaging Launch Hub (OHIF)
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  DICOMweb cloud PACS integration launching the OHIF Viewer for PET/CT, multi-parametric MRI, and Whole Slide Pathology imaging.
                 </p>
               </div>
-            </div>
-            <Badge className="bg-red-950 text-red-300 border-red-800/60">
-              PHI-Free Zone Verified
-            </Badge>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 1. No PHI in CMS
-              </p>
-              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                No patient identifiers or medical records are ever stored in Builder.io content models.
-              </p>
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">OHIF / DICOMweb</span>
+                <Link to="/imaging-hub" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                  Open Imaging Hub <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 2. Component Composition
-              </p>
-              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                Heavy clinical UI (Patient 360, Cohort Builder, DICOM launcher) registered as custom React components.
-              </p>
+            {/* Card 6: Admin Census Dashboard */}
+            <div className="p-5 rounded-2xl bg-card border border-border space-y-3 flex flex-col justify-between hover:border-primary/50 transition-all shadow-subtle group">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="p-2.5 rounded-xl bg-surface border border-border text-primary">
+                    <BarChart2 className="w-5 h-5" />
+                  </div>
+                  <Badge variant="outline" className="text-[10px]">
+                    Administration
+                  </Badge>
+                </div>
+                <h4 className="font-serif font-bold text-base text-foreground group-hover:text-primary transition-colors">
+                  Admin Census & Registration
+                </h4>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Real-time oncology patient census, dynamic disease & treatment bucket aggregation, and live patient registration console.
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-border flex items-center justify-between text-xs">
+                <span className="text-muted-foreground font-mono text-[11px]">Live Census Stream</span>
+                <Link to="/admin" className="text-primary font-semibold flex items-center gap-1 hover:underline">
+                  Open Admin Census <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
             </div>
 
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 3. Multi-Environment
-              </p>
-              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                Builder environments (dev → staging → prod) with strict approval gates for layout publishing.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
-              <p className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" /> 4. Business Associate
-              </p>
-              <p className="text-slate-600 dark:text-slate-400 text-[11px] leading-relaxed">
-                Designed to avoid PHI exposure entirely, eliminating vendor PHI liability risk.
-              </p>
-            </div>
           </div>
         </div>
+
       </div>
     </Layout>
   );
