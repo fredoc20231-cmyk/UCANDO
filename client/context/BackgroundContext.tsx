@@ -15,7 +15,7 @@ export function BackgroundProvider({ children }: { children: ReactNode }) {
       const saved = localStorage.getItem("ucando_bg_theme") as BgTheme;
       if (saved === "day" || saved === "night" || saved === "sky") return saved;
     }
-    return "night";
+    return "day";
   });
 
   useEffect(() => {
