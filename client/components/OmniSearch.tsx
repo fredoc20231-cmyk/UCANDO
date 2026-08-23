@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useRnaSeq } from "@/context/RnaSeqContext";
 import {
   Search,
   User,
@@ -30,6 +31,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
 
 export type SearchCategory =
   | "all"
@@ -53,7 +55,7 @@ export interface SearchItem {
   tags: string[];
 }
 
-const SEARCH_DATABASE: SearchItem[] = [
+const STATIC_SEARCH_DATABASE: SearchItem[] = [
   // Patients
   {
     id: "pat-89421",
@@ -280,86 +282,266 @@ const SEARCH_DATABASE: SearchItem[] = [
     tags: ["function", "admin", "census", "audit", "governance", "security", "data zones"]
   },
 
-  // Genes & Transcripts
+  // Curated Cancer Gene Catalog
   {
     id: "gene-brca1",
     title: "BRCA1 (BRCA1 DNA Repair Associated)",
-    subtitle: "Chr 17q21.31 • ENSG00000012048 • Key homologous recombination repair regulator • log2FC: -2.84, FDR: 1.2e-18",
+    subtitle: "Chr 17q21.31 • ENSG00000012048 • Key homologous recombination repair regulator • log2FC: -2.31, FDR: 1.8e-31",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: -2.84",
+    badge: "log2FC: -2.31",
     path: "/workspace?gene=BRCA1",
-    tags: ["gene", "brca1", "dna repair", "parp", "breast", "ovarian", "ensg00000012048"]
+    tags: ["gene", "brca1", "dna repair", "parp", "breast", "ovarian", "ensg00000012048", "hrd"]
+  },
+  {
+    id: "gene-brca2",
+    title: "BRCA2 (BRCA2 DNA Repair Associated)",
+    subtitle: "Chr 13q13.1 • ENSG00000139618 • Homologous recombination repair factor • log2FC: -1.75, FDR: 3.9e-16",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -1.75",
+    path: "/workspace?gene=BRCA2",
+    tags: ["gene", "brca2", "dna repair", "parp", "breast", "ovarian", "ensg00000139618", "fanconi"]
   },
   {
     id: "gene-tp53",
-    title: "TP53 (Tumor Protein P53)",
-    subtitle: "Chr 17p13.1 • ENSG00000141510 • Master tumor suppressor and guardian of the genome • log2FC: -1.95, FDR: 4.8e-15",
+    title: "TP53 / p53 (Tumor Protein P53)",
+    subtitle: "Chr 17p13.1 • ENSG00000141510 • Guardian of the genome & tumor suppressor • log2FC: +2.84, FDR: 8.9e-54",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: -1.95",
+    badge: "log2FC: +2.84",
     path: "/workspace?gene=TP53",
     tags: ["gene", "tp53", "p53", "tumor suppressor", "apoptosis", "cell cycle", "ensg00000141510"]
   },
   {
     id: "gene-erbb2",
     title: "ERBB2 / HER2 (erb-b2 Receptor Tyrosine Kinase 2)",
-    subtitle: "Chr 17q12 • ENSG00000141736 • Amplified oncogene in HER2+ malignancies • log2FC: +3.62, FDR: 8.9e-24",
+    subtitle: "Chr 17q12 • ENSG00000141736 • Amplified oncogene in HER2+ breast/gastric cancer • log2FC: +0.42, FDR: 0.245",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: +3.62",
+    badge: "HER2 / Neu",
     path: "/workspace?gene=ERBB2",
-    tags: ["gene", "erbb2", "her2", "neu", "tyrosine kinase", "trastuzumab", "ensg00000141736"]
+    tags: ["gene", "erbb2", "her2", "neu", "tyrosine kinase", "trastuzumab", "ensg00000141736", "her2+"]
   },
   {
     id: "gene-esr1",
-    title: "ESR1 (Estrogen Receptor 1)",
-    subtitle: "Chr 6q25.1-q25.2 • ENSG00000091831 • Key nuclear receptor defining Luminal breast cancer • log2FC: +4.15, FDR: 2.1e-31",
+    title: "ESR1 / ER (Estrogen Receptor 1)",
+    subtitle: "Chr 6q25.1 • ENSG00000091831 • Hallmark nuclear receptor defining Luminal A/B breast cancer • log2FC: -4.95, FDR: 3.1e-83",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: +4.15",
+    badge: "log2FC: -4.95",
     path: "/workspace?gene=ESR1",
-    tags: ["gene", "esr1", "er", "estrogen receptor", "luminal", "tamoxifen", "ensg00000091831"]
+    tags: ["gene", "esr1", "er", "estrogen receptor", "luminal", "tamoxifen", "fulvestrant", "ensg00000091831"]
+  },
+  {
+    id: "gene-pik3ca",
+    title: "PIK3CA (Phosphatidylinositol-4,5-Bisphosphate 3-Kinase Catalytic Subunit Alpha)",
+    subtitle: "Chr 3q26.32 • ENSG00000121879 • PI3K/AKT oncogenic signaling driver • log2FC: +1.95, FDR: 3.2e-18",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +1.95",
+    path: "/workspace?gene=PIK3CA",
+    tags: ["gene", "pik3ca", "pi3k", "alpelisib", "akt", "oncogene", "ensg00000121879"]
   },
   {
     id: "gene-mki67",
     title: "MKI67 / Ki-67 (Marker of Proliferation Ki-67)",
-    subtitle: "Chr 10q26.2 • ENSG00000148773 • Cellular proliferation marker • log2FC: +3.12, FDR: 6.4e-22",
+    subtitle: "Chr 10q26.2 • ENSG00000148773 • Cellular proliferation index marker • log2FC: +3.82, FDR: 4.8e-64",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: +3.12",
+    badge: "log2FC: +3.82",
     path: "/workspace?gene=MKI67",
-    tags: ["gene", "mki67", "ki67", "proliferation", "cell division", "ensg00000148773"]
+    tags: ["gene", "mki67", "ki67", "ki-67", "proliferation", "mitosis", "ensg00000148773"]
   },
   {
     id: "gene-egfr",
-    title: "EGFR (Epidermal Growth Factor Receptor)",
-    subtitle: "Chr 7p11.2 • ENSG00000146648 • Receptor tyrosine kinase driver in NSCLC and glioblastoma • log2FC: +2.48, FDR: 3.2e-14",
+    title: "EGFR / HER1 (Epidermal Growth Factor Receptor)",
+    subtitle: "Chr 7p11.2 • ENSG00000146648 • Receptor tyrosine kinase driver in NSCLC & glioblastoma • log2FC: +2.65, FDR: 6.4e-31",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: +2.48",
+    badge: "log2FC: +2.65",
     path: "/workspace?gene=EGFR",
     tags: ["gene", "egfr", "her1", "erbb1", "osimertinib", "gefitinib", "nsclc", "ensg00000146648"]
   },
   {
+    id: "gene-kras",
+    title: "KRAS (KRAS Proto-Oncogene, GTPase)",
+    subtitle: "Chr 12p12.1 • ENSG00000133703 • GTPase driver in colorectal, pancreatic & lung cancers • log2FC: +1.45, FDR: 4.5e-12",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +1.45",
+    path: "/workspace?gene=KRAS",
+    tags: ["gene", "kras", "ras", "sotorasib", "g12c", "g12d", "pancreatic", "colorectal", "ensg00000133703"]
+  },
+  {
+    id: "gene-braf",
+    title: "BRAF (B-Raf Proto-Oncogene, Serine/Threonine Kinase)",
+    subtitle: "Chr 7q34 • ENSG00000157764 • MAPK/ERK driver in melanoma, CRC & thyroid carcinoma • log2FC: +1.15, FDR: 2.8e-8",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +1.15",
+    path: "/workspace?gene=BRAF",
+    tags: ["gene", "braf", "v600e", "dabrafenib", "vemurafenib", "mapk", "ensg00000157764"]
+  },
+  {
+    id: "gene-myc",
+    title: "MYC / c-Myc (MYC Proto-Oncogene, BHLH Transcription Factor)",
+    subtitle: "Chr 8q24.21 • ENSG00000136997 • Master oncogenic transcription factor • log2FC: +3.12, FDR: 2.9e-39",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +3.12",
+    path: "/workspace?gene=MYC",
+    tags: ["gene", "myc", "c-myc", "transcription factor", "amplification", "ensg00000136997"]
+  },
+  {
+    id: "gene-pten",
+    title: "PTEN (Phosphatase and Tensin Homolog)",
+    subtitle: "Chr 10q23.31 • ENSG00000171862 • Tumor suppressor negatively regulating PI3K/AKT • log2FC: -2.18, FDR: 8.2e-23",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -2.18",
+    path: "/workspace?gene=PTEN",
+    tags: ["gene", "pten", "tumor suppressor", "pi3k", "loss", "ensg00000171862"]
+  },
+  {
+    id: "gene-cdk4",
+    title: "CDK4 (Cyclin Dependent Kinase 4)",
+    subtitle: "Chr 12q14.1 • ENSG00000135446 • G1/S cell cycle transition kinase • log2FC: +2.42, FDR: 3.2e-31",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.42",
+    path: "/workspace?gene=CDK4",
+    tags: ["gene", "cdk4", "cell cycle", "palbociclib", "ribociclib", "abemaciclib", "ensg00000135446"]
+  },
+  {
+    id: "gene-cdk6",
+    title: "CDK6 (Cyclin Dependent Kinase 6)",
+    subtitle: "Chr 7q21.2 • ENSG00000105810 • G1/S cell cycle kinase • log2FC: +2.15, FDR: 3.6e-20",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.15",
+    path: "/workspace?gene=CDK6",
+    tags: ["gene", "cdk6", "cell cycle", "cdk4/6", "ensg00000105810"]
+  },
+  {
+    id: "gene-ccnd1",
+    title: "CCND1 / Cyclin D1 (Cyclin D1)",
+    subtitle: "Chr 11q13.3 • ENSG00000110092 • Regulator of CDK4/6 kinases • log2FC: -2.85, FDR: 1.6e-25",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -2.85",
+    path: "/workspace?gene=CCND1",
+    tags: ["gene", "ccnd1", "cyclin d1", "cell cycle", "ensg00000110092"]
+  },
+  {
+    id: "gene-parp1",
+    title: "PARP1 (Poly(ADP-Ribose) Polymerase 1)",
+    subtitle: "Chr 1q42.12 • ENSG00000143799 • Base excision repair enzyme, synthetic lethality with BRCA1/2 • log2FC: +2.78, FDR: 2.4e-37",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.78",
+    path: "/workspace?gene=PARP1",
+    tags: ["gene", "parp1", "parp", "olaparib", "talazoparib", "synthetic lethality", "ensg00000143799"]
+  },
+  {
     id: "gene-pdcd1",
     title: "PDCD1 / PD-1 (Programmed Cell Death 1)",
-    subtitle: "Chr 2q37.3 • ENSG00000188389 • Immune checkpoint receptor targeting exhausted T cells • log2FC: +2.77, FDR: 9.1e-12",
+    subtitle: "Chr 2q37.3 • ENSG00000188389 • Key immune checkpoint on exhausted T cells • log2FC: +2.77, FDR: 6.4e-31",
     category: "genes",
     categoryLabel: "Genes",
     badge: "log2FC: +2.77",
     path: "/workspace?gene=PDCD1",
-    tags: ["gene", "pdcd1", "pd1", "checkpoint", "immunotherapy", "pembrolizumab", "ensg00000188389"]
+    tags: ["gene", "pdcd1", "pd1", "pd-1", "checkpoint", "immunotherapy", "pembrolizumab", "nivolumab", "ensg00000188389"]
   },
   {
     id: "gene-cd274",
     title: "CD274 / PD-L1 (Programmed Death-Ligand 1)",
-    subtitle: "Chr 9p24.1 • ENSG00000120217 • Immune checkpoint ligand driving T-cell evasion • log2FC: +2.18, FDR: 1.4e-11",
+    subtitle: "Chr 9p24.1 • ENSG00000120217 • Immune evasion checkpoint ligand • log2FC: +3.15, FDR: 1.1e-36",
     category: "genes",
     categoryLabel: "Genes",
-    badge: "log2FC: +2.18",
+    badge: "log2FC: +3.15",
     path: "/workspace?gene=CD274",
-    tags: ["gene", "cd274", "pdl1", "pd-l1", "checkpoint", "atezolizumab", "ensg00000120217"]
+    tags: ["gene", "cd274", "pdl1", "pd-l1", "checkpoint", "atezolizumab", "durvalumab", "ensg00000120217"]
+  },
+  {
+    id: "gene-ctla4",
+    title: "CTLA4 / CD152 (Cytotoxic T-Lymphocyte Associated Protein 4)",
+    subtitle: "Chr 2q33.2 • ENSG00000163599 • Immune checkpoint downregulating T cell activation • log2FC: +2.48, FDR: 4.9e-27",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.48",
+    path: "/workspace?gene=CTLA4",
+    tags: ["gene", "ctla4", "ipilimumab", "checkpoint", "immunotherapy", "t cell", "ensg00000163599"]
+  },
+  {
+    id: "gene-gata3",
+    title: "GATA3 (GATA Binding Protein 3)",
+    subtitle: "Chr 10p14 • ENSG00000107485 • Luminal breast lineage master transcription factor • log2FC: -4.62, FDR: 2.4e-62",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -4.62",
+    path: "/workspace?gene=GATA3",
+    tags: ["gene", "gata3", "luminal", "breast", "transcription factor", "ensg00000107485"]
+  },
+  {
+    id: "gene-foxa1",
+    title: "FOXA1 (Forkhead Box A1)",
+    subtitle: "Chr 14q21.1 • ENSG00000129514 • Pioneer factor for nuclear hormone receptors • log2FC: -4.18, FDR: 7.2e-55",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -4.18",
+    path: "/workspace?gene=FOXA1",
+    tags: ["gene", "foxa1", "pioneer factor", "estrogen receptor", "luminal", "ensg00000129514"]
+  },
+  {
+    id: "gene-vim",
+    title: "VIM / Vimentin (Vimentin)",
+    subtitle: "Chr 10p13 • ENSG00000026025 • Mesenchymal marker & EMT driver • log2FC: +3.95, FDR: 1.5e-57",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +3.95",
+    path: "/workspace?gene=VIM",
+    tags: ["gene", "vim", "vimentin", "emt", "mesenchymal", "metastasis", "ensg00000026025"]
+  },
+  {
+    id: "gene-cdh1",
+    title: "CDH1 / E-Cadherin (Cadherin 1)",
+    subtitle: "Chr 16q22.1 • ENSG00000039068 • Epithelial cell-cell adhesion molecule • log2FC: -3.72, FDR: 1.8e-47",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: -3.72",
+    path: "/workspace?gene=CDH1",
+    tags: ["gene", "cdh1", "e-cadherin", "epithelial", "lobular", "adhesion", "ensg00000039068"]
+  },
+  {
+    id: "gene-vegfa",
+    title: "VEGFA (Vascular Endothelial Growth Factor A)",
+    subtitle: "Chr 6p21.1 • ENSG00000112715 • Angiogenesis and vascular permeability mediator • log2FC: +2.92, FDR: 2.8e-34",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.92",
+    path: "/workspace?gene=VEGFA",
+    tags: ["gene", "vegfa", "vegf", "bevacizumab", "angiogenesis", "hypoxia", "ensg00000112715"]
+  },
+  {
+    id: "gene-hif1a",
+    title: "HIF1A (Hypoxia Inducible Factor 1 Subunit Alpha)",
+    subtitle: "Chr 14q23.2 • ENSG00000100644 • Master cellular oxygen sensing transcription factor • log2FC: +2.25, FDR: 2.4e-24",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.25",
+    path: "/workspace?gene=HIF1A",
+    tags: ["gene", "hif1a", "hif-1a", "hypoxia", "metabolic rewiring", "ensg00000100644"]
+  },
+  {
+    id: "gene-cd8a",
+    title: "CD8A (CD8a Molecule)",
+    subtitle: "Chr 2p11.2 • ENSG00000153563 • Cytotoxic T-lymphocyte coreceptor • log2FC: +2.85, FDR: 1.1e-32",
+    category: "genes",
+    categoryLabel: "Genes",
+    badge: "log2FC: +2.85",
+    path: "/workspace?gene=CD8A",
+    tags: ["gene", "cd8a", "cd8", "cytotoxic t cell", "tumor infiltrating lymphocytes", "til", "ensg00000153563"]
   },
 
   // Pathways
@@ -474,16 +656,17 @@ const CATEGORY_CONFIG: {
   badgeColor: string;
 }[] = [
   { id: "all", label: "All Categories", icon: Search, badgeColor: "bg-muted text-foreground" },
+  { id: "genes", label: "Gene Symbol", icon: Dna, badgeColor: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30" },
   { id: "patients", label: "Patients", icon: User, badgeColor: "bg-primary/10 text-primary border-primary/30" },
   { id: "analyses", label: "Analyses", icon: Activity, badgeColor: "bg-accent/15 text-accent border-accent/30" },
   { id: "functions", label: "Functions & Tools", icon: Compass, badgeColor: "bg-slate-500/10 text-slate-700 dark:text-slate-300 border-slate-500/30" },
-  { id: "genes", label: "Genes & Transcripts", icon: Dna, badgeColor: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30" },
   { id: "pathways", label: "Pathways", icon: Sparkles, badgeColor: "bg-amber-500/10 text-amber-700 dark:text-amber-300 border-amber-500/30" },
   { id: "cohorts", label: "Cohorts & Datasets", icon: Database, badgeColor: "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border-indigo-500/30" },
 ];
 
 export const OmniSearch: React.FC = () => {
   const navigate = useNavigate();
+  const { activeDataset, setSelectedGene, setGeneSearchQuery } = useRnaSeq();
   const [query, setQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState<SearchCategory>("all");
   const [isOpen, setIsOpen] = useState(false);
@@ -519,10 +702,30 @@ export const OmniSearch: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filter items
+  // Filter items with dynamic gene dataset integration
   const filteredResults = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return SEARCH_DATABASE.filter((item) => {
+    
+    // Build active dataset gene items
+    const datasetGeneItems: SearchItem[] = (activeDataset?.genes || []).map((gene) => ({
+      id: gene.geneId,
+      title: `${gene.geneSymbol} (${gene.geneId})`,
+      subtitle: `${gene.chromosome} • ${gene.biotype} • BaseMean: ${gene.baseMean.toFixed(1)} • log2FC: ${gene.log2FoldChange > 0 ? "+" : ""}${gene.log2FoldChange.toFixed(2)} • FDR: ${gene.padj < 0.001 ? gene.padj.toExponential(2) : gene.padj.toFixed(4)}`,
+      category: "genes",
+      categoryLabel: "Gene Symbol",
+      badge: `log2FC: ${gene.log2FoldChange > 0 ? "+" : ""}${gene.log2FoldChange.toFixed(2)}`,
+      path: `/workspace?gene=${encodeURIComponent(gene.geneSymbol)}`,
+      tags: ["gene", gene.geneSymbol.toLowerCase(), gene.geneId.toLowerCase(), gene.chromosome.toLowerCase(), gene.status]
+    }));
+
+    // Merge static database with dataset genes (deduping by geneId / title)
+    const existingIds = new Set(datasetGeneItems.map(g => g.id));
+    const mergedDb = [
+      ...datasetGeneItems,
+      ...STATIC_SEARCH_DATABASE.filter(item => !existingIds.has(item.id))
+    ];
+
+    const results = mergedDb.filter((item) => {
       // Category filter
       if (activeCategory !== "all" && item.category !== activeCategory) {
         return false;
@@ -538,7 +741,23 @@ export const OmniSearch: React.FC = () => {
         (item.badge && item.badge.toLowerCase().includes(q))
       );
     });
-  }, [query, activeCategory]);
+
+    // If querying genes and no exact item matched, provide dynamic deep query item
+    if (q && (activeCategory === "genes" || activeCategory === "all") && !results.some(r => r.title.toLowerCase().startsWith(q))) {
+      results.unshift({
+        id: `query-gene-${q}`,
+        title: `Search Gene Symbol "${query.toUpperCase()}"`,
+        subtitle: `Query DESeq2 GLM results, Volcano plot coordinates, and boxplots for ${query.toUpperCase()}`,
+        category: "genes",
+        categoryLabel: "Gene Symbol",
+        badge: "Deep Query",
+        path: `/workspace?gene=${encodeURIComponent(query.trim().toUpperCase())}`,
+        tags: ["gene", q]
+      });
+    }
+
+    return results;
+  }, [query, activeCategory, activeDataset]);
 
   // Keep selected index in bounds
   useEffect(() => {
@@ -548,6 +767,23 @@ export const OmniSearch: React.FC = () => {
   const handleSelectItem = (item: SearchItem) => {
     setIsOpen(false);
     setQuery("");
+
+    // If selecting a gene, automatically link to active dataset gene model
+    if (item.category === "genes" && activeDataset?.genes) {
+      const cleanSymbol = item.title.split(" ")[0].replace(/[^a-zA-Z0-9_-]/g, "").toUpperCase();
+      const geneObj = activeDataset.genes.find(
+        (g) => g.geneSymbol.toUpperCase() === cleanSymbol || g.geneId.toUpperCase() === item.id.toUpperCase()
+      );
+      if (geneObj) {
+        setSelectedGene(geneObj);
+        setGeneSearchQuery(geneObj.geneSymbol);
+        toast.success(`Selected gene: ${geneObj.geneSymbol} (${geneObj.geneId})`);
+      } else {
+        setGeneSearchQuery(cleanSymbol);
+        toast.info(`Querying gene expression for ${cleanSymbol}`);
+      }
+    }
+
     if (item.external) {
       window.open(item.path, "_blank", "noopener,noreferrer");
     } else {
@@ -590,7 +826,7 @@ export const OmniSearch: React.FC = () => {
               title="Filter search category"
             >
               <CurrentIcon className="w-3.5 h-3.5 text-primary" />
-              <span className="hidden xl:inline text-[11px] font-sans truncate max-w-[85px]">
+              <span className="hidden xl:inline text-[11px] font-sans truncate max-w-[90px]">
                 {activeCategory === "all" ? "All" : currentCategoryConfig.label}
               </span>
               <span className="text-[10px] text-muted-foreground">▾</span>
@@ -633,7 +869,7 @@ export const OmniSearch: React.FC = () => {
             type="text"
             placeholder={
               activeCategory === "all"
-                ? "Search patients, analyses, functions, genes, pathways..."
+                ? "Search gene symbols (BRCA1, TP53, HER2), patients, analyses, pathways..."
                 : `Search in ${currentCategoryConfig.label}...`
             }
             value={query}
@@ -643,7 +879,7 @@ export const OmniSearch: React.FC = () => {
             }}
             onFocus={() => setIsOpen(true)}
             onKeyDown={handleKeyDown}
-            className="w-full h-8 pl-3 pr-16 text-xs bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="w-full h-8 pl-3 pr-16 text-xs bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-sans"
           />
 
           {/* Shortcut / Clear Badge */}
@@ -670,10 +906,10 @@ export const OmniSearch: React.FC = () => {
 
       {/* Dropdown Results Box */}
       {isOpen && (
-        <div className="absolute top-9 left-0 right-0 bg-card border border-border rounded-lg shadow-elevated z-50 overflow-hidden font-sans animate-in fade-in-50 duration-100 max-h-[460px] flex flex-col">
+        <div className="absolute top-9 left-0 right-0 bg-card border border-border rounded-lg shadow-elevated z-50 overflow-hidden font-sans animate-in fade-in-50 duration-100 max-h-[480px] flex flex-col">
           {/* Category Filter Pills in Dropdown Header */}
           <div className="p-2 border-b border-border bg-surface flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-            <span className="text-[10px] font-semibold text-muted-foreground uppercase px-1 shrink-0">Filter:</span>
+            <span className="text-[10px] font-semibold text-muted-foreground uppercase px-1 shrink-0">Scope:</span>
             {CATEGORY_CONFIG.map((cat) => {
               const isSelected = activeCategory === cat.id;
               return (
@@ -697,13 +933,13 @@ export const OmniSearch: React.FC = () => {
           </div>
 
           {/* Results List */}
-          <div className="overflow-y-auto max-h-[340px] p-1 divide-y divide-border/40">
+          <div className="overflow-y-auto max-h-[360px] p-1 divide-y divide-border/40">
             {filteredResults.length === 0 ? (
               <div className="p-6 text-center">
                 <Search className="w-8 h-8 mx-auto text-muted-foreground/50 mb-2" />
                 <p className="text-xs font-medium text-foreground">No matching results found</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5">
-                  Try searching for a patient ID (e.g. 89421), gene (BRCA1, TP53), pathway (EMT, Cell Cycle), or analysis (DESeq2, Volcano).
+                  Try searching for gene symbols like <strong>BRCA1, TP53, ERBB2, ESR1, EGFR, KRAS, CD274</strong> or patient IDs.
                 </p>
               </div>
             ) : (

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Layout } from "@/components/Layout";
-import { useRnaSeq, DESIGN_FORMULA_OPTIONS } from "@/context/RnaSeqContext";
+import { useRnaSeq, DESIGN_FORMULA_OPTIONS, GeneResult } from "@/context/RnaSeqContext";
 import { VolcanoPlot } from "@/components/scientific/VolcanoPlot";
 import { PcaPlot } from "@/components/scientific/PcaPlot";
 import { HeatmapMatrix } from "@/components/scientific/HeatmapMatrix";
@@ -64,11 +65,31 @@ export const Workspace: React.FC = () => {
     setIsDesignModalOpen,
     sequencingPlatform,
     uploadInputType,
-    groupsList
+    groupsList,
+    setSelectedGene
   } = useRnaSeq();
 
+  const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<"overview" | "volcano" | "pca" | "heatmap" | "table" | "pathways">("overview");
   const [isRecalculating, setIsRecalculating] = useState(false);
+
+  // Sync gene query parameter from OmniSearch or direct deep links
+  useEffect(() => {
+    const geneParam = searchParams.get("gene");
+    if (geneParam && activeDataset?.genes) {
+      const targetQuery = geneParam.trim().toUpperCase();
+      const match = activeDataset.genes.find(
+        (g) => g.geneSymbol.toUpperCase() === targetQuery || g.geneId.toUpperCase() === targetQuery
+      );
+      if (match) {
+        setSelectedGene(match);
+        setGeneSearchQuery(match.geneSymbol);
+        toast.info(`Inspecting gene: ${match.geneSymbol} (${match.geneId})`);
+      } else {
+        setGeneSearchQuery(geneParam);
+      }
+    }
+  }, [searchParams, activeDataset]);
 
   const handleRecalculate = () => {
     setIsRecalculating(true);
