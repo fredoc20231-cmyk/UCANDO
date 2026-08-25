@@ -83,7 +83,7 @@ export function PlaceholderPage({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">UI Wireframe & Preview Canvas</span>
-                <span className="text-[10px] text-slate-500 font-mono">Builder.io Custom Component Blueprint</span>
+                <span className="text-[10px] text-slate-500 font-mono">UCANDO Component Architecture Blueprint</span>
               </div>
 
               {previewContent ? (

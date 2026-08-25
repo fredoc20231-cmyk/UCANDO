@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="favMaroon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8E1F34" />
+      <stop offset="100%" stop-color="#55101E" />
+    </linearGradient>
+    <linearGradient id="favTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#24A0B2" />
+      <stop offset="100%" stop-color="#0E5E6B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Shield Base -->
+  <path d="M 64,6 C 90,6 112,14 114,38 C 114,70 94,104 64,122 C 34,104 14,70 14,38 C 16,14 38,6 64,6 Z"
+        fill="url(#favMaroon)"
+        stroke="#FFFFFF"
+        stroke-width="3.5" />
+
+  <!-- Orbit Ring -->
+  <ellipse cx="64" cy="58" rx="34" ry="14" fill="none" stroke="url(#favTeal)" stroke-width="3" transform="rotate(-25 64 58)" />
+
+  <!-- Central "U" Monogram & DNA Core -->
+  <text x="64" y="70"
+        font-family="'Spectral', 'Georgia', serif"
+        font-size="34"
+        font-weight="900"
+        fill="#FFFFFF"
+        text-anchor="middle">U</text>
+
+  <!-- Data Nodes -->
+  <circle cx="38" cy="46" r="3.5" fill="#24A0B2" stroke="#FFFFFF" stroke-width="1" />
+  <circle cx="90" cy="70" r="3.5" fill="#E6A15C" stroke="#FFFFFF" stroke-width="1" />
+</svg>
