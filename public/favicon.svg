@@ -1,33 +1,79 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
   <defs>
-    <linearGradient id="favMaroon" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="maroonGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#8E1F34" />
+      <stop offset="50%" stop-color="#7D1B2D" />
       <stop offset="100%" stop-color="#55101E" />
     </linearGradient>
-    <linearGradient id="favTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#24A0B2" />
+      <stop offset="50%" stop-color="#157F8F" />
       <stop offset="100%" stop-color="#0E5E6B" />
     </linearGradient>
+    <linearGradient id="shieldBorder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D6A5AF" />
+      <stop offset="50%" stop-color="#7D1B2D" />
+      <stop offset="100%" stop-color="#3A0812" />
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#7D1B2D" flood-opacity="0.25" />
+    </filter>
   </defs>
 
-  <!-- Shield Base -->
-  <path d="M 64,6 C 90,6 112,14 114,38 C 114,70 94,104 64,122 C 34,104 14,70 14,38 C 16,14 38,6 64,6 Z"
-        fill="url(#favMaroon)"
+  <!-- Base Shield / Crest -->
+  <path d="M 256,24 C 360,24 448,56 456,152 C 456,280 376,416 256,488 C 136,416 56,280 56,152 C 64,56 152,24 256,24 Z"
+        fill="url(#maroonGrad)"
+        stroke="url(#shieldBorder)"
+        stroke-width="12"
+        filter="url(#softGlow)" />
+
+  <!-- Inner Inset Shield Ring -->
+  <path d="M 256,48 C 344,48 424,76 432,160 C 432,268 360,388 256,456 C 152,388 80,268 80,160 C 88,76 168,48 256,48 Z"
+        fill="none"
         stroke="#FFFFFF"
-        stroke-width="3.5" />
+        stroke-opacity="0.25"
+        stroke-width="3"
+        stroke-dasharray="8 6" />
 
-  <!-- Orbit Ring -->
-  <ellipse cx="64" cy="58" rx="34" ry="14" fill="none" stroke="url(#favTeal)" stroke-width="3" transform="rotate(-25 64 58)" />
+  <!-- Central Oncology Orbit & Multi-Omics Genome Helix -->
+  <g transform="translate(256, 230)">
+    <!-- Outer Orbital Rings (Teal / Data Integration) -->
+    <ellipse cx="0" cy="0" rx="130" ry="50" fill="none" stroke="url(#tealGrad)" stroke-width="6" transform="rotate(-28)" opacity="0.9" />
+    <ellipse cx="0" cy="0" rx="130" ry="50" fill="none" stroke="#68D0DE" stroke-width="3" transform="rotate(38)" opacity="0.8" />
 
-  <!-- Central "U" Monogram & DNA Core -->
-  <text x="64" y="70"
-        font-family="'Spectral', 'Georgia', serif"
-        font-size="34"
-        font-weight="900"
-        fill="#FFFFFF"
-        text-anchor="middle">U</text>
+    <!-- Orbiting Data Nodes -->
+    <circle cx="-105" cy="-55" r="9" fill="#157F8F" stroke="#FFFFFF" stroke-width="2.5" />
+    <circle cx="108" cy="52" r="9" fill="#24A0B2" stroke="#FFFFFF" stroke-width="2.5" />
+    <circle cx="95" cy="-62" r="7.5" fill="#E6A15C" stroke="#FFFFFF" stroke-width="2" />
+    <circle cx="-90" cy="65" r="7.5" fill="#E6A15C" stroke="#FFFFFF" stroke-width="2" />
 
-  <!-- Data Nodes -->
-  <circle cx="38" cy="46" r="3.5" fill="#24A0B2" stroke="#FFFFFF" stroke-width="1" />
-  <circle cx="90" cy="70" r="3.5" fill="#E6A15C" stroke="#FFFFFF" stroke-width="1" />
+    <!-- Central Crest Emblem: Stylized UC Phoenix & DNA Cross -->
+    <!-- DNA Base Strands -->
+    <path d="M -50,-80 Q 0,-30 50,-80 M -50,-30 Q 0,20 50,-30 M -50,20 Q 0,70 50,20 M -50,70 Q 0,120 50,70"
+          fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" opacity="0.95" />
+    <path d="M 50,-80 Q 0,-30 -50,-80 M 50,-30 Q 0,20 -50,-30 M 50,20 Q 0,70 -50,20 M 50,70 Q 0,120 -50,70"
+          fill="none" stroke="#FFFFFF" stroke-width="4.5" stroke-linecap="round" opacity="0.95" />
+
+    <!-- Connecting Rungs -->
+    <line x1="-32" y1="-55" x2="32" y2="-55" stroke="#68D0DE" stroke-width="4" stroke-linecap="round" />
+    <line x1="-15" y1="-5" x2="15" y2="-5" stroke="#F4C582" stroke-width="4.5" stroke-linecap="round" />
+    <line x1="-32" y1="45" x2="32" y2="45" stroke="#68D0DE" stroke-width="4" stroke-linecap="round" />
+    <line x1="-15" y1="95" x2="15" y2="95" stroke="#F4C582" stroke-width="4.5" stroke-linecap="round" />
+
+    <!-- Center Core Glow Node -->
+    <circle cx="0" cy="-5" r="14" fill="#FFFFFF" />
+    <circle cx="0" cy="-5" r="9" fill="#7D1B2D" />
+  </g>
+
+  <!-- Lower Banner Ribbon: UCANDO -->
+  <g transform="translate(256, 415)">
+    <rect x="-105" y="-22" width="210" height="42" rx="8" fill="#157F8F" stroke="#FFFFFF" stroke-width="3" />
+    <text x="0" y="8"
+          font-family="'Spectral', 'Georgia', serif"
+          font-size="24"
+          font-weight="900"
+          letter-spacing="4"
+          fill="#FFFFFF"
+          text-anchor="middle">UCANDO</text>
+  </g>
 </svg>
