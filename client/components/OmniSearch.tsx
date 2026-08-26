@@ -814,19 +814,19 @@ export const OmniSearch: React.FC = () => {
   const CurrentIcon = currentCategoryConfig.icon;
 
   return (
-    <div ref={containerRef} className="relative flex-1 max-w-xl hidden md:block">
+    <div ref={containerRef} className="relative w-full">
       {/* Search Input Container */}
-      <div className="relative flex items-center bg-surface border border-border rounded-md shadow-subtle hover:border-border/80 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+      <div className="relative flex items-center bg-card dark:bg-slate-900 border border-border/80 rounded-md shadow-xs hover:border-primary/50 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
         {/* Category Selector Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="h-8 -mt-px px-2.5 flex items-center gap-1.5 border-r border-border bg-card/60 hover:bg-muted text-xs font-medium text-foreground rounded-l-md transition-colors shrink-0"
+              className="h-8 -mt-px px-2.5 flex items-center gap-1.5 border-r border-border bg-muted/50 hover:bg-muted text-xs font-medium text-foreground rounded-l-md transition-colors shrink-0"
               title="Filter search category"
             >
               <CurrentIcon className="w-3.5 h-3.5 text-primary" />
-              <span className="hidden xl:inline text-[11px] font-sans truncate max-w-[90px]">
+              <span className="hidden xl:inline text-[11px] font-sans truncate max-w-[85px]">
                 {activeCategory === "all" ? "All" : currentCategoryConfig.label}
               </span>
               <span className="text-[10px] text-muted-foreground">▾</span>

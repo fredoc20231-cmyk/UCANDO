@@ -130,10 +130,10 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* Main Cancer Data Commons Header */}
       <header className="sticky top-0 z-40 border-b border-border bg-card shadow-subtle">
         <div className="max-w-[1700px] mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4">
-          
+
           {/* Brand Logo & Identity */}
-          <div className="flex items-center gap-2.5 shrink-0 max-w-[380px] sm:max-w-[440px] xl:max-w-[500px]">
-            <Link to="/" className="flex items-center gap-2.5 group">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <Link to="/" className="flex items-center gap-2.5 group min-w-0">
               <div className="h-10 w-10 rounded-lg border border-border bg-slate-950 flex items-center justify-center shadow-subtle group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                 <img
                   src={institutionConfig.logoPath}
@@ -154,9 +154,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               </div>
             </Link>
           </div>
-
-          {/* OmniSearch Multi-Category Search Bar */}
-          <OmniSearch />
 
           {/* Upper Panel Action Controls */}
           <div className="flex items-center gap-2 shrink-0">
@@ -285,443 +282,488 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
 
         {/* Global Horizontal 5-Category Taxonomy Navigation Bar */}
-        <nav className="w-full border-t border-border bg-surface/90 dark:bg-slate-950/90 backdrop-blur-xs px-4 sm:px-6 shadow-xs">
-          <div className="max-w-[1700px] mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-1.5 py-1 text-xs font-sans">
+        <nav className="w-full bg-[#7D1B2D] dark:bg-slate-950 border-t border-[#661221] dark:border-border px-4 sm:px-6 shadow-md text-white">
+          <div className="max-w-[1700px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-3 py-1.5 text-xs font-sans">
 
-            {/* Category 1: Analytics & Insights */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md font-medium transition-all group ${
-                    [
-                      "/patient-360",
-                      "/patient-integration",
-                      "/iucado-orbit",
-                      "/cohort-builder",
-                      "/researcher-portal",
-                      "/workspace",
-                      "/rnaseq",
-                      "/data",
-                      "/expression",
-                      "/pathways",
-                      "/visualization",
-                      "/advanced",
-                      "/reports",
-                      "/methods",
-                      "/omics-view"
-                    ].some((p) => location.pathname.startsWith(p))
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <BarChart3 className="w-3.5 h-3.5 shrink-0 opacity-80" />
-                    <span className="truncate">Analytics & Insights</span>
-                  </div>
-                  <ChevronDown className="w-3 h-3 shrink-0 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border">
-                <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
-                  Analytics & Insights Sub-Modules
-                </div>
+            {/* 5 Dropdown Tabs on Left (Uniform Hover & One-Click Trigger) */}
+            <div className="flex items-center gap-1.5 flex-wrap sm:flex-nowrap w-full lg:w-auto overflow-x-auto scrollbar-none">
 
-                {/* Item 1: Patient 360 Orbit */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/patient-360")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    location.pathname.startsWith("/patient-360") || location.pathname.startsWith("/patient-integration") || location.pathname.startsWith("/iucado-orbit")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <Users className="w-3.5 h-3.5" />
+              {/* 1. Data Hub (First from the left) */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold text-white hover:bg-white/20 transition-colors group shrink-0 cursor-pointer"
+                  >
+                    <Network className="w-3.5 h-3.5 opacity-90 text-white" />
+                    <span className="text-white font-bold tracking-tight">Data Hub</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/80 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border text-foreground">
+                  <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
+                    Data Hub & Connectivity
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Patient 360 Orbit</span>
+
+                  {/* Item 1: Integration Hub */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname === "/"
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <LayoutDashboard className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Comprehensive patient data view
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-
-                {/* Item 2: Cohort Builder */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/cohort-builder")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    location.pathname.startsWith("/cohort-builder")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
-                    <SlidersHorizontal className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Cohort Builder</span>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Integration Hub</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Core connectivity matrix & central data commons
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Patient population filtering
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
 
-                {/* Item 3: Researcher Portal */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/researcher-portal")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isResearcherRoute
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <Layers className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Researcher Portal</span>
+                  {/* Item 2: Global Integrations */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/global-integrations")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/global-integrations")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <Globe className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Access point for data analysis
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Category 2: AI & Clinical Trials */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md font-medium transition-all group ${
-                    isActive("/trial-matching") || chatOpen
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <Sparkles className="w-3.5 h-3.5 shrink-0 opacity-80 text-accent" />
-                    <span className="truncate">AI & Clinical Trials</span>
-                  </div>
-                  <ChevronDown className="w-3 h-3 shrink-0 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border">
-                <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
-                  AI & Clinical Trials Modules
-                </div>
-
-                {/* Item 1: iUCANDO AI */}
-                <DropdownMenuItem
-                  onClick={() => setChatOpen(true)}
-                  className="cursor-pointer p-2 rounded-lg hover:bg-muted transition-colors flex items-start gap-2.5"
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
-                    <Sparkles className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-foreground">iUCANDO AI</span>
-                      <Badge variant="outline" className="text-[9px] py-0 px-1 border-primary/30 text-primary font-mono">Platform Concierge</Badge>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Global Integrations</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        External system hooks (Epic, Cosmos, GDC, cBioPortal)
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      AI engine tools
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
 
-                {/* Item 2: Trial Matching */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/trial-matching")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/trial-matching")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <GitPullRequest className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Trial Matching</span>
+                  {/* Item 3: Manual */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/manual")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/manual") || isActive("/architecture") || isActive("/data-quality")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-foreground border border-border shrink-0 mt-0.5">
+                      <BookOpen className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Clinical trial alignment
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Category 3: Imaging & Diagnostics */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md font-medium transition-all group ${
-                    isActive("/imaging-hub")
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <ImageIcon className="w-3.5 h-3.5 shrink-0 opacity-80" />
-                    <span className="truncate">Imaging & Diagnostics</span>
-                  </div>
-                  <ChevronDown className="w-3 h-3 shrink-0 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border">
-                <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
-                  Imaging & Diagnostics Modules
-                </div>
-
-                {/* Item 1: Imaging Launch (OHIF) */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/imaging-hub")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/imaging-hub")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <ImageIcon className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="font-semibold text-foreground">Imaging Launch (OHIF)</span>
-                      <Badge variant="outline" className="text-[9px] py-0 px-1 border-accent/30 text-accent font-mono">DICOMweb</Badge>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Manual</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Documentation, architecture & ingestion logs
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      DICOM/Radiology viewer
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-            {/* Category 4: Data Hub & Connectivity */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md font-medium transition-all group ${
-                    [
-                      "/global-integrations",
-                      "/manual",
-                      "/architecture",
-                      "/data-quality"
-                    ].some((p) => location.pathname.startsWith(p)) || location.pathname === "/"
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <Network className="w-3.5 h-3.5 shrink-0 opacity-80" />
-                    <span className="truncate">Data Hub & Connectivity</span>
+              {/* 2. Clinical */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold text-white hover:bg-white/20 transition-colors group shrink-0 cursor-pointer"
+                  >
+                    <Stethoscope className="w-3.5 h-3.5 opacity-90 text-white" />
+                    <span className="text-white font-bold tracking-tight">Clinical</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/80 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border text-foreground">
+                  <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
+                    Clinical & Diagnostic Tools
                   </div>
-                  <ChevronDown className="w-3 h-3 shrink-0 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border">
-                <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
-                  Data Hub & Connectivity Modules
-                </div>
 
-                {/* Item 1: Integration Hub */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    location.pathname === "/"
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <LayoutDashboard className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Integration Hub</span>
+                  {/* Item 1: Clinical Trials */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/trial-matching")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/trial-matching")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <GitPullRequest className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Core connectivity matrix
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-
-                {/* Item 2: Global Integrations */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/global-integrations")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/global-integrations")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
-                    <Globe className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Global Integrations</span>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">Clinical Trials</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-primary/30 text-primary font-mono">Matching</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Molecular pre-screening & protocol alignment
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      External system hooks
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
 
-                {/* Item 3: Manual */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/manual")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/manual") || isActive("/architecture") || isActive("/data-quality")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-foreground border border-border shrink-0 mt-0.5">
-                    <BookOpen className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Manual</span>
+                  {/* Item 2: Imaging & Diagnostics */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/imaging-hub")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/imaging-hub")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <ImageIcon className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Documentation and ingestion logs
-                    </span>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {/* Category 5: Governance & Admin */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={`w-full flex items-center justify-between px-3 py-1.5 rounded-md font-medium transition-all group ${
-                    [
-                      "/governance",
-                      "/admin",
-                      "/audit-dashboard",
-                      "/consent-console"
-                    ].some((p) => location.pathname.startsWith(p))
-                      ? "bg-primary text-primary-foreground font-semibold shadow-subtle"
-                      : "text-foreground hover:bg-muted/80"
-                  }`}
-                >
-                  <div className="flex items-center gap-1.5 truncate">
-                    <ShieldCheck className="w-3.5 h-3.5 shrink-0 opacity-80 text-primary" />
-                    <span className="truncate">Governance & Admin</span>
-                  </div>
-                  <ChevronDown className="w-3 h-3 shrink-0 opacity-60 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border">
-                <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
-                  Governance & Compliance Modules
-                </div>
-
-                {/* Item 1: Governance */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/governance")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/governance")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <Shield className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Governance</span>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">Imaging & Diagnostics</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-accent/30 text-accent font-mono">OHIF</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Zero-footprint DICOM radiology & pathology WSI
+                      </span>
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Policy and compliance rules
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                  </DropdownMenuItem>
 
-                {/* Item 2: Admin Census */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/admin")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/admin")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
-                    <BarChart2 className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Admin Census</span>
+                  {/* Item 3: Patient 360 Orbit */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/patient-360")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/patient-360")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Users className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      System usage and patient counts
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Patient 360 Orbit</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Radial domain visualization & longitudinal EHR records
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
 
-                {/* Item 3: Audit */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/audit-dashboard")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/audit-dashboard")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                    <Activity className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Audit</span>
+                  {/* Item 4: Patient Integration */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/patient-integration")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/patient-integration")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <Stethoscope className="w-3.5 h-3.5" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Zero-trust access and OPA logs
-                    </span>
-                  </div>
-                </DropdownMenuItem>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Patient Integration</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Targeted analysis: treatments, RECIST, survival & CDS
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
 
-                {/* Item 4: Consent Console */}
-                <DropdownMenuItem
-                  onClick={() => navigate("/consent-console")}
-                  className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                    isActive("/consent-console")
-                      ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
-                    <Lock className="w-3.5 h-3.5" />
+              {/* 3. Intelligence */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold text-white hover:bg-white/20 transition-colors group shrink-0 cursor-pointer"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 opacity-90 text-amber-300" />
+                    <span className="text-white font-bold tracking-tight">Intelligence</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/80 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border text-foreground">
+                  <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
+                    AI & Scientific Intelligence
                   </div>
-                  <div className="flex flex-col min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-semibold text-foreground">Consent Console</span>
+
+                  {/* Item 1: iUCANDO */}
+                  <DropdownMenuItem
+                    onClick={() => setChatOpen(true)}
+                    className="cursor-pointer p-2 rounded-lg hover:bg-muted transition-colors flex items-start gap-2.5"
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <Sparkles className="w-3.5 h-3.5 text-accent" />
                     </div>
-                    <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                      Real-time OPA consent management
-                    </span>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">iUCANDO</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-primary/30 text-primary font-mono">Concierge</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Platform-aware research concierge & protocol synthesis
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 2: Omics Integration */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/omics-view")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/omics-view")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Dna className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">Omics Integration</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-accent/30 text-accent font-mono">PhoenixMO</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Somatic variants, OncoPrint matrix & composite risk score
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 3: iUCADO-Orbit Engine */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/iucado-orbit")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/iucado-orbit")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <Bot className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">iUCADO-Orbit Engine</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-primary/30 text-primary font-mono">GRADE PICO</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Literature consensus, clinical trials & guideline reasoning
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* 4. Analytics & Insights */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold text-white hover:bg-white/20 transition-colors group shrink-0 cursor-pointer"
+                  >
+                    <BarChart3 className="w-3.5 h-3.5 opacity-90 text-white" />
+                    <span className="text-white font-bold tracking-tight">Analytics & Insights</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/80 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border text-foreground">
+                  <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
+                    Analytics & Research Studio
                   </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+
+                  {/* Item 1: Cohort Builder */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/cohort-builder")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/cohort-builder")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <SlidersHorizontal className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Cohort Builder</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Patient population filtering & mCODE query
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 2: Researcher Portal */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/researcher-portal")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isResearcherRoute
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Layers className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Researcher Portal</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Access point for data analysis & RNA-seq Studio
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 3: RNA-seq Workspace */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/workspace")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/workspace") || location.pathname.startsWith("/rnaseq")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Sliders className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">RNA-seq Analysis Studio</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        DESeq2 GLMs (~ batch + condition), Volcano, PCA & GSEA
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* 5. Governance & Admin */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-bold text-white hover:bg-white/20 transition-colors group shrink-0 cursor-pointer"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 opacity-90 text-white" />
+                    <span className="text-white font-bold tracking-tight">Governance & Admin</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-white/80 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-84 font-sans text-xs p-2 shadow-elevated space-y-1 bg-card border-border text-foreground">
+                  <div className="px-2 py-1 text-[10px] uppercase font-mono font-bold tracking-wider text-muted-foreground border-b border-border/60 mb-1">
+                    Governance & Compliance
+                  </div>
+
+                  {/* Item 1: Governance */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/governance")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/governance")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Shield className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Governance</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Policy, IRB charter and compliance rules
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 2: Admin Census */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/admin")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/admin")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <BarChart2 className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Admin Census</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        System usage, patient breakdown and node telemetry
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 3: Audit */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/audit-dashboard")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/audit-dashboard")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Activity className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Audit</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Zero-trust access and immutable OPA query logs
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 4: Consent Console */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/consent-console")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      isActive("/consent-console")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <Lock className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">Consent Console</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Real-time OPA fine-grained consent management
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+            </div>
+
+            {/* OmniSearch Search Box directly on the Horizontal Panel */}
+            <div className="w-full lg:w-80 xl:w-96 shrink-0">
+              <OmniSearch />
+            </div>
 
           </div>
         </nav>
