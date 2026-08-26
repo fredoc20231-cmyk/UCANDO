@@ -111,7 +111,7 @@ export default function Index() {
               <img
                 src={institutionConfig.logoPath}
                 alt={`${institutionConfig.platformName} Logo`}
-                className="h-20 w-auto max-w-[90px] object-contain rounded-lg border border-border bg-card p-0.5"
+                className="h-20 w-auto max-w-[90px] object-contain rounded-lg border border-border bg-slate-950 p-1"
               />
               <span className="text-[9px] font-bold text-primary font-mono mt-1 tracking-wider uppercase">
                 {institutionConfig.platformName} Core

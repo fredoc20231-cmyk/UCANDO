@@ -134,7 +134,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
           {/* Brand Logo & Identity */}
           <div className="flex items-center gap-2.5 shrink-0 max-w-[380px] sm:max-w-[440px] xl:max-w-[500px]">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="h-10 w-10 rounded-lg border border-border bg-surface flex items-center justify-center shadow-subtle group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
+              <div className="h-10 w-10 rounded-lg border border-border bg-slate-950 flex items-center justify-center shadow-subtle group-hover:scale-105 transition-transform shrink-0 overflow-hidden">
                 <img
                   src={institutionConfig.logoPath}
                   alt={`${institutionConfig.platformName} Logo`}
