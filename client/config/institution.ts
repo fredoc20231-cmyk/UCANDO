@@ -24,6 +24,6 @@ export const institutionConfig: InstitutionConfig = {
   legalEntity: "The University of Chicago Medical Center",
   supportEmail: "datacommons-support@bsd.uchicago.edu",
   copyrightYear: "2026",
-  tagline: "Enterprise Clinical Oncology and Research Integration Hub",
+  tagline: "Central Oncology Integration Hub & Governed Data Commons",
   governanceBody: "UC-CCC Data Governance & Institutional Review Board (IRB)"
 };
