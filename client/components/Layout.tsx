@@ -168,28 +168,6 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <span>API Contracts</span>
             </Button>
 
-            {/* IRB Charter */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCharterOpen(true)}
-              className="h-8 px-2.5 text-xs bg-card border-border text-foreground hover:bg-muted gap-1.5 hidden lg:flex"
-            >
-              <Landmark className="w-3.5 h-3.5 text-primary" />
-              <span>IRB Charter</span>
-            </Button>
-
-            {/* Authenticated Button */}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setLoginOpen(true)}
-              className="h-8 px-2.5 text-xs bg-card border-border text-foreground hover:bg-muted gap-1.5 hidden sm:flex"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-              <span>{isAuthenticated ? "Authenticated" : "Sign In"}</span>
-            </Button>
-
             {/* Day / Night Theme Toggle */}
             <div className="flex items-center p-0.5 rounded-md bg-surface border border-border">
               <button
@@ -685,12 +663,58 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <span className="font-semibold text-foreground">Governance</span>
                       </div>
                       <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                        Policy, IRB charter and compliance rules
+                        Policy, data compliance & framework rules
                       </span>
                     </div>
                   </DropdownMenuItem>
 
-                  {/* Item 2: Admin Census */}
+                  {/* Item 2: IRB Charter */}
+                  <DropdownMenuItem
+                    onClick={() => setCharterOpen(true)}
+                    className="cursor-pointer p-2 rounded-lg hover:bg-muted transition-colors flex items-start gap-2.5"
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Landmark className="w-3.5 h-3.5 text-primary" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-semibold text-foreground">IRB Charter</span>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Institutional Review Board protocols & ethical oversight
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 3: Authenticated */}
+                  <DropdownMenuItem
+                    onClick={() => setLoginOpen(true)}
+                    className="cursor-pointer p-2 rounded-lg hover:bg-muted transition-colors flex items-start gap-2.5"
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-accent border border-border shrink-0 mt-0.5">
+                      <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">Authenticated</span>
+                        <Badge
+                          variant="outline"
+                          className={`text-[9px] py-0 px-1 font-mono ${
+                            isAuthenticated
+                              ? "border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+                              : "border-amber-500/30 text-amber-600 dark:text-amber-400"
+                          }`}
+                        >
+                          {isAuthenticated ? "Active" : "Sign In"}
+                        </Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Session credentials, role delegation & auth state
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 4: Admin Census */}
                   <DropdownMenuItem
                     onClick={() => navigate("/admin")}
                     className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
