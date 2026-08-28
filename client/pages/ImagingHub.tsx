@@ -412,16 +412,18 @@ export default function ImagingHub() {
           </TabsContent>
 
           {/* Pathology Whole Slide Image Viewer */}
-          <TabsContent value="pathology" className="p-6 rounded-xl bg-card border border-border space-y-4 shadow-subtle">
+          <TabsContent value="pathology" className="p-5 sm:p-6 rounded-xl bg-card border border-border space-y-4 shadow-subtle">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <h3 className="text-base font-bold font-serif text-foreground">Digital Pathology Whole Slide Image (H&E Stain)</h3>
+                <h3 className="text-base font-bold font-serif text-foreground">
+                  Digital Pathology Whole Slide Image — Invasive Carcinoma Cell Clusters
+                </h3>
                 <p className="text-xs text-muted-foreground">
-                  Slide Barcode: <code className="text-primary font-mono">{study?.pathologySlide?.slideId || "WSI-PATH-2024-7712"}</code> • H&E Stain
+                  Slide Barcode: <code className="text-primary font-mono">{study?.pathologySlide?.slideId || "WSI-PATH-2024-7712"}</code> • Stain: <strong>H&E (Hematoxylin and Eosin)</strong> • Biopsy Site: <strong>Right Upper Lobe Core Biopsy</strong>
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 font-mono text-xs">
+              <div className="flex items-center gap-2 font-mono text-xs flex-wrap">
                 <span className="text-muted-foreground mr-1">Magnification:</span>
                 {(["10x", "20x", "40x"] as const).map((z) => (
                   <Button
@@ -429,7 +431,7 @@ export default function ImagingHub() {
                     size="sm"
                     variant={pathologyZoom === z ? "default" : "outline"}
                     onClick={() => setPathologyZoom(z)}
-                    className={`h-7 text-xs font-semibold ${
+                    className={`h-7 px-3 text-xs font-semibold ${
                       pathologyZoom === z
                         ? "bg-primary text-primary-foreground shadow-subtle"
                         : "border-border text-foreground hover:bg-muted"
@@ -438,35 +440,88 @@ export default function ImagingHub() {
                     {z}
                   </Button>
                 ))}
+
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setShowPathologyAiMask(!showPathologyAiMask)}
+                  className={`h-7 text-xs ml-2 ${showPathologyAiMask ? "border-accent text-accent bg-accent/10 font-semibold" : "border-border text-muted-foreground"}`}
+                >
+                  <Sparkles className="w-3.5 h-3.5 mr-1 text-accent" /> AI Cell Cluster Mask
+                </Button>
               </div>
             </div>
 
-            {/* Simulated WSI pathology canvas */}
-            <div className="relative h-80 w-full rounded-xl bg-surface border border-border overflow-hidden flex items-center justify-center">
-              <div className="absolute top-3 left-3 font-mono text-[10px] text-foreground bg-card/90 px-2.5 py-1 rounded border border-border">
-                WSI MAGNIFICATION: {pathologyZoom} • STAIN: H&E
+            {/* Real WSI Pathology Canvas */}
+            <div className="relative min-h-[440px] w-full rounded-xl bg-neutral-950 border border-border overflow-hidden flex items-center justify-center group select-none">
+              {/* HUD Overlay Top Left */}
+              <div className="absolute top-3 left-3 font-mono text-[10px] text-white bg-black/85 px-2.5 py-1.5 rounded border border-white/15 space-y-0.5 z-10 backdrop-blur-xs">
+                <p className="font-bold text-primary">UC-CCC DIGITAL PATHOLOGY</p>
+                <p>SLIDE: WSI-PATH-2024-7712</p>
+                <p>MAGNIFICATION: {pathologyZoom} (High Power Field)</p>
+                <p>STAIN: H&E Coregistered</p>
               </div>
 
-              {/* AI Segmentation Overlay Box */}
+              {/* AI Segmentation Overlay Box Top Right */}
               {showPathologyAiMask && (
-                <div className="absolute top-3 right-3 font-mono text-[10px] bg-card/90 p-2.5 rounded border border-border space-y-1 text-right">
+                <div className="absolute top-3 right-3 font-mono text-[10px] bg-black/85 p-2.5 rounded border border-white/15 space-y-1 text-right z-10 backdrop-blur-xs">
                   <p className="text-accent font-bold">AI Tumor Purity: 68%</p>
-                  <p className="text-muted-foreground">Stroma: 24% | Necrosis: 8%</p>
+                  <p className="text-emerald-400 font-semibold">Invasive Carcinoma Cell Clusters: Detected</p>
+                  <p className="text-muted-foreground">Nuclear Atypia: Score 3 | Mitotic Rate: Elevated</p>
                 </div>
               )}
 
-              {/* Cellular H&E Pattern Simulation */}
-              <div className="w-full h-full bg-gradient-to-r from-rose-950/20 via-pink-950/20 to-primary/10 flex items-center justify-center p-8">
-                <div className="p-8 rounded-xl bg-card/80 border border-border backdrop-blur text-center space-y-2 max-w-md shadow-subtle">
-                  <div className="p-3 rounded-full bg-primary/10 text-primary w-12 h-12 mx-auto flex items-center justify-center">
-                    <Layers className="w-6 h-6" />
-                  </div>
-                  <h4 className="font-bold text-foreground text-sm font-serif">Invasive Carcinoma Cell Clusters</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Deep learning nuclear segmentation detected atypical pleomorphic epithelial nuclei with high mitotic rate (Score 3).
-                  </p>
+              {/* Real H&E Pathology Tissue Slide Image */}
+              <div
+                className="relative transition-all duration-300 max-h-[420px] max-w-full flex items-center justify-center p-2"
+                style={{
+                  transform: `scale(${pathologyZoom === "10x" ? 1.0 : pathologyZoom === "20x" ? 1.25 : 1.5})`
+                }}
+              >
+                <div className="relative rounded-lg overflow-hidden border border-white/20 shadow-2xl">
+                  <img
+                    src="https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F68cec5f18626414e819566174c262d44?format=webp&width=800&height=1200"
+                    alt="Invasive Carcinoma Cell Clusters H&E Stain Digital Pathology Whole Slide"
+                    className="max-h-[360px] sm:max-h-[400px] w-auto object-contain select-none"
+                  />
+
+                  {/* AI Cell Cluster Highlight Annotations */}
+                  {showPathologyAiMask && (
+                    <>
+                      <div className="absolute top-[22%] left-[30%] w-[24%] h-[28%] border-2 border-dashed border-rose-400 bg-rose-500/20 rounded-xl pointer-events-none animate-pulse flex items-start justify-end p-1">
+                        <span className="text-[8px] font-mono font-bold text-white bg-rose-900/90 px-1 rounded">
+                          Cluster A (Pleomorphic)
+                        </span>
+                      </div>
+                      <div className="absolute bottom-[20%] left-[18%] w-[22%] h-[26%] border-2 border-dashed border-amber-400 bg-amber-500/20 rounded-xl pointer-events-none flex items-start justify-end p-1">
+                        <span className="text-[8px] font-mono font-bold text-white bg-amber-900/90 px-1 rounded">
+                          Cluster B (Mitotic)
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
+
+              {/* Bottom HUD Bar */}
+              <div className="absolute bottom-3 left-3 text-[10px] font-mono text-neutral-400 bg-black/80 px-2 py-0.5 rounded border border-white/10 z-10">
+                WSI DeepZoom Tile Server • Resolution: 0.25 µm/pixel (40x equivalent)
+              </div>
+            </div>
+
+            {/* Pathology Impression Card */}
+            <div className="p-4 rounded-xl bg-surface border border-border space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground uppercase font-mono font-semibold">
+                  Histopathological Impression — Invasive Carcinoma
+                </span>
+                <Badge variant="outline" className="text-[9px] font-mono border-rose-500/30 text-rose-600 dark:text-rose-400">
+                  Confirmed Malignant Neoplasm
+                </Badge>
+              </div>
+              <p className="text-xs text-foreground leading-relaxed font-sans">
+                High-power H&E histological examination demonstrates atypical pleomorphic invasive carcinoma cell clusters with prominent nucleoli, hyperchromasia, high nuclear-to-cytoplasmic ratio, and frequent atypical mitotic figures. Architecture displays infiltrative nests within a desmoplastic stroma, consistent with poorly differentiated carcinoma.
+              </p>
             </div>
           </TabsContent>
 

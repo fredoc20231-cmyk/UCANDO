@@ -1263,7 +1263,7 @@ export function getImagingDetails() {
       tumorPurityPercent: 68,
       stromaPercent: 24,
       necrosisPercent: 8,
-      aiTumorMaskUrl: "/pathology/mask_7712.png"
+      aiTumorMaskUrl: "https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2F68cec5f18626414e819566174c262d44?format=webp&width=800&height=1200"
     },
     radiomicsFeatures: [
       { featureName: "Original Shape Surface Volume Ratio", category: "Shape", value: 0.142, normalZScore: 1.8 },
