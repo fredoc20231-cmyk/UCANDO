@@ -202,28 +202,30 @@ export default function CohortBuilder() {
 
   return (
     <Layout>
-      <div className="space-y-6 pb-12">
+      <div className="max-w-[1700px] w-full mx-auto p-4 sm:p-6 space-y-6 pb-12 font-sans">
         {/* Page Header */}
-        <div className="p-6 rounded-xl bg-card border border-border space-y-4 shadow-subtle">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="p-3 rounded-lg bg-primary/10 text-primary border border-primary/20">
+        <div className="p-5 sm:p-6 rounded-xl bg-card border border-border space-y-4 shadow-subtle">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+            <div className="flex items-center gap-3.5 min-w-0">
+              <div className="p-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20 shrink-0">
                 <SlidersHorizontal className="w-6 h-6 text-primary" />
               </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold font-serif text-foreground">Visual Cohort Query Builder</h1>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h1 className="text-xl sm:text-2xl font-bold font-serif text-foreground tracking-tight">
+                    Visual Cohort Query Builder
+                  </h1>
                   <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-mono text-[10px]">
                     De-identified Enclave Tier 1
                   </Badge>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
                   Multi-attribute cohort stratification across 98,450 consented cancer patients, integrated with mCODE FHIR and GA4GH Beacon v2.
                 </p>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0 flex-wrap">
               <Button
                 size="sm"
                 variant="outline"
@@ -231,7 +233,7 @@ export default function CohortBuilder() {
                   setExportModalOpenFormat("mcode");
                   setExportModalOpen(true);
                 }}
-                className="text-xs border-border hover:bg-muted text-foreground"
+                className="text-xs border-border hover:bg-muted text-foreground h-8"
               >
                 <Code className="w-3.5 h-3.5 mr-1.5 text-accent" /> Export mCODE FHIR
               </Button>
@@ -242,14 +244,14 @@ export default function CohortBuilder() {
                   setExportModalOpenFormat("beacon");
                   setExportModalOpen(true);
                 }}
-                className="text-xs border-border hover:bg-muted text-foreground"
+                className="text-xs border-border hover:bg-muted text-foreground h-8"
               >
                 <FileCode className="w-3.5 h-3.5 mr-1.5 text-primary" /> GA4GH Query
               </Button>
               <Button
                 size="sm"
                 onClick={launchInRnaSeqWorkspace}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-subtle"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs shadow-subtle h-8"
               >
                 <Dna className="w-3.5 h-3.5 mr-1.5" /> Launch in RNA-seq Platform
               </Button>
@@ -257,16 +259,16 @@ export default function CohortBuilder() {
           </div>
 
           {/* Preset Chips & Privacy Budget Banner */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 pt-2 border-t border-border">
-            <div className="lg:col-span-2 flex flex-wrap items-center gap-2">
-              <span className="text-xs font-semibold text-muted-foreground mr-1 flex items-center gap-1 font-sans">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 pt-3 border-t border-border">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-xs font-semibold text-muted-foreground mr-1 flex items-center gap-1 font-sans shrink-0">
                 <Sparkles className="w-3.5 h-3.5 text-accent" /> Clinical Presets:
               </span>
               <Button
                 size="sm"
                 variant={activePreset === "brca" ? "default" : "outline"}
                 onClick={() => applyPreset("brca")}
-                className={`text-xs h-7 rounded-md font-semibold ${
+                className={`text-xs h-7 px-3 rounded-md font-semibold transition-all ${
                   activePreset === "brca"
                     ? "bg-primary text-primary-foreground shadow-subtle"
                     : "border-border text-foreground hover:bg-muted"
@@ -278,7 +280,7 @@ export default function CohortBuilder() {
                 size="sm"
                 variant={activePreset === "tnbc" ? "default" : "outline"}
                 onClick={() => applyPreset("tnbc")}
-                className={`text-xs h-7 rounded-md font-semibold ${
+                className={`text-xs h-7 px-3 rounded-md font-semibold transition-all ${
                   activePreset === "tnbc"
                     ? "bg-primary text-primary-foreground shadow-subtle"
                     : "border-border text-foreground hover:bg-muted"
@@ -290,7 +292,7 @@ export default function CohortBuilder() {
                 size="sm"
                 variant={activePreset === "lung_egfr" ? "default" : "outline"}
                 onClick={() => applyPreset("lung_egfr")}
-                className={`text-xs h-7 rounded-md font-semibold ${
+                className={`text-xs h-7 px-3 rounded-md font-semibold transition-all ${
                   activePreset === "lung_egfr"
                     ? "bg-primary text-primary-foreground shadow-subtle"
                     : "border-border text-foreground hover:bg-muted"
@@ -301,8 +303,8 @@ export default function CohortBuilder() {
             </div>
 
             {/* Differential Privacy Budget Indicator */}
-            <div className="p-2.5 rounded-lg bg-surface border border-border flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2">
+            <div className="p-2 px-3 rounded-lg bg-surface border border-border flex items-center justify-between gap-3 text-xs shrink-0 self-start lg:self-auto">
+              <div className="flex items-center gap-1.5">
                 <ShieldAlert className="w-4 h-4 text-accent shrink-0" />
                 <span className="text-muted-foreground font-sans">Differential Privacy:</span>
               </div>

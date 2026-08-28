@@ -168,7 +168,7 @@ export interface GenomicVariant {
 export interface ImagingStudy {
   studyId: string;
   accessionNumber: string;
-  modality: "CT" | "MRI" | "PET/CT" | "WSI" | "Pathology";
+  modality: "CT" | "MRI" | "PET/CT" | "WSI" | "Pathology" | "fMRI" | "fMRI / CT" | "fMRI / Thoracic CT";
   studyDate: string;
   bodyPart: string;
   instancesCount: number;

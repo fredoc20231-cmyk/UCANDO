@@ -647,14 +647,14 @@ export function getPatient360(patientId: string): Patient360Record {
       {
         studyId: "STD-2023-9941",
         accessionNumber: "ACC-2023-9941",
-        modality: "PET/CT",
+        modality: "fMRI / CT",
         studyDate: shiftDateString("2023-11-20", offsetDays),
-        bodyPart: "Chest/Abdomen/Pelvis",
+        bodyPart: "Functional Lung MRI & Thoracic CT",
         instancesCount: 480,
         dicomWebEndpoint: "https://imaging.demo-cancercenter.org/dicomweb/studies/1.2.840.113619.2.55.3.28",
         ohifViewerUrl: "https://beacon.demo-cancercenter.org/viewer?studyInstanceUID=1.2.840.113619.2.55.3.28&token=signed_ctx_9941",
         aiAnnotationsCount: 3,
-        findingsSummary: "No FDG-avid residual tumor in primary bed. Axillary lymphadenopathy resolved."
+        findingsSummary: "Functional Magnetic Resonance Imaging (fMRI) of the lung with high-resolution thoracic CT (DFOV 34.5cm) demonstrating preserved bilateral ventilation and dynamic perfusion response."
       },
       {
         studyId: "STD-2023-8102",
@@ -1228,32 +1228,32 @@ export function getImagingDetails() {
   return {
     studyId: "std_rad_881",
     accessionNumber: "ACC-UCANDO-2024-9910",
-    modality: "PET/CT",
+    modality: "fMRI / Thoracic CT",
     studyDate: "2024-01-20",
-    bodyPart: "Chest/Abdomen/Pelvis",
+    bodyPart: "Thorax / Functional Lung",
     instancesCount: 480,
     dicomWebEndpoint: "https://dicom.demo-cancercenter.org/dicomweb/studies/std_rad_881",
     ohifViewerUrl: "/viewer?study=std_rad_881",
     aiAnnotationsCount: 14,
-    findingsSummary: "Right upper lobe pulmonary mass (3.2 x 2.8 cm) with SUVmax 11.4, consistent with primary non-small cell lung neoplasm. Subcarinal lymphadenopathy noted.",
+    findingsSummary: "Functional Magnetic Resonance Imaging (fMRI) of the lungs combined with high-resolution thoracic CT (DFOV 34.5cm, 140kV, 60mA Smart mA) demonstrates regional pulmonary ventilation and perfusion dynamics. Marked hyperintense signal on functional MRI perfusion maps corresponding to the 3.2 x 2.8 cm right upper lobe primary lesion with preserved functional ventilation in contralateral left lung and bilateral lower lung zones.",
     seriesList: [
       {
-        seriesId: "ser_ct_axial",
-        description: "Axial 1.25mm High-Res Lung CT",
+        seriesId: "ser_dual_view",
+        description: "Dual View: Thoracic CT + Functional Lung MRI",
         numSlices: 240,
-        sliceUrls: ["/dicom/slice1.png", "/dicom/slice2.png"]
+        sliceUrls: ["https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Fd1e5a1076d134704af2e4f10a45c931e?format=webp&width=800&height=1200"]
       },
       {
-        seriesId: "ser_pet_coronal",
-        description: "Coronal 18F-FDG PET SUV Map",
-        numSlices: 120,
-        sliceUrls: ["/dicom/pet1.png"]
+        seriesId: "ser_ct_axial",
+        description: "High-Resolution Thoracic CT (Lung Window)",
+        numSlices: 240,
+        sliceUrls: ["https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Fd1e5a1076d134704af2e4f10a45c931e?format=webp&width=800&height=1200"]
       },
       {
-        seriesId: "ser_fused",
-        description: "Fused PET/CT Multiplanar Reconstruction",
+        seriesId: "ser_fmri_lung",
+        description: "Functional Lung MRI (Pulmonary Ventilation/Perfusion)",
         numSlices: 120,
-        sliceUrls: ["/dicom/fused1.png"]
+        sliceUrls: ["https://cdn.builder.io/api/v1/image/assets%2Fda14c32a03704491b9b339da0a35dca5%2Fd1e5a1076d134704af2e4f10a45c931e?format=webp&width=800&height=1200"]
       }
     ],
     pathologySlide: {
