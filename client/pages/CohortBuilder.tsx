@@ -138,6 +138,14 @@ export default function CohortBuilder() {
         hasBiospecimen: true,
         ageRange: [21, 75]
       };
+    } else if (presetName === "ovarian") {
+      newFilters = {
+        diagnoses: ["High-Grade Serous Ovarian Cancer"],
+        stages: ["Stage III", "Stage IV"],
+        genes: ["TP53", "BRCA1", "BRCA2"],
+        hasBiospecimen: true,
+        ageRange: [30, 85]
+      };
     } else if (presetName === "lung_egfr") {
       newFilters = {
         diagnoses: ["Non-Small Cell Lung Cancer"],
@@ -145,6 +153,14 @@ export default function CohortBuilder() {
         genes: ["EGFR", "TP53"],
         hasBiospecimen: true,
         ageRange: [35, 85]
+      };
+    } else if (presetName === "rare_subtype") {
+      newFilters = {
+        diagnoses: ["Metaplastic Breast Carcinoma", "Intrahepatic Cholangiocarcinoma"],
+        stages: ["Stage II", "Stage III", "Stage IV"],
+        genes: ["PIK3CA", "TP53", "KRAS"],
+        hasBiospecimen: true,
+        ageRange: [25, 85]
       };
     }
 
@@ -274,7 +290,19 @@ export default function CohortBuilder() {
                     : "border-border text-foreground hover:bg-muted"
                 }`}
               >
-                BRCA1/2 PARP Cohort
+                Invasive Breast (4,280)
+              </Button>
+              <Button
+                size="sm"
+                variant={activePreset === "ovarian" ? "default" : "outline"}
+                onClick={() => applyPreset("ovarian")}
+                className={`text-xs h-7 px-3 rounded-md font-semibold transition-all ${
+                  activePreset === "ovarian"
+                    ? "bg-primary text-primary-foreground shadow-subtle"
+                    : "border-border text-foreground hover:bg-muted"
+                }`}
+              >
+                HGS Ovarian (2,150)
               </Button>
               <Button
                 size="sm"
@@ -286,7 +314,7 @@ export default function CohortBuilder() {
                     : "border-border text-foreground hover:bg-muted"
                 }`}
               >
-                Triple Negative Breast (TNBC)
+                TNBC Cohort (3,120)
               </Button>
               <Button
                 size="sm"
@@ -298,7 +326,19 @@ export default function CohortBuilder() {
                     : "border-border text-foreground hover:bg-muted"
                 }`}
               >
-                NSCLC EGFR Mutated
+                NSCLC EGFR (2,890)
+              </Button>
+              <Button
+                size="sm"
+                variant={activePreset === "rare_subtype" ? "default" : "outline"}
+                onClick={() => applyPreset("rare_subtype")}
+                className={`text-xs h-7 px-3 rounded-md font-semibold transition-all ${
+                  activePreset === "rare_subtype"
+                    ? "bg-primary text-primary-foreground shadow-subtle"
+                    : "border-border text-foreground hover:bg-muted"
+                }`}
+              >
+                Rare Subtypes (358)
               </Button>
             </div>
 

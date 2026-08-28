@@ -1280,9 +1280,9 @@ export function getTrialMatches() {
       nctId: "NCT05214820",
       title: "Phase II Study of Olaparib + Pembrolizumab in BRCA1-Mutated Advanced Solid Tumors",
       phase: "Phase II",
-      sponsor: "UC-CCC",
+      sponsor: "UC-CCC Center for Clinical Cancer Genetics",
       status: "Recruiting",
-      primaryLocation: "UC-CCC Main Medical Center",
+      primaryLocation: "UC-CCC Main Medical Center (Duchossois Center)",
       matchScorePercent: 96,
       matchingBiomarkers: ["BRCA1 Pathogenic Variant", "PD-L1 CPS >= 10", "Prior Platinum Chemotherapy"],
       inclusionCriteria: [
@@ -1296,49 +1296,133 @@ export function getTrialMatches() {
         "Active brain metastases without local control",
         "Severe active infection or autoimmune flare"
       ],
-      contactEmail: "trials@demo-cancercenter.org",
-      principalInvestigator: "Dr. Elena Vance, MD, FACP"
+      contactEmail: "genetics-trials@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Olufunmilayo Olopade, MD, FACP"
+    },
+    {
+      nctId: "NCT05578768",
+      title: "Phase II Study of Adagrasib in Combination with Cetuximab in KRAS G12C-Mutated Advanced Solid Tumors",
+      phase: "Phase II",
+      sponsor: "UC-CCC Thoracic & GI Oncology Program",
+      status: "Recruiting",
+      primaryLocation: "UC-CCC Comprehensive Cancer Center",
+      matchScorePercent: 93,
+      matchingBiomarkers: ["KRAS p.G12C Somatic Mutation", "TP53 Co-mutation", "High Perfusion Signal"],
+      inclusionCriteria: [
+        "Histologically confirmed KRAS G12C mutation identified by NGS or ctDNA",
+        "Progression following platinum-based chemotherapy or checkpoint blockade",
+        "ECOG performance status 0-1"
+      ],
+      exclusionCriteria: [
+        "Prior KRAS G12C direct inhibitor therapy",
+        "Symptomatic or untreated central nervous system metastases"
+      ],
+      contactEmail: "thoracic-onc@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Jyoti Patel, MD"
+    },
+    {
+      nctId: "NCT04982224",
+      title: "Phase I/II Trial of Trastuzumab Deruxtecan (T-DXd) in HER2-Low and ERBB2-Amplified Solid Tumors",
+      phase: "Phase I/II",
+      sponsor: "UC-CCC Breast & Gynecologic Oncology Program",
+      status: "Recruiting",
+      primaryLocation: "UC-CCC Main Medical Center",
+      matchScorePercent: 91,
+      matchingBiomarkers: ["HER2 IHC 1+ or 2+/ISH Negative (HER2-Low)", "ERBB2 Amplified", "HR Positive/Negative"],
+      inclusionCriteria: [
+        "Central pathology confirmation of HER2-low expression (IHC 1+ or IHC 2+/ISH-)",
+        "At least one prior line of systemic therapy in metastatic setting",
+        "Left ventricular ejection fraction (LVEF) >= 50%"
+      ],
+      exclusionCriteria: [
+        "History of non-infectious interstitial lung disease (ILD) or pneumonitis",
+        "Uncontrolled cardiac disease"
+      ],
+      contactEmail: "breast-trials@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Rita Nanda, MD"
+    },
+    {
+      nctId: "NCT05388487",
+      title: "Phase II Evaluation of Amivantamab + Lazertinib in EGFR-Mutant and MET-Amplified Malignancies",
+      phase: "Phase II",
+      sponsor: "UC-CCC Precision Oncology Alliance",
+      status: "Recruiting",
+      primaryLocation: "UC-CCC Main Campus & Orland Park Network",
+      matchScorePercent: 89,
+      matchingBiomarkers: ["EGFR Exon 19 Deletion / L858R", "MET Amplification", "T790M Negative"],
+      inclusionCriteria: [
+        "Confirmed activating EGFR mutation with secondary MET amplification on tissue or liquid biopsy",
+        "Disease progression on prior 3rd generation EGFR-TKI (Osimertinib)",
+        "Adequate renal and hepatic clearance"
+      ],
+      exclusionCriteria: [
+        "Previous treatment with bispecific EGFR/MET antibody",
+        "QTc interval prolongation > 470 ms"
+      ],
+      contactEmail: "precision-trials@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Everett Vokes, MD"
     },
     {
       nctId: "NCT04882194",
-      title: "Targeted Alpha Therapy (225Ac-PSMA) for Advanced Metastatic Cancer",
+      title: "Targeted Alpha Therapy (225Ac-PSMA / Theranostics) for Advanced Refractory Solid Malignancies",
       phase: "Phase I/II",
-      sponsor: "UC-CCC / NIH NCI",
+      sponsor: "UC-CCC / NIH NCI Radiotheranostics Center",
       status: "Recruiting",
-      primaryLocation: "UC-CCC Specialty Care Center",
+      primaryLocation: "UC-CCC Radiotheranostics Suite",
       matchScorePercent: 88,
-      matchingBiomarkers: ["High SUVmax on PET/CT", "Refractory to Standard Regimen"],
+      matchingBiomarkers: ["High SUVmax on Diagnostic PET/CT", "Refractory to Standard Regimen"],
       inclusionCriteria: [
-        "Metastatic or unresectable disease",
-        "Positive target expression on diagnostic PET scan",
+        "Metastatic or unresectable disease with documented target avidity",
+        "Positive target expression on diagnostic PET/CT or fMRI",
         "Life expectancy > 12 weeks"
       ],
       exclusionCriteria: [
         "Platelet count < 75,000/mcL",
         "Prior total body irradiation"
       ],
-      contactEmail: "radiotheranostics@demo-cancercenter.org",
-      principalInvestigator: "Dr. Marcus Thorne, MD"
+      contactEmail: "theranostics@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Daniel Golden, MD, MHPE"
     },
     {
       nctId: "NCT05102941",
-      title: "Neoadjuvant mRNA Neoantigen Vaccine Combined with Nivolumab in Stage III Malignancy",
+      title: "Neoadjuvant mRNA Neoantigen Vaccine Combined with Nivolumab in High TMB Malignancies",
       phase: "Phase I",
       sponsor: "UC-CCC Center for Personalized Therapeutics",
       status: "Enrolling by invitation",
-      primaryLocation: "UC-CCC Regional Center",
-      matchScorePercent: 82,
-      matchingBiomarkers: ["High Tumor Mutational Burden (TMB > 10 mut/Mb)", "HLA-A*02:01 Positive"],
+      primaryLocation: "UC-CCC Center for Care and Discovery (CCD)",
+      matchScorePercent: 84,
+      matchingBiomarkers: ["High Tumor Mutational Burden (TMB > 10 mut/Mb)", "HLA-A*02:01 Positive", "MSI-High"],
       inclusionCriteria: [
-        "Fresh tumor tissue biopsy available for neoantigen sequencing",
+        "Fresh tumor tissue biopsy available for whole-exome sequencing and neoantigen epitope prediction",
         "No prior PD-1/PD-L1 checkpoint inhibitor resistance"
       ],
       exclusionCriteria: [
-        "Concurrent immunosuppressive therapy",
+        "Concurrent systemic immunosuppressive therapy",
         "Active solid organ transplant"
       ],
-      contactEmail: "cpt-trials@demo-cancercenter.org",
-      principalInvestigator: "Dr. Sarah Chen, MD, PhD"
+      contactEmail: "cpt-trials@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Thomas Gajewski, MD, PhD"
+    },
+    {
+      nctId: "NCT04720911",
+      title: "Phase I/II Multi-Target Autologous CAR-T Cellular Therapy for Refractory Hematologic Malignancies",
+      phase: "Phase I/II",
+      sponsor: "UC-CCC Cellular Therapy & Bone Marrow Transplant Program",
+      status: "Recruiting",
+      primaryLocation: "UC-CCC Cell Therapy Inpatient Enclave",
+      matchScorePercent: 80,
+      matchingBiomarkers: ["CD19/CD22 Positive Expression", "Relapsed/Refractory Disease"],
+      inclusionCriteria: [
+        "Relapsed or refractory disease after >= 2 prior systemic regimens",
+        "Adequate pulmonary and cardiac status",
+        "Consented to apheresis collection"
+      ],
+      exclusionCriteria: [
+        "Active uncontrolled graft-versus-host disease (GVHD)",
+        "Severe active neurological deficits"
+      ],
+      contactEmail: "cellular-therapy@bsd.uchicago.edu",
+      principalInvestigator: "Dr. Michael Bishop, MD"
     }
   ];
 }
