@@ -142,7 +142,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                 />
               </div>
               <div className="min-w-0 flex flex-col justify-center">
-                <span className="font-sans font-bold text-xs sm:text-sm md:text-base lg:text-[16px] tracking-tight text-primary group-hover:text-primary/90 transition-colors leading-snug truncate">
+                <span className="font-serif font-bold text-sm sm:text-base md:text-lg lg:text-[19px] tracking-tight text-primary group-hover:text-primary/90 transition-colors leading-snug truncate">
                   {institutionConfig.platformName}: {institutionConfig.fullName}
                 </span>
                 <p className="text-[9px] sm:text-[10px] text-muted-foreground font-sans truncate leading-tight mt-0.5 hidden sm:block">
