@@ -490,30 +490,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
                   </DropdownMenuItem>
 
-                  {/* Item 2: Omics Integration */}
-                  <DropdownMenuItem
-                    onClick={() => navigate("/omics-view")}
-                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
-                      location.pathname.startsWith("/omics-view")
-                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
-                        : "hover:bg-muted"
-                    }`}
-                  >
-                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
-                      <Dna className="w-3.5 h-3.5" />
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="font-semibold text-foreground">Omics Integration</span>
-                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-accent/30 text-accent font-mono">PhoenixMO</Badge>
-                      </div>
-                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
-                        Somatic variants, OncoPrint matrix & composite risk score
-                      </span>
-                    </div>
-                  </DropdownMenuItem>
-
-                  {/* Item 3: iUCADO-Orbit Engine */}
+                  {/* Item 2: iUCADO-Orbit Engine */}
                   <DropdownMenuItem
                     onClick={() => navigate("/iucado-orbit")}
                     className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
@@ -555,7 +532,30 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     Analytics & Research Studio
                   </div>
 
-                  {/* Item 1: Cohort Builder */}
+                  {/* Item 1: Omics Integration */}
+                  <DropdownMenuItem
+                    onClick={() => navigate("/omics-view")}
+                    className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
+                      location.pathname.startsWith("/omics-view")
+                        ? "border-l-2 border-primary bg-primary/10 text-primary font-semibold"
+                        : "hover:bg-muted"
+                    }`}
+                  >
+                    <div className="p-1.5 rounded-md bg-surface text-primary border border-border shrink-0 mt-0.5">
+                      <Dna className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="font-semibold text-foreground">Omics Integration</span>
+                        <Badge variant="outline" className="text-[9px] py-0 px-1 border-accent/30 text-accent font-mono">PhoenixMO</Badge>
+                      </div>
+                      <span className="text-[11px] text-muted-foreground font-normal leading-snug">
+                        Somatic variants, OncoPrint matrix & composite risk score
+                      </span>
+                    </div>
+                  </DropdownMenuItem>
+
+                  {/* Item 2: Cohort Builder */}
                   <DropdownMenuItem
                     onClick={() => navigate("/cohort-builder")}
                     className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
@@ -577,7 +577,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
                   </DropdownMenuItem>
 
-                  {/* Item 2: Researcher Portal */}
+                  {/* Item 3: Researcher Portal */}
                   <DropdownMenuItem
                     onClick={() => navigate("/researcher-portal")}
                     className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
@@ -599,7 +599,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
                     </div>
                   </DropdownMenuItem>
 
-                  {/* Item 3: RNA-seq Workspace */}
+                  {/* Item 4: RNA-seq Workspace */}
                   <DropdownMenuItem
                     onClick={() => navigate("/workspace")}
                     className={`cursor-pointer p-2 rounded-lg transition-colors flex items-start gap-2.5 ${
