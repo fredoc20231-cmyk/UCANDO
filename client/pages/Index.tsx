@@ -70,10 +70,6 @@ export default function Index() {
                 </Badge>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-serif font-bold text-foreground tracking-tight leading-tight">
-                Central Oncology Integration Hub & Governed Data Commons
-              </h1>
-
               <p className="text-sm md:text-base text-muted-foreground font-medium leading-relaxed font-sans">
                 {institutionConfig.platformName} connects every consented {institutionConfig.shortName} oncology patient and translational dataset into a single, HIPAA-compliant, AI-ready integration spine. Seamlessly unifies Epic EHR, publication-grade RNA-seq analytics, digital radiology, pathology WSI, biospecimen lineage, and clinical trial matching under real-time OPA consent governance.
               </p>
