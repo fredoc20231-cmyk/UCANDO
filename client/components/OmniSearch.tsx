@@ -680,11 +680,9 @@ export const OmniSearch: React.FC = () => {
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         inputRef.current?.focus();
-        setIsOpen(true);
       } else if (e.key === "/" && document.activeElement !== inputRef.current && !["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName || "")) {
         e.preventDefault();
         inputRef.current?.focus();
-        setIsOpen(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -844,7 +842,9 @@ export const OmniSearch: React.FC = () => {
                   key={cat.id}
                   onClick={() => {
                     setActiveCategory(cat.id);
-                    setIsOpen(true);
+                    if (query.trim().length > 0) {
+                      setIsOpen(true);
+                    }
                     inputRef.current?.focus();
                   }}
                   className={`flex items-center justify-between text-xs px-2 py-1.5 cursor-pointer rounded ${
@@ -875,9 +875,13 @@ export const OmniSearch: React.FC = () => {
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
-              if (!isOpen) setIsOpen(true);
+              setIsOpen(e.target.value.trim().length > 0);
             }}
-            onFocus={() => setIsOpen(true)}
+            onFocus={() => {
+              if (query.trim().length > 0) {
+                setIsOpen(true);
+              }
+            }}
             onKeyDown={handleKeyDown}
             className="w-full h-8 -mt-px pl-3 pr-16 text-xs bg-transparent text-foreground placeholder:text-muted-foreground focus:outline-none font-sans"
           />
@@ -889,6 +893,7 @@ export const OmniSearch: React.FC = () => {
                 type="button"
                 onClick={() => {
                   setQuery("");
+                  setIsOpen(false);
                   inputRef.current?.focus();
                 }}
                 className="p-0.5 text-muted-foreground hover:text-foreground rounded"
@@ -904,34 +909,9 @@ export const OmniSearch: React.FC = () => {
         </div>
       </div>
 
-      {/* Dropdown Results Box */}
-      {isOpen && (
+      {/* Dropdown Results Box (only displays when a keyword is typed) */}
+      {isOpen && query.trim().length > 0 && (
         <div className="absolute top-9 left-0 right-0 bg-card border border-border rounded-lg shadow-elevated z-50 overflow-hidden font-sans animate-in fade-in-50 duration-100 max-h-[480px] flex flex-col">
-          {/* Category Filter Pills in Dropdown Header */}
-          <div className="p-2 border-b border-border bg-surface flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-            <span className="text-[10px] font-semibold text-muted-foreground uppercase px-1 shrink-0">Scope:</span>
-            {CATEGORY_CONFIG.map((cat) => {
-              const isSelected = activeCategory === cat.id;
-              return (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => {
-                    setActiveCategory(cat.id);
-                    inputRef.current?.focus();
-                  }}
-                  className={`px-2 py-0.5 rounded-full text-[11px] font-medium transition-colors shrink-0 flex items-center gap-1 ${
-                    isSelected
-                      ? "bg-primary text-primary-foreground font-semibold shadow-xs"
-                      : "bg-card text-muted-foreground hover:text-foreground border border-border hover:bg-muted"
-                  }`}
-                >
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
           {/* Results List */}
           <div className="overflow-y-auto max-h-[360px] p-1 divide-y divide-border/40">
             {filteredResults.length === 0 ? (
