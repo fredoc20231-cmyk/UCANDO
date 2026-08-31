@@ -9,15 +9,16 @@ import { DifferentialExpressionTable } from "@/components/scientific/Differentia
 import { GeneExpressionBoxplot } from "@/components/scientific/GeneExpressionBoxplot";
 import { EnrichmentBarPlot } from "@/components/scientific/EnrichmentBarPlot";
 import { ExperimentalDesignModal } from "@/components/ExperimentalDesignModal";
-import { 
-  SlidersHorizontal, 
-  Database, 
-  RefreshCw, 
-  Sliders, 
-  Layers, 
-  Play, 
-  RotateCcw, 
-  Filter, 
+import { RnaSeqUploadModal } from "@/components/RnaSeqUploadModal";
+import {
+  SlidersHorizontal,
+  Database,
+  RefreshCw,
+  Sliders,
+  Layers,
+  Play,
+  RotateCcw,
+  Filter,
   HelpCircle,
   FileCode,
   Share2,
@@ -29,7 +30,8 @@ import {
   Info,
   GitFork,
   Cpu,
-  Upload
+  Upload,
+  FileArchive
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -72,6 +74,7 @@ export const Workspace: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<"overview" | "volcano" | "pca" | "heatmap" | "table" | "pathways">("overview");
   const [isRecalculating, setIsRecalculating] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   // Sync gene query parameter from OmniSearch or direct deep links
   useEffect(() => {
@@ -136,19 +139,28 @@ export const Workspace: React.FC = () => {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setIsDesignModalOpen(true)}
-              className="text-xs border-primary/40 text-primary hover:bg-primary/5 h-8 font-mono"
+              onClick={() => setIsUploadModalOpen(true)}
+              className="text-xs border-primary/50 bg-primary/10 text-primary hover:bg-primary/20 h-8 font-semibold shadow-xs"
             >
-              <GitFork className="w-3.5 h-3.5 mr-1" /> Configure Design & Platform
+              <Upload className="w-3.5 h-3.5 mr-1 text-primary" /> Upload Data / ZIP
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsDesignModalOpen(true)}
+              className="text-xs border-border hover:bg-muted text-foreground h-8 font-mono"
+            >
+              <GitFork className="w-3.5 h-3.5 mr-1" /> Design & Platform
             </Button>
 
             <Button
               variant="outline"
               size="sm"
               onClick={handleResetDefaults}
-              className="text-xs border-border hover:bg-muted text-muted-foreground h-8"
+              className="text-xs border-border hover:bg-muted text-muted-foreground h-8 hidden sm:flex"
             >
-              <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset Defaults
+              <RotateCcw className="w-3.5 h-3.5 mr-1" /> Reset
             </Button>
 
             <Button
@@ -176,7 +188,13 @@ export const Workspace: React.FC = () => {
                   <Database className="w-3.5 h-3.5 text-primary" />
                   <span>1. Reference Dataset</span>
                 </Label>
-                <span className="text-[10px] text-muted-foreground font-mono">N={activeDataset.sampleCount}</span>
+                <button
+                  type="button"
+                  onClick={() => setIsUploadModalOpen(true)}
+                  className="text-[10px] text-primary hover:underline font-bold flex items-center gap-1"
+                >
+                  <Upload className="w-3 h-3" /> Ingest New
+                </button>
               </div>
 
               <Select value={activeDataset.id} onValueChange={(val) => selectDataset(val)}>
@@ -541,10 +559,15 @@ export const Workspace: React.FC = () => {
           </main>
         </div>
 
-        {/* Modal */}
+        {/* Modals */}
         <ExperimentalDesignModal
           open={isDesignModalOpen}
           onOpenChange={setIsDesignModalOpen}
+        />
+
+        <RnaSeqUploadModal
+          open={isUploadModalOpen}
+          onOpenChange={setIsUploadModalOpen}
         />
       </div>
     </Layout>

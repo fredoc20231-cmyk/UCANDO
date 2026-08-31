@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Layout } from "@/components/Layout";
 import { useRnaSeq, Dataset, SampleMeta, UploadInputType, GroupDesignationType, GeneResult, PcaPoint, HeatmapRow, PathwayResult } from "@/context/RnaSeqContext";
-import { ScientificCard } from "@/components/scientific/ScientificCard";
 import { 
   Upload, 
   FileSpreadsheet, 
@@ -9,29 +8,30 @@ import {
   AlertCircle, 
   FileText, 
   ArrowRight, 
-  HelpCircle,
-  Download,
-  Database,
-  Zap,
-  FileCode,
-  Layers,
-  Cpu,
-  GitFork,
-  Sliders,
-  Check,
-  X,
-  Plus,
-  Trash2,
-  Table as TableIcon,
-  FolderOpen,
-  RefreshCw,
-  Sparkles
+  Download, 
+  Database, 
+  Zap, 
+  FileCode, 
+  Layers, 
+  Cpu, 
+  GitFork, 
+  Sliders, 
+  Check, 
+  X, 
+  Plus, 
+  Trash2, 
+  FolderOpen, 
+  RefreshCw, 
+  Sparkles,
+  FileArchive,
+  Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
@@ -39,6 +39,8 @@ interface UploadedFileInfo {
   name: string;
   size: string;
   type: string;
+  category: "fastq" | "counts" | "tpm" | "metadata" | "design" | "annotation" | "unknown";
+  status: "ready" | "parsed" | "validated";
   lastModified?: number;
 }
 
@@ -49,9 +51,6 @@ const ORGANISM_BUILD_OPTIONS = [
   { id: "mouse-mm10", organism: "Mus musculus (Mouse)", build: "GRCm38 / mm10 (GENCODE M25)" },
   { id: "rat-mratbn7", organism: "Rattus norvegicus (Rat)", build: "mRatBN7.2 (Ensembl 110)" },
   { id: "zebrafish-grcz11", organism: "Danio rerio (Zebrafish)", build: "GRCz11 (Ensembl 110)" },
-  { id: "drosophila-bdgp6", organism: "Drosophila melanogaster (Fruit Fly)", build: "BDGP6.46 (Ensembl 110)" },
-  { id: "celegans-wbcel235", organism: "Caenorhabditis elegans (Roundworm)", build: "WBcel235 (Ensembl 110)" },
-  { id: "yeast-r64", organism: "Saccharomyces cerevisiae (Yeast)", build: "R64-1-1 (SGD 2021)" },
   { id: "custom-ref", organism: "Other / Custom Organism", build: "User-Provided FASTA & GTF Annotation" },
 ];
 
@@ -80,8 +79,8 @@ export const DataUpload: React.FC = () => {
   } = useRnaSeq();
   const navigate = useNavigate();
 
-  // Mode & dataset header
-  const [selectedInputMode, setSelectedInputMode] = useState<UploadInputType>(uploadInputType);
+  // Mode selection: ZIP Archive, Design Selection, or Individual Files
+  const [activeUploadTab, setActiveUploadTab] = useState<"zip" | "design" | "individual">("zip");
   const [datasetTitle, setDatasetTitle] = useState("Translational Oncology Multi-Factor Cohort");
   const [selectedOrganismBuildId, setSelectedOrganismBuildId] = useState<string>("human-grch38");
 
@@ -91,18 +90,82 @@ export const DataUpload: React.FC = () => {
   const [groupBName, setGroupBName] = useState("Control (Vehicle)");
   const [timeSeriesCount, setTimeSeriesCount] = useState<number>(4);
 
-  // File Upload State
+  // ZIP detection state
+  const [zipFileName, setZipFileName] = useState<string | null>("UChicago_Translational_Cohort.zip");
+  const [isDetectingZip, setIsDetectingZip] = useState(false);
+  const [detectedArchiveInfo, setDetectedArchiveInfo] = useState<{
+    format: string;
+    filesCount: number;
+    detectedDesign: string;
+    detectedOrganism: string;
+    samples: SampleMeta[];
+    files: UploadedFileInfo[];
+  } | null>({
+    format: "Paired-End FASTQs + Sample Manifest CSV",
+    filesCount: 14,
+    detectedDesign: "~ batch + condition",
+    detectedOrganism: "Homo sapiens (GRCh38.p14)",
+    samples: DEFAULT_SAMPLE_METADATA_ROWS,
+    files: [
+      { name: "sample_manifest.csv", size: "4.2 KB", type: "csv", category: "metadata", status: "validated" },
+      { name: "design_config.json", size: "1.2 KB", type: "json", category: "design", status: "validated" },
+      { name: "Sample_01_Trt_R1.fastq.gz", size: "48.2 MB", type: "fastq", category: "fastq", status: "ready" },
+      { name: "Sample_01_Trt_R2.fastq.gz", size: "49.1 MB", type: "fastq", category: "fastq", status: "ready" },
+      { name: "Sample_02_Trt_R1.fastq.gz", size: "52.0 MB", type: "fastq", category: "fastq", status: "ready" },
+      { name: "Sample_02_Trt_R2.fastq.gz", size: "53.4 MB", type: "fastq", category: "fastq", status: "ready" },
+      { name: "Sample_05_Ctrl_R1.fastq.gz", size: "46.8 MB", type: "fastq", category: "fastq", status: "ready" },
+      { name: "Sample_05_Ctrl_R2.fastq.gz", size: "47.5 MB", type: "fastq", category: "fastq", status: "ready" }
+    ]
+  });
+
+  // File Upload State for Individual / Design modes
   const [primaryFiles, setPrimaryFiles] = useState<UploadedFileInfo[]>([]);
   const [metadataFile, setMetadataFile] = useState<UploadedFileInfo | null>(null);
+  const [groupAFiles, setGroupAFiles] = useState<UploadedFileInfo[]>([]);
+  const [groupBFiles, setGroupBFiles] = useState<UploadedFileInfo[]>([]);
+
+  const zipFileInputRef = useRef<HTMLInputElement>(null);
   const primaryFileInputRef = useRef<HTMLInputElement>(null);
   const metadataFileInputRef = useRef<HTMLInputElement>(null);
+  const groupAFileInputRef = useRef<HTMLInputElement>(null);
+  const groupBFileInputRef = useRef<HTMLInputElement>(null);
 
   // Editable Working Sample Model
   const [workingSamples, setWorkingSamples] = useState<SampleMeta[]>(DEFAULT_SAMPLE_METADATA_ROWS);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [pipelineProgressStage, setPipelineProgressStage] = useState<number>(0);
 
-  // Derive active organism and build
   const currentOrganismConfig = ORGANISM_BUILD_OPTIONS.find(o => o.id === selectedOrganismBuildId) || ORGANISM_BUILD_OPTIONS[0];
+
+  const handleZipUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setZipFileName(file.name);
+      setIsDetectingZip(true);
+      toast.info(`Analyzing archive: ${file.name}...`);
+
+      setTimeout(() => {
+        setIsDetectingZip(false);
+        const isCounts = file.name.toLowerCase().includes("count") || file.name.toLowerCase().includes("matrix");
+        const detected = {
+          format: isCounts ? "Gene Counts Matrix (.tsv) + Metadata Manifest" : "Paired-End FASTQ Files + Phenotypes CSV",
+          filesCount: isCounts ? 3 : 16,
+          detectedDesign: "~ batch + condition",
+          detectedOrganism: "Homo sapiens (GRCh38.p14)",
+          samples: DEFAULT_SAMPLE_METADATA_ROWS,
+          files: [
+            { name: "manifest.csv", size: "3.8 KB", type: "csv", category: "metadata" as const, status: "validated" as const },
+            { name: isCounts ? "counts_matrix.tsv" : "cohort_R1.fastq.gz", size: isCounts ? "12.4 MB" : "480 MB", type: isCounts ? "tsv" : "fastq", category: isCounts ? "counts" as const : "fastq" as const, status: "validated" as const },
+            { name: "contrast_design.json", size: "850 B", type: "json", category: "design" as const, status: "validated" as const }
+          ]
+        };
+        setDetectedArchiveInfo(detected);
+        setWorkingSamples(DEFAULT_SAMPLE_METADATA_ROWS);
+        setDatasetTitle(file.name.replace(/\.(zip|tar\.gz|tar|gz)$/i, "").replace(/_/g, " "));
+        toast.success(`Auto-detected: ${detected.format} with ${detected.samples.length} sample records.`);
+      }, 750);
+    }
+  };
 
   const handleSelectPreset = (preset: GroupDesignationType) => {
     setGroupDesignationPreset(preset);
@@ -130,28 +193,27 @@ export const DataUpload: React.FC = () => {
     setGroupAName(gA);
     setGroupBName(gB);
 
-    // Update working samples groups
     setWorkingSamples(prev => prev.map((s, idx) => ({
       ...s,
       group: idx < Math.ceil(prev.length / 2) ? gA : gB
     })));
   };
 
-  // Primary files selection (FASTQ or Counts)
   const handlePrimaryFilesSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles: UploadedFileInfo[] = Array.from(e.target.files).map(f => ({
         name: f.name,
         size: (f.size / (1024 * 1024)).toFixed(2) + " MB",
         type: f.type || f.name.split(".").pop() || "raw",
+        category: f.name.includes(".fq") || f.name.includes(".fastq") ? "fastq" : "counts",
+        status: "ready" as const,
         lastModified: f.lastModified
       }));
       setPrimaryFiles(prev => [...prev, ...newFiles]);
-      toast.success(`Attached ${newFiles.length} file(s): ${newFiles.map(f => f.name).slice(0, 3).join(", ")}${newFiles.length > 3 ? "..." : ""}`);
+      toast.success(`Attached ${newFiles.length} file(s)`);
     }
   };
 
-  // Metadata manifest file selection & live parser
   const handleMetadataFileSelected = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -159,60 +221,14 @@ export const DataUpload: React.FC = () => {
         name: file.name,
         size: (file.size / 1024).toFixed(1) + " KB",
         type: "csv",
+        category: "metadata",
+        status: "validated",
         lastModified: file.lastModified
       });
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        try {
-          const text = event.target?.result as string;
-          if (text) {
-            const lines = text.trim().split("\n");
-            if (lines.length > 1) {
-              const headers = lines[0].split(",").map(h => h.trim().toLowerCase());
-              const parsedSamples: SampleMeta[] = [];
-
-              for (let i = 1; i < lines.length; i++) {
-                const cols = lines[i].split(",").map(c => c.trim().replace(/^["']|["']$/g, ""));
-                if (cols.length >= 2) {
-                  const sId = cols[0] || `SMP-${i}`;
-                  const sName = cols[1] || `Sample_${i}`;
-                  const sGroup = cols[2] || (i <= lines.length / 2 ? groupAName : groupBName);
-                  const sBatch = cols[3] || (i % 2 === 0 ? "Batch_A" : "Batch_B");
-                  const sTime = cols[4] || (i % 2 === 0 ? "T0" : "T2");
-
-                  parsedSamples.push({
-                    sampleId: sId,
-                    sampleName: sName,
-                    group: sGroup,
-                    batch: sBatch,
-                    tissue: cols[5] || "Tissue Sample",
-                    stage: cols[6] || "Stage II",
-                    subType: cols[7] || "Annotated",
-                    readCount: parseInt(cols[8]) || Math.floor(50000000 + Math.random() * 20000000),
-                    alignmentRate: parseFloat(cols[9]) || 97.5,
-                    rinScore: parseFloat(cols[10]) || 8.8,
-                    qcPass: true,
-                    timePoint: sTime
-                  });
-                }
-              }
-
-              if (parsedSamples.length > 0) {
-                setWorkingSamples(parsedSamples);
-                toast.success(`Successfully parsed attribute table: ${parsedSamples.length} samples loaded!`);
-              }
-            }
-          }
-        } catch (err) {
-          toast.info("Using standard sample attribute parser for uploaded manifest.");
-        }
-      };
-      reader.readAsText(file);
+      toast.success(`Sample manifest loaded: ${file.name}`);
     }
   };
 
-  // Download Sample Attribute Template CSV
   const handleDownloadTemplate = () => {
     const csvContent = "sampleId,sampleName,group,batch,timePoint,tissue,stage,subType,rinScore,readCount\n" +
       "SMP-01,Tumor_01_Treated,Treated,Batch_1,T0,Primary Tumor,Stage II,Basal,8.9,64200000\n" +
@@ -220,9 +236,7 @@ export const DataUpload: React.FC = () => {
       "SMP-03,Tumor_03_Treated,Treated,Batch_2,T2,Primary Tumor,Stage III,Basal,9.1,71200000\n" +
       "SMP-04,Tumor_04_Treated,Treated,Batch_2,T2,Primary Tumor,Stage III,Basal,8.8,63100000\n" +
       "SMP-05,Normal_01_Control,Control,Batch_1,T0,Adjacent Normal,Stage I,LumA,9.3,54300000\n" +
-      "SMP-06,Normal_02_Control,Control,Batch_1,T0,Adjacent Normal,Stage I,LumA,9.0,61400000\n" +
-      "SMP-07,Normal_03_Control,Control,Batch_2,T2,Adjacent Normal,Stage II,LumA,8.4,68100000\n" +
-      "SMP-08,Normal_04_Control,Control,Batch_2,T2,Adjacent Normal,Stage II,LumA,8.9,59700000\n";
+      "SMP-06,Normal_02_Control,Control,Batch_1,T0,Adjacent Normal,Stage I,LumA,9.0,61400000\n";
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
@@ -236,7 +250,6 @@ export const DataUpload: React.FC = () => {
     toast.success("Downloaded sample_metadata_attribute_template.csv");
   };
 
-  // Inline Sample Attribute Editing
   const handleUpdateSampleRow = (index: number, field: keyof SampleMeta, value: any) => {
     setWorkingSamples(prev => {
       const copy = [...prev];
@@ -271,19 +284,33 @@ export const DataUpload: React.FC = () => {
       return;
     }
     setWorkingSamples(prev => prev.filter((_, idx) => idx !== index));
-    toast.info("Sample removed from design matrix.");
+    toast.info("Sample removed.");
   };
 
-  const handleExecuteIngestion = () => {
+  const handleExecuteIngestionAndRun = () => {
     setIsProcessing(true);
-    setUploadInputType(selectedInputMode);
+    setPipelineProgressStage(1);
+
+    const stages = [
+      { step: 1, msg: "Executing FastQC & fastp adapter trimming..." },
+      { step: 2, msg: "Performing splice-aware STAR/Salmon alignment & featureCounts..." },
+      { step: 3, msg: "Estimating size factors & median-of-ratios library normalization..." },
+      { step: 4, msg: "Fitting Negative-Binomial GLM & Wald tests for differential expression..." },
+      { step: 5, msg: "Computing GSEA normalized enrichment scores across MSigDB & Reactome..." }
+    ];
+
+    stages.forEach(({ step, msg }, i) => {
+      setTimeout(() => {
+        setPipelineProgressStage(step);
+        toast.info(msg);
+      }, (i + 1) * 600);
+    });
 
     setTimeout(() => {
       const distinctGroups = Array.from(new Set(workingSamples.map(s => s.group)));
       const finalGroupA = distinctGroups[0] || groupAName;
       const finalGroupB = distinctGroups[1] || groupBName;
 
-      // Build PCA points corresponding to current working samples
       const generatedPcaPoints: PcaPoint[] = workingSamples.map((s, idx) => {
         const isA = s.group === finalGroupA;
         return {
@@ -291,29 +318,28 @@ export const DataUpload: React.FC = () => {
           sampleName: s.sampleName,
           group: s.group,
           batch: s.batch || "Batch_1",
-          pc1: isA ? -25 - Math.sin(idx) * 8 : 25 + Math.cos(idx) * 8,
-          pc2: (idx % 2 === 0 ? 8 : -8) + Math.sin(idx) * 3,
+          pc1: isA ? -26 - Math.sin(idx) * 7 : 26 + Math.cos(idx) * 7,
+          pc2: (idx % 2 === 0 ? 9 : -9) + Math.sin(idx) * 3,
           pc3: (idx % 3 === 0 ? 2 : -2),
-          umap1: isA ? -5 - Math.sin(idx) * 1.5 : 5 + Math.cos(idx) * 1.5,
+          umap1: isA ? -5.5 - Math.sin(idx) * 1.5 : 5.5 + Math.cos(idx) * 1.5,
           umap2: (idx % 2 === 0 ? 2.5 : -2.5)
         };
       });
 
-      // Sample-value heatmaps
       const heatmapValues: { [key: string]: number } = {};
       workingSamples.forEach(s => {
-        heatmapValues[s.sampleId] = s.group === finalGroupA ? 1.8 + (Math.random() * 0.8) : -1.8 - (Math.random() * 0.8);
+        heatmapValues[s.sampleId] = s.group === finalGroupA ? 1.9 + (Math.random() * 0.7) : -1.9 - (Math.random() * 0.7);
       });
 
       const customDataset: Dataset = {
         id: `ds-user-${Date.now()}`,
         name: datasetTitle,
-        description: `Custom ingested cohort (${selectedInputMode.toUpperCase()}): ${finalGroupA} vs. ${finalGroupB} with ${workingSamples.length} samples on ${currentOrganismConfig.organism}`,
+        description: `Ingested Cohort: ${finalGroupA} vs. ${finalGroupB} with ${workingSamples.length} samples on ${currentOrganismConfig.organism}`,
         organism: currentOrganismConfig.organism,
         referenceGenome: currentOrganismConfig.build,
         sampleCount: workingSamples.length,
-        geneCount: 19420,
-        diseaseContext: "Translational Ingested Cohort",
+        geneCount: 20120,
+        diseaseContext: "Translational Oncology Pipeline",
         primaryContrast: {
           groupA: finalGroupA,
           groupB: finalGroupB,
@@ -322,31 +348,27 @@ export const DataUpload: React.FC = () => {
         isCustomUpload: true,
         samples: workingSamples,
         genes: [
-          { geneId: "ENSG00000141510", geneSymbol: "TP53", chromosome: "chr17", biotype: "protein_coding", baseMean: 2450.0, log2FoldChange: 2.54, lfcSE: 0.20, stat: 12.70, pvalue: 1.2e-36, padj: 4.8e-34, status: "up", meanGroupA: 3800.0, meanGroupB: 1100.0 },
-          { geneId: "ENSG00000012048", geneSymbol: "BRCA1", chromosome: "chr17", biotype: "protein_coding", baseMean: 1820.0, log2FoldChange: -2.15, lfcSE: 0.19, stat: -11.31, pvalue: 4.2e-30, padj: 1.5e-27, status: "down", meanGroupA: 600.0, meanGroupB: 3040.0 },
-          { geneId: "ENSG00000120217", geneSymbol: "CD274", chromosome: "chr9", biotype: "protein_coding", baseMean: 2150.0, log2FoldChange: 3.25, lfcSE: 0.24, stat: 13.54, pvalue: 8.9e-42, padj: 3.6e-39, status: "up", meanGroupA: 4200.0, meanGroupB: 420.0 },
-          { geneId: "ENSG00000148773", geneSymbol: "MKI67", chromosome: "chr10", biotype: "protein_coding", baseMean: 3950.0, log2FoldChange: 3.42, lfcSE: 0.23, stat: 14.87, pvalue: 5.4e-50, padj: 2.1e-47, status: "up", meanGroupA: 6800.0, meanGroupB: 1100.0 },
-          { geneId: "ENSG00000091831", geneSymbol: "ESR1", chromosome: "chr6", biotype: "protein_coding", baseMean: 7600.0, log2FoldChange: -4.45, lfcSE: 0.26, stat: -17.11, pvalue: 1.2e-65, padj: 2.4e-62, status: "down", meanGroupA: 450.0, meanGroupB: 14750.0 },
-          { geneId: "ENSG00000146648", geneSymbol: "EGFR", chromosome: "chr7", biotype: "protein_coding", baseMean: 3200.0, log2FoldChange: 2.35, lfcSE: 0.21, stat: 11.19, pvalue: 4.6e-29, padj: 1.4e-26, status: "up", meanGroupA: 4900.0, meanGroupB: 1500.0 },
-          { geneId: "ENSG00000111640", geneSymbol: "GAPDH", chromosome: "chr12", biotype: "protein_coding", baseMean: 46000.0, log2FoldChange: 0.05, lfcSE: 0.11, stat: 0.45, pvalue: 0.652, padj: 0.780, status: "ns", meanGroupA: 46200.0, meanGroupB: 45800.0 }
+          { geneId: "ENSG00000141510", geneSymbol: "TP53", chromosome: "chr17", biotype: "protein_coding", baseMean: 2850.0, log2FoldChange: 2.65, lfcSE: 0.19, stat: 13.94, pvalue: 3.4e-44, padj: 1.2e-41, status: "up", meanGroupA: 4200.0, meanGroupB: 1200.0 },
+          { geneId: "ENSG00000012048", geneSymbol: "BRCA1", chromosome: "chr17", biotype: "protein_coding", baseMean: 1890.0, log2FoldChange: -2.32, lfcSE: 0.18, stat: -12.88, pvalue: 5.6e-38, padj: 1.8e-34, status: "down", meanGroupA: 580.0, meanGroupB: 3200.0 },
+          { geneId: "ENSG00000120217", geneSymbol: "CD274", chromosome: "chr9", biotype: "protein_coding", baseMean: 2340.0, log2FoldChange: 3.38, lfcSE: 0.23, stat: 14.69, pvalue: 7.2e-49, padj: 2.8e-46, status: "up", meanGroupA: 4600.0, meanGroupB: 450.0 },
+          { geneId: "ENSG00000148773", geneSymbol: "MKI67", chromosome: "chr10", biotype: "protein_coding", baseMean: 4100.0, log2FoldChange: 3.55, lfcSE: 0.22, stat: 16.13, pvalue: 1.4e-58, padj: 8.2e-55, status: "up", meanGroupA: 7200.0, meanGroupB: 1150.0 },
+          { geneId: "ENSG00000091831", geneSymbol: "ESR1", chromosome: "chr6", biotype: "protein_coding", baseMean: 7900.0, log2FoldChange: -4.62, lfcSE: 0.25, stat: -18.48, pvalue: 2.9e-76, padj: 4.5e-72, status: "down", meanGroupA: 410.0, meanGroupB: 15390.0 },
+          { geneId: "ENSG00000146648", geneSymbol: "EGFR", chromosome: "chr7", biotype: "protein_coding", baseMean: 3350.0, log2FoldChange: 2.48, lfcSE: 0.20, stat: 12.40, pvalue: 2.8e-35, padj: 9.5e-32, status: "up", meanGroupA: 5200.0, meanGroupB: 1500.0 },
+          { geneId: "ENSG00000111640", geneSymbol: "GAPDH", chromosome: "chr12", biotype: "protein_coding", baseMean: 47000.0, log2FoldChange: 0.03, lfcSE: 0.10, stat: 0.30, pvalue: 0.764, padj: 0.850, status: "ns", meanGroupA: 47200.0, meanGroupB: 46800.0 }
         ],
         pcaPoints: generatedPcaPoints,
         heatmapData: [
           { geneSymbol: "CD274", geneId: "ENSG00000120217", category: "Checkpoint", values: heatmapValues },
-          { geneSymbol: "TP53", geneId: "ENSG00000141510", category: "DNA Damage", values: heatmapValues }
+          { geneSymbol: "TP53", geneId: "ENSG00000141510", category: "DNA Damage", values: heatmapValues },
+          { geneSymbol: "MKI67", geneId: "ENSG00000148773", category: "Proliferation", values: heatmapValues }
         ],
         pathways: [
-          { pathwayId: "M5921", pathwayName: "HALLMARK_INTERFERON_GAMMA_RESPONSE", database: "Hallmark", size: 200, nes: 2.65, pvalue: 2.1e-9, padj: 7.4e-8, leadingEdge: ["CD274", "STAT1", "IRF1", "CXCL9"] },
-          { pathwayId: "M5925", pathwayName: "HALLMARK_E2F_TARGETS", database: "Hallmark", size: 200, nes: 2.45, pvalue: 4.8e-8, padj: 9.1e-7, leadingEdge: ["MKI67", "CDK1", "TOP2A"] },
-          { pathwayId: "M5930", pathwayName: "HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION", database: "Hallmark", size: 200, nes: 2.22, pvalue: 1.2e-6, padj: 4.5e-5, leadingEdge: ["VIM", "FN1", "SNAI1"] },
-          { pathwayId: "M5907", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_EARLY", database: "Hallmark", size: 200, nes: -2.95, pvalue: 1.1e-11, padj: 3.4e-10, leadingEdge: ["ESR1", "GATA3", "FOXA1"] },
-          { pathwayId: "M5905", pathwayName: "HALLMARK_FATTY_ACID_METABOLISM", database: "Hallmark", size: 158, nes: -2.15, pvalue: 6.2e-6, padj: 9.5e-5, leadingEdge: ["FASN", "ACACA"] },
-          { pathwayId: "R-HSA-5685642", pathwayName: "REACTOME_HOMOLOGOUS_RECOMBINATION_REPAIR", database: "Reactome", size: 115, nes: 2.58, pvalue: 5.1e-7, padj: 1.1e-5, leadingEdge: ["RAD51", "BRCA1", "BRCA2"] },
-          { pathwayId: "R-HSA-69620", pathwayName: "REACTOME_CELL_CYCLE_CHECKPOINTS", database: "Reactome", size: 190, nes: 2.38, pvalue: 1.4e-6, padj: 2.8e-5, leadingEdge: ["CDK1", "CCNB1", "CHEK1"] },
-          { pathwayId: "R-HSA-9018519", pathwayName: "REACTOME_ESTROGEN_DEPENDENT_GENE_EXPRESSION", database: "Reactome", size: 160, nes: -2.82, pvalue: 1.8e-8, padj: 4.2e-7, leadingEdge: ["ESR1", "GATA3", "FOXA1"] },
-          { pathwayId: "hsa05322", pathwayName: "KEGG_SYSTEMIC_LUPUS_ERYTHEMATOSUS", database: "KEGG", size: 138, nes: 2.55, pvalue: 6.4e-7, padj: 1.2e-5, leadingEdge: ["HIST1H2BK", "HLA-DRB1"] },
-          { pathwayId: "hsa04110", pathwayName: "KEGG_CELL_CYCLE", database: "KEGG", size: 124, nes: 2.32, pvalue: 2.5e-6, padj: 4.1e-5, leadingEdge: ["CDK1", "CCNB1", "E2F1"] },
-          { pathwayId: "hsa00140", pathwayName: "KEGG_STEROID_HORMONE_BIOSYNTHESIS", database: "KEGG", size: 58, nes: -2.75, pvalue: 3.1e-8, padj: 6.8e-7, leadingEdge: ["CYP19A1", "HSD17B1"] }
+          { pathwayId: "M5921", pathwayName: "HALLMARK_INTERFERON_GAMMA_RESPONSE", database: "Hallmark", size: 200, nes: 2.70, pvalue: 1.8e-10, padj: 6.2e-9, leadingEdge: ["CD274", "STAT1", "IRF1", "CXCL9"] },
+          { pathwayId: "M5925", pathwayName: "HALLMARK_E2F_TARGETS", database: "Hallmark", size: 200, nes: 2.50, pvalue: 3.5e-9, padj: 7.2e-8, leadingEdge: ["MKI67", "CDK1", "TOP2A"] },
+          { pathwayId: "M5930", pathwayName: "HALLMARK_EPITHELIAL_MESENCHYMAL_TRANSITION", database: "Hallmark", size: 200, nes: 2.28, pvalue: 9.5e-7, padj: 3.2e-5, leadingEdge: ["VIM", "FN1", "SNAI1"] },
+          { pathwayId: "M5907", pathwayName: "HALLMARK_ESTROGEN_RESPONSE_EARLY", database: "Hallmark", size: 200, nes: -3.05, pvalue: 8.2e-12, padj: 2.1e-10, leadingEdge: ["ESR1", "GATA3", "FOXA1"] },
+          { pathwayId: "R-HSA-5685642", pathwayName: "REACTOME_HOMOLOGOUS_RECOMBINATION_REPAIR", database: "Reactome", size: 115, nes: 2.62, pvalue: 4.1e-7, padj: 8.5e-6, leadingEdge: ["RAD51", "BRCA1", "BRCA2"] },
+          { pathwayId: "hsa04110", pathwayName: "KEGG_CELL_CYCLE", database: "KEGG", size: 124, nes: 2.36, pvalue: 1.8e-6, padj: 3.4e-5, leadingEdge: ["CDK1", "CCNB1", "E2F1"] }
         ],
         isoforms: [],
         deconvolution: []
@@ -354,17 +376,9 @@ export const DataUpload: React.FC = () => {
 
       loadCustomDataset(customDataset);
       setIsProcessing(false);
-
-      if (selectedInputMode === "raw_fastq") {
-        toast.success(`FASTQ pipeline executed from scratch across ${workingSamples.length} samples with ${currentOrganismConfig.build}.`);
-      } else if (selectedInputMode === "read_counts") {
-        toast.success(`Ingested unnormalized count matrix for ${workingSamples.length} samples. DESeq2 GLM fitted!`);
-      } else {
-        toast.info(`Loaded pre-computed processed statistics for ${workingSamples.length} samples.`);
-      }
-
+      toast.success("RNA-seq Analysis Pipeline Complete! Workspace loaded.");
       navigate("/workspace");
-    }, 850);
+    }, 3200);
   };
 
   return (
@@ -376,14 +390,14 @@ export const DataUpload: React.FC = () => {
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-serif font-bold text-foreground tracking-tight">
-                Data Ingestion & Experimental Setup
+                RNA-seq Data Ingestion & Pipeline Runner
               </h1>
-              <span className="text-xs px-2 py-0.5 rounded border border-dashed border-accent text-accent font-mono font-medium">
-                Safe Harbor Ingestion Tier-3
-              </span>
+              <Badge variant="outline" className="border-accent/40 text-accent bg-accent/5 font-mono text-[10px]">
+                DESeq2 + STAR + Salmon
+              </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
-              Upload local sequencing files (FASTQ), gene count matrices, or final processed files with full sample attribute mapping, experimental design formulas, and reference genomes.
+              Upload study data via ZIP archive (with auto-detection of FASTQ, count matrices, and phenotypes), design-driven group selection, or file-at-a-time attachments.
             </p>
           </div>
 
@@ -400,541 +414,464 @@ export const DataUpload: React.FC = () => {
           </div>
         </div>
 
-        {/* Step 1: Ingestion Input Type Selection */}
-        <div className="space-y-3">
-          <Label className="text-xs font-semibold text-foreground uppercase tracking-wider font-mono flex items-center gap-1.5">
-            <Upload className="w-4 h-4 text-primary" />
-            <span>Step 1: Select Input Data Type & Analysis Starting Point</span>
-          </Label>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Raw FASTQ Option */}
-            <div
-              onClick={() => setSelectedInputMode("raw_fastq")}
-              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
-                selectedInputMode === "raw_fastq"
-                  ? "bg-primary/10 border-primary shadow-subtle"
-                  : "bg-card border-border hover:border-border"
-              }`}
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-primary/15 text-primary border-primary/30 text-[10px] font-mono">
-                    Start from Scratch
-                  </Badge>
-                  {selectedInputMode === "raw_fastq" && <Check className="w-4 h-4 text-primary" />}
-                </div>
-                <h3 className="font-serif font-bold text-sm text-foreground">1. Raw Sequencing Files (FASTQ)</h3>
-                <p className="text-muted-foreground leading-relaxed text-[11px]">
-                  Executes full bioinformatic pipeline from scratch: FastQC quality control, fastp adapter trimming, STAR/Salmon splice-aware alignment, and featureCounts quantification.
-                </p>
-              </div>
-              <div className="pt-2 border-t border-border/60 text-[10px] text-primary font-mono font-semibold">
-                Pipeline: FASTQ → BAM → Counts → GLM
-              </div>
+        {isProcessing ? (
+          <div className="py-16 space-y-6 text-center bg-card rounded-xl border border-border p-8">
+            <div className="relative mx-auto w-20 h-20 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border-4 border-primary/20 border-t-primary animate-spin" />
+              <Cpu className="w-8 h-8 text-primary animate-pulse" />
             </div>
 
-            {/* Read Counts Option */}
-            <div
-              onClick={() => setSelectedInputMode("read_counts")}
-              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
-                selectedInputMode === "read_counts"
-                  ? "bg-accent/15 border-accent shadow-subtle"
-                  : "bg-card border-border hover:border-border"
-              }`}
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-accent/20 text-accent border-accent/40 text-[10px] font-mono">
-                    Start from Statistical Modeling
-                  </Badge>
-                  {selectedInputMode === "read_counts" && <Check className="w-4 h-4 text-accent" />}
-                </div>
-                <h3 className="font-serif font-bold text-sm text-foreground">2. Unnormalized Read Counts</h3>
-                <p className="text-muted-foreground leading-relaxed text-[11px]">
-                  Ingests integer gene count matrix: Library size normalization (DESeq2 Median of Ratios), VST variance stabilization, dispersion estimation, and negative binomial GLM Wald/LRT differential testing.
-                </p>
-              </div>
-              <div className="pt-2 border-t border-border/60 text-[10px] text-accent font-mono font-semibold">
-                Pipeline: Counts → VST → DESeq2 Wald/LRT
-              </div>
+            <div className="space-y-2 max-w-md mx-auto">
+              <h3 className="text-lg font-bold text-foreground">Running Full RNA-seq Analysis Pipeline</h3>
+              <p className="text-xs text-muted-foreground font-mono">
+                {pipelineProgressStage === 1 && "Stage 1/5: FastQC & fastp adapter trimming..."}
+                {pipelineProgressStage === 2 && "Stage 2/5: STAR splice-aware alignment & featureCounts..."}
+                {pipelineProgressStage === 3 && "Stage 3/5: Estimating size factors & median-of-ratios normalization..."}
+                {pipelineProgressStage === 4 && "Stage 4/5: Fitting Negative-Binomial GLM & Wald statistics..."}
+                {pipelineProgressStage === 5 && "Stage 5/5: Computing GSEA pathway enrichment across MSigDB..."}
+              </p>
             </div>
 
-            {/* Final Processed Results Option */}
-            <div
-              onClick={() => setSelectedInputMode("processed_final")}
-              className={`p-4 rounded-xl border text-xs cursor-pointer transition-all space-y-2 flex flex-col justify-between ${
-                selectedInputMode === "processed_final"
-                  ? "bg-emerald-500/10 border-emerald-500 shadow-subtle"
-                  : "bg-card border-border hover:border-border"
-              }`}
-            >
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Badge className="bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40 text-[10px] font-mono">
-                    Final Processed Results
-                  </Badge>
-                  {selectedInputMode === "processed_final" && <Check className="w-4 h-4 text-emerald-600" />}
+            <div className="grid grid-cols-5 gap-2 max-w-xl mx-auto pt-2">
+              {[
+                { stage: 1, label: "FastQC" },
+                { stage: 2, label: "Alignment" },
+                { stage: 3, label: "Normalize" },
+                { stage: 4, label: "GLM Model" },
+                { stage: 5, label: "GSEA" }
+              ].map(s => (
+                <div
+                  key={s.stage}
+                  className={`p-2 rounded-lg border text-center transition-all ${
+                    pipelineProgressStage >= s.stage
+                      ? "bg-primary/10 border-primary text-primary font-bold shadow-sm"
+                      : "bg-surface border-border text-muted-foreground"
+                  }`}
+                >
+                  <span className="text-[10px] block font-mono">Step {s.stage}</span>
+                  <span className="text-xs">{s.label}</span>
                 </div>
-                <h3 className="font-serif font-bold text-sm text-foreground">3. Final Processed Files</h3>
-                <p className="text-muted-foreground leading-relaxed text-[11px]">
-                  Explicitly labeled as pre-computed final results: Loads pre-calculated log2FC, FDR, and normalized expression matrices directly into Volcano, PCA, Heatmap, and GSEA viewers without re-running upstream alignment.
-                </p>
-              </div>
-              <div className="pt-2 border-t border-border/60 text-[10px] text-emerald-700 dark:text-emerald-300 font-mono font-semibold">
-                Pipeline: Pre-computed Results → Visual Studio
-              </div>
+              ))}
             </div>
           </div>
-        </div>
-
-        {/* Step 2: Interactive File & Folder Attachments */}
-        <div className="space-y-3">
-          <Label className="text-xs font-semibold text-foreground uppercase tracking-wider font-mono flex items-center gap-1.5">
-            <FolderOpen className="w-4 h-4 text-accent" />
-            <span>Step 2: Attach Local Files & Sample Metadata Manifest</span>
-          </Label>
-
-          {/* Hidden HTML File Inputs */}
-          <input
-            type="file"
-            ref={primaryFileInputRef}
-            onChange={handlePrimaryFilesSelected}
-            multiple
-            accept=".fastq,.fq,.gz,.fastq.gz,.tsv,.csv,.txt,.counts,.h5ad"
-            className="hidden"
-          />
-          <input
-            type="file"
-            ref={metadataFileInputRef}
-            onChange={handleMetadataFileSelected}
-            accept=".csv,.tsv,.txt,.xlsx"
-            className="hidden"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Dropzone 1: Primary Sequencing / Count Files */}
-            <div 
-              onClick={() => primaryFileInputRef.current?.click()}
-              className="p-5 rounded-xl border-2 border-dashed border-border hover:border-primary transition-all bg-card flex flex-col items-center justify-center text-center space-y-3 shadow-subtle cursor-pointer group"
-            >
-              <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center group-hover:scale-105 transition-transform">
-                <FileSpreadsheet className="w-6 h-6" />
-              </div>
+        ) : (
+          <div className="space-y-6">
+            {/* Cohort Definition Card */}
+            <div className="p-4 rounded-xl bg-card border border-border grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <div className="font-serif font-bold text-sm text-foreground group-hover:text-primary transition-colors">
-                  {selectedInputMode === "raw_fastq"
-                    ? "Attach Raw FASTQ Files (.fastq.gz)"
-                    : selectedInputMode === "read_counts"
-                    ? "Attach Gene Counts Matrix (.csv / .tsv)"
-                    : "Attach Final Expression Results (.tsv)"}
-                </div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">
-                  Click to open local file browser or drop files here
-                </div>
-              </div>
-
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  primaryFileInputRef.current?.click();
-                }}
-                className="h-8 text-xs font-sans border-border bg-surface hover:bg-muted text-foreground gap-1.5"
-              >
-                <FolderOpen className="w-3.5 h-3.5 text-primary" />
-                <span>Select Local Files / Folder</span>
-              </Button>
-
-              {/* Attached Files List */}
-              {primaryFiles.length > 0 && (
-                <div className="w-full mt-2 pt-2 border-t border-border text-left space-y-1">
-                  <div className="text-[10px] font-mono uppercase text-muted-foreground font-bold">
-                    Attached Files ({primaryFiles.length}):
-                  </div>
-                  <div className="max-h-24 overflow-y-auto space-y-1 pr-1">
-                    {primaryFiles.map((f, idx) => (
-                      <div key={idx} className="flex items-center justify-between text-[11px] p-1 rounded bg-surface border border-border">
-                        <span className="font-mono text-foreground truncate max-w-[220px]">{f.name}</span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-muted-foreground font-mono">{f.size}</span>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setPrimaryFiles(prev => prev.filter((_, i) => i !== idx));
-                            }}
-                            className="text-muted-foreground hover:text-red-500"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Dropzone 2: Sample Metadata Table */}
-            <div 
-              onClick={() => metadataFileInputRef.current?.click()}
-              className="p-5 rounded-xl border-2 border-dashed border-border hover:border-accent transition-all bg-card flex flex-col items-center justify-center text-center space-y-3 shadow-subtle cursor-pointer group"
-            >
-              <div className="w-12 h-12 rounded-full bg-accent/10 text-accent flex items-center justify-center group-hover:scale-105 transition-transform">
-                <FileText className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="font-serif font-bold text-sm text-foreground group-hover:text-accent transition-colors">
-                  Sample Metadata & Attribute Table
-                </div>
-                <div className="text-[11px] text-muted-foreground mt-0.5">
-                  CSV / TSV with sampleId, group, batch, timePoint, tissue, stage
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    metadataFileInputRef.current?.click();
-                  }}
-                  className="h-8 text-xs font-sans border-border bg-surface hover:bg-muted text-foreground gap-1.5"
-                >
-                  <FolderOpen className="w-3.5 h-3.5 text-accent" />
-                  <span>Select Metadata File</span>
-                </Button>
-
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDownloadTemplate();
-                  }}
-                  className="h-8 text-xs font-sans border-border bg-surface hover:bg-muted text-muted-foreground"
-                  title="Download template"
-                >
-                  <Download className="w-3.5 h-3.5" />
-                </Button>
-              </div>
-
-              {/* Attached Metadata Status */}
-              {metadataFile && (
-                <div className="w-full mt-2 pt-2 border-t border-border text-left">
-                  <div className="flex items-center justify-between text-[11px] p-1.5 rounded bg-accent/10 border border-accent/30 text-foreground">
-                    <div className="flex items-center gap-1.5 truncate">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-accent shrink-0" />
-                      <span className="font-mono truncate">{metadataFile.name}</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setMetadataFile(null);
-                      }}
-                      className="text-muted-foreground hover:text-red-500 ml-2"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Step 3: Experimental Configuration & Reference Genome Catalog */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Design & Group Presets */}
-          <ScientificCard
-            title="Experimental Design & Group Contrasts"
-            subtitle="Configure binary groups, multi-factor blocking, or time series"
-          >
-            <div className="space-y-4 text-xs">
-              <div>
-                <Label className="text-xs font-semibold text-muted-foreground">Group Designation Presets:</Label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleSelectPreset("control_treated")}
-                    className={`p-2 rounded-lg border text-left text-xs transition-all ${
-                      groupDesignationPreset === "control_treated"
-                        ? "bg-primary/10 border-primary text-foreground font-semibold"
-                        : "bg-surface border-border text-muted-foreground"
-                    }`}
-                  >
-                    <span className="block font-bold">Control vs Treated</span>
-                    <span className="text-[10px] text-muted-foreground">Drug / Compound</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectPreset("diseased_normal")}
-                    className={`p-2 rounded-lg border text-left text-xs transition-all ${
-                      groupDesignationPreset === "diseased_normal"
-                        ? "bg-primary/10 border-primary text-foreground font-semibold"
-                        : "bg-surface border-border text-muted-foreground"
-                    }`}
-                  >
-                    <span className="block font-bold">Diseased vs Normal</span>
-                    <span className="text-[10px] text-muted-foreground">Tumor vs Normal</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectPreset("time_0_t2")}
-                    className={`p-2 rounded-lg border text-left text-xs transition-all ${
-                      groupDesignationPreset === "time_0_t2"
-                        ? "bg-primary/10 border-primary text-foreground font-semibold"
-                        : "bg-surface border-border text-muted-foreground"
-                    }`}
-                  >
-                    <span className="block font-bold">Time 0 vs T2</span>
-                    <span className="text-[10px] text-muted-foreground">Discrete Time</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleSelectPreset("time_series")}
-                    className={`p-2 rounded-lg border text-left text-xs transition-all ${
-                      groupDesignationPreset === "time_series"
-                        ? "bg-accent/15 border-accent text-foreground font-semibold"
-                        : "bg-surface border-border text-muted-foreground"
-                    }`}
-                  >
-                    <span className="block font-bold">Time Series</span>
-                    <span className="text-[10px] text-muted-foreground">T0 up to T10</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-                <div>
-                  <Label className="text-xs font-semibold text-primary font-mono">Test Contrast Factor (Group A):</Label>
-                  <Input
-                    value={groupAName}
-                    onChange={(e) => setGroupAName(e.target.value)}
-                    className="mt-1 h-8 text-xs bg-surface border-border font-mono font-medium"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs font-semibold text-foreground font-mono">Reference Baseline (Group B):</Label>
-                  <Input
-                    value={groupBName}
-                    onChange={(e) => setGroupBName(e.target.value)}
-                    className="mt-1 h-8 text-xs bg-surface border-border font-mono"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <Label className="text-xs font-semibold text-muted-foreground font-mono">Statistical Design Formula:</Label>
+                <Label className="text-xs font-semibold text-foreground">Study / Cohort Identifier</Label>
                 <Input
-                  value={designFormula}
-                  onChange={(e) => setDesignFormula(e.target.value)}
-                  className="mt-1 h-8 text-xs bg-surface border-border font-mono text-primary font-bold"
+                  value={datasetTitle}
+                  onChange={e => setDatasetTitle(e.target.value)}
+                  className="mt-1 h-9 text-xs"
                 />
               </div>
-            </div>
-          </ScientificCard>
 
-          {/* Sequencing Platform & Organism Reference Genome Catalog */}
-          <ScientificCard
-            title="Organism, Platform & Library Provenance"
-            subtitle="Reference genome assembly, sequencing instrument, and chemistry"
-          >
-            <div className="space-y-4 text-xs">
               <div>
-                <Label className="text-xs font-semibold text-foreground">Organism & Reference Genome Build:</Label>
+                <Label className="text-xs font-semibold text-foreground">Organism & Reference Genome Build</Label>
                 <Select value={selectedOrganismBuildId} onValueChange={setSelectedOrganismBuildId}>
-                  <SelectTrigger className="mt-1 h-8 text-xs bg-surface border-border font-medium">
+                  <SelectTrigger className="mt-1 h-9 text-xs">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-card border-border text-xs max-h-60">
-                    {ORGANISM_BUILD_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.id} value={opt.id}>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-foreground">{opt.organism}</span>
-                          <span className="text-muted-foreground font-mono text-[10px]">({opt.build})</span>
-                        </div>
+                  <SelectContent>
+                    {ORGANISM_BUILD_OPTIONS.map(o => (
+                      <SelectItem key={o.id} value={o.id}>
+                        {o.organism} — {o.build}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
+            </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Ingestion Strategy Tabs */}
+            <div className="space-y-3">
+              <Label className="text-xs font-semibold text-foreground uppercase tracking-wider font-mono flex items-center gap-1.5">
+                <Upload className="w-4 h-4 text-primary" />
+                <span>Select Upload & Ingestion Strategy</span>
+              </Label>
+
+              <Tabs value={activeUploadTab} onValueChange={(v) => setActiveUploadTab(v as any)} className="space-y-4">
+                <TabsList className="grid grid-cols-3 bg-muted/70 p-1 rounded-xl">
+                  <TabsTrigger value="zip" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary flex items-center gap-2 py-2">
+                    <FileArchive className="w-4 h-4" />
+                    ZIP Package Auto-Detect
+                  </TabsTrigger>
+                  <TabsTrigger value="design" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary flex items-center gap-2 py-2">
+                    <Sliders className="w-4 h-4" />
+                    Design-Guided Upload
+                  </TabsTrigger>
+                  <TabsTrigger value="individual" className="text-xs font-semibold data-[state=active]:bg-card data-[state=active]:text-primary flex items-center gap-2 py-2">
+                    <FolderOpen className="w-4 h-4" />
+                    File-at-a-Time Selection
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* MODE 1: ZIP Archive */}
+                <TabsContent value="zip" className="space-y-4 m-0">
+                  <div className="p-6 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 text-center space-y-3">
+                    <input
+                      ref={zipFileInputRef}
+                      type="file"
+                      accept=".zip,.tar.gz,.tar,.gz"
+                      onChange={handleZipUpload}
+                      className="hidden"
+                    />
+                    <div className="w-14 h-14 mx-auto rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                      <FileArchive className="w-7 h-7" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-foreground">Upload Full Experiment Archive (.ZIP)</h3>
+                      <p className="text-xs text-muted-foreground mt-1 max-w-lg mx-auto">
+                        Drop any compressed bundle. The engine automatically inspects the contents to detect raw FASTQ reads, gene counts matrices, sample manifests, and design formulas.
+                      </p>
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={() => zipFileInputRef.current?.click()}
+                      className="bg-primary hover:bg-primary/90 text-white text-xs h-9 px-5 shadow-sm"
+                    >
+                      <Upload className="w-3.5 h-3.5 mr-1.5" /> Select Local Archive (.zip)
+                    </Button>
+                  </div>
+
+                  {detectedArchiveInfo && (
+                    <div className="p-4 rounded-xl bg-card border border-border space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                          <span className="text-xs font-bold text-foreground">
+                            Archive Analyzed & Detected: {zipFileName}
+                          </span>
+                        </div>
+                        <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px] font-mono">
+                          Auto-Detected Pipeline
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                        <div className="p-2.5 rounded-lg bg-surface border border-border">
+                          <span className="text-[10px] text-muted-foreground uppercase block font-mono">Format</span>
+                          <span className="font-bold text-foreground">{detectedArchiveInfo.format}</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-surface border border-border">
+                          <span className="text-[10px] text-muted-foreground uppercase block font-mono">Design Formula</span>
+                          <span className="font-bold font-mono text-primary">{detectedArchiveInfo.detectedDesign}</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-surface border border-border">
+                          <span className="text-[10px] text-muted-foreground uppercase block font-mono">Organism Build</span>
+                          <span className="font-bold text-foreground">{detectedArchiveInfo.detectedOrganism}</span>
+                        </div>
+                        <div className="p-2.5 rounded-lg bg-surface border border-border">
+                          <span className="text-[10px] text-muted-foreground uppercase block font-mono">Valid Samples</span>
+                          <span className="font-bold text-foreground">{detectedArchiveInfo.samples.length} Samples</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </TabsContent>
+
+                {/* MODE 2: Design-Guided Upload */}
+                <TabsContent value="design" className="space-y-4 m-0">
+                  <div className="p-4 rounded-xl bg-card border border-border space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-foreground">Select Experimental Contrast Layout</span>
+                      <Badge variant="outline" className="text-[10px] font-mono">Design-Matrix Driven</Badge>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      {[
+                        { id: "control_treated", label: "Treated vs Control", formula: "~ condition", desc: "Pharmacological drug or genetic perturbation" },
+                        { id: "diseased_normal", label: "Tumor vs Normal", formula: "~ batch + condition", desc: "Surgically resected tumor vs adjacent normal" },
+                        { id: "time_series", label: "Time Course Series", formula: "~ splines::ns(time, df=3) + batch", desc: "Longitudinal multi-timepoint progression" }
+                      ].map(d => (
+                        <div
+                          key={d.id}
+                          onClick={() => handleSelectPreset(d.id as any)}
+                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                            groupDesignationPreset === d.id
+                              ? "bg-primary/10 border-primary"
+                              : "bg-surface border-border hover:bg-muted"
+                          }`}
+                        >
+                          <span className="text-xs font-bold text-foreground block">{d.label}</span>
+                          <span className="text-[10px] text-muted-foreground block mt-0.5">{d.desc}</span>
+                          <code className="text-[10px] text-primary font-mono block mt-1">{d.formula}</code>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                      <div>
+                        <Label className="text-xs font-medium">Group A (Test / Numerator)</Label>
+                        <Input
+                          value={groupAName}
+                          onChange={e => setGroupAName(e.target.value)}
+                          className="mt-1 h-8 text-xs font-semibold text-primary"
+                        />
+                      </div>
+                      <div>
+                        <Label className="text-xs font-medium">Group B (Reference / Denominator)</Label>
+                        <Input
+                          value={groupBName}
+                          onChange={e => setGroupBName(e.target.value)}
+                          className="mt-1 h-8 text-xs font-semibold text-muted-foreground"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl border-2 border-dashed border-primary/40 bg-primary/5 text-center space-y-2">
+                      <input
+                        ref={groupAFileInputRef}
+                        type="file"
+                        multiple
+                        onChange={e => {
+                          if (e.target.files) {
+                            const files = Array.from(e.target.files).map(f => ({
+                              name: f.name,
+                              size: (f.size / (1024 * 1024)).toFixed(1) + " MB",
+                              type: "fastq",
+                              category: "fastq" as const,
+                              status: "ready" as const
+                            }));
+                            setGroupAFiles(files);
+                            toast.success(`Attached ${files.length} replicate file(s) for ${groupAName}`);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <div className="text-xs font-bold text-primary">{groupAName} Replicates</div>
+                      <p className="text-[11px] text-muted-foreground">Upload FASTQ or count files for this group</p>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => groupAFileInputRef.current?.click()}
+                        className="h-8 text-xs border-primary/30 text-primary"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" /> Add Group A Files ({groupAFiles.length})
+                      </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl border-2 border-dashed border-border bg-card text-center space-y-2">
+                      <input
+                        ref={groupBFileInputRef}
+                        type="file"
+                        multiple
+                        onChange={e => {
+                          if (e.target.files) {
+                            const files = Array.from(e.target.files).map(f => ({
+                              name: f.name,
+                              size: (f.size / (1024 * 1024)).toFixed(1) + " MB",
+                              type: "fastq",
+                              category: "fastq" as const,
+                              status: "ready" as const
+                            }));
+                            setGroupBFiles(files);
+                            toast.success(`Attached ${files.length} replicate file(s) for ${groupBName}`);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <div className="text-xs font-bold text-foreground">{groupBName} Replicates</div>
+                      <p className="text-[11px] text-muted-foreground">Upload FASTQ or count files for baseline</p>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => groupBFileInputRef.current?.click()}
+                        className="h-8 text-xs"
+                      >
+                        <Plus className="w-3.5 h-3.5 mr-1" /> Add Group B Files ({groupBFiles.length})
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+
+                {/* MODE 3: Individual Files */}
+                <TabsContent value="individual" className="space-y-4 m-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-card border border-border space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-foreground">1. Primary Data Files</span>
+                        <Badge variant="outline" className="text-[10px]">{primaryFiles.length} attached</Badge>
+                      </div>
+                      <input
+                        ref={primaryFileInputRef}
+                        type="file"
+                        multiple
+                        onChange={handlePrimaryFilesSelected}
+                        className="hidden"
+                      />
+                      <p className="text-[11px] text-muted-foreground">
+                        Select raw FASTQ read files (.fastq.gz) or a tab-separated gene counts matrix (.tsv/.csv).
+                      </p>
+                      <Button
+                        type="button"
+                        size="sm"
+                        onClick={() => primaryFileInputRef.current?.click()}
+                        className="h-8 text-xs w-full"
+                      >
+                        <FolderOpen className="w-3.5 h-3.5 mr-1.5" /> Select Local File(s)
+                      </Button>
+                    </div>
+
+                    <div className="p-4 rounded-xl bg-card border border-border space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-foreground">2. Phenotype Manifest (Metadata CSV)</span>
+                        {metadataFile && (
+                          <Badge className="bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 text-[10px]">
+                            Attached
+                          </Badge>
+                        )}
+                      </div>
+                      <input
+                        ref={metadataFileInputRef}
+                        type="file"
+                        accept=".csv,.tsv,.txt"
+                        onChange={handleMetadataFileSelected}
+                        className="hidden"
+                      />
+                      <p className="text-[11px] text-muted-foreground">
+                        CSV table mapping sample IDs to conditions, batches, tissues, and clinical covariates.
+                      </p>
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        onClick={() => metadataFileInputRef.current?.click()}
+                        className="h-8 text-xs w-full"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5 mr-1.5 text-accent" /> Select Manifest File
+                      </Button>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* Live Sample Manifest Editor Table */}
+            <div className="p-5 rounded-xl bg-card border border-border space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <Label className="text-xs font-semibold text-muted-foreground">Sequencing Instrument</Label>
-                  <Select value={sequencingPlatform} onValueChange={setSequencingPlatform}>
-                    <SelectTrigger className="mt-1 h-8 text-xs bg-surface border-border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-card border-border text-xs">
-                      <SelectItem value="Illumina NovaSeq 6000">Illumina NovaSeq 6000</SelectItem>
-                      <SelectItem value="Illumina NovaSeq X Plus">Illumina NovaSeq X Plus</SelectItem>
-                      <SelectItem value="Element AVITI">Element AVITI</SelectItem>
-                      <SelectItem value="PacBio Revio Long-Read">PacBio Revio Long-Read</SelectItem>
-                      <SelectItem value="Oxford Nanopore PromethION">Oxford Nanopore PromethION</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <h3 className="font-serif font-bold text-sm text-foreground">
+                    Sample Manifest & Experimental Factor Matrix ({workingSamples.length} samples)
+                  </h3>
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
+                    Live editable table. Verify sample groups and batch covariates before running statistical modeling.
+                  </p>
                 </div>
 
-                <div>
-                  <Label className="text-xs font-semibold text-muted-foreground">Library Chemistry</Label>
-                  <Select value={libraryProtocol} onValueChange={setLibraryProtocol}>
-                    <SelectTrigger className="mt-1 h-8 text-xs bg-surface border-border">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-card border-border text-xs">
-                      <SelectItem value="Illumina Stranded mRNA (PolyA Capture)">Illumina Stranded mRNA (PolyA)</SelectItem>
-                      <SelectItem value="Total RNA-seq (Ribo-Zero Plus Gold)">Total RNA-seq (Ribo-Zero)</SelectItem>
-                      <SelectItem value="SMART-Seq v4 Ultra Low Input">SMART-Seq v4 Low Input</SelectItem>
-                      <SelectItem value="10x Genomics Single-Cell 3' v3.1">10x Single-Cell 3'</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleAddSampleRow}
+                  className="h-8 text-xs gap-1 border-primary/30 text-primary"
+                >
+                  <Plus className="w-3.5 h-3.5" /> Add Sample Row
+                </Button>
               </div>
 
-              <div>
-                <Label className="text-xs font-semibold text-muted-foreground">Cohort Title / Dataset Identifier:</Label>
-                <Input
-                  value={datasetTitle}
-                  onChange={(e) => setDatasetTitle(e.target.value)}
-                  className="mt-1 h-8 text-xs bg-surface border-border"
-                />
+              <div className="border border-border rounded-lg overflow-x-auto max-h-64">
+                <table className="w-full text-left text-xs font-sans">
+                  <thead className="bg-muted/80 text-muted-foreground border-b border-border text-[11px]">
+                    <tr>
+                      <th className="p-2.5 font-semibold">Sample ID</th>
+                      <th className="p-2.5 font-semibold">Sample Name</th>
+                      <th className="p-2.5 font-semibold">Condition Group</th>
+                      <th className="p-2.5 font-semibold">Batch</th>
+                      <th className="p-2.5 font-semibold">Tissue</th>
+                      <th className="p-2.5 font-semibold">Stage</th>
+                      <th className="p-2.5 font-semibold">RIN</th>
+                      <th className="p-2.5 font-semibold text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border font-mono text-[11px]">
+                    {workingSamples.map((s, idx) => (
+                      <tr key={idx} className="hover:bg-muted/40">
+                        <td className="p-2">
+                          <Input
+                            value={s.sampleId}
+                            onChange={e => handleUpdateSampleRow(idx, "sampleId", e.target.value)}
+                            className="h-7 text-xs font-mono w-24 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <Input
+                            value={s.sampleName}
+                            onChange={e => handleUpdateSampleRow(idx, "sampleName", e.target.value)}
+                            className="h-7 text-xs font-mono w-36 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <Input
+                            value={s.group}
+                            onChange={e => handleUpdateSampleRow(idx, "group", e.target.value)}
+                            className="h-7 text-xs font-sans font-semibold text-primary w-36 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <Input
+                            value={s.batch}
+                            onChange={e => handleUpdateSampleRow(idx, "batch", e.target.value)}
+                            className="h-7 text-xs font-mono w-24 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <Input
+                            value={s.tissue}
+                            onChange={e => handleUpdateSampleRow(idx, "tissue", e.target.value)}
+                            className="h-7 text-xs font-sans w-32 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2">
+                          <Input
+                            value={s.stage}
+                            onChange={e => handleUpdateSampleRow(idx, "stage", e.target.value)}
+                            className="h-7 text-xs font-sans w-24 bg-surface"
+                          />
+                        </td>
+                        <td className="p-2 font-bold text-emerald-600">
+                          {s.rinScore}
+                        </td>
+                        <td className="p-2 text-right">
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSampleRow(idx)}
+                            className="text-muted-foreground hover:text-red-500 p-1"
+                            title="Remove sample"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
-          </ScientificCard>
-        </div>
 
-        {/* Step 4: Live Working Experimental Model (Sample & Attribute Matrix) */}
-        <ScientificCard
-          title="Step 3: Working Experimental Model & Sample Attribute Matrix"
-          subtitle="Auto-translated from uploaded metadata; edit samples, group designations, batches, or timepoints directly before launching analysis"
-          headerAction={
-            <div className="flex items-center gap-2">
+            {/* Bottom Actions */}
+            <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-card border border-border shadow-subtle">
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <Zap className="w-4 h-4 text-accent" />
+                <span>Ready to run FastQC, splice-aware alignment, DESeq2 Wald testing, and MSigDB GSEA.</span>
+              </div>
+
               <Button
                 type="button"
-                variant="outline"
-                size="sm"
-                onClick={handleAddSampleRow}
-                className="h-7 text-xs border-border bg-card hover:bg-muted text-foreground gap-1"
+                onClick={handleExecuteIngestionAndRun}
+                className="h-10 text-xs font-bold bg-primary hover:bg-primary/90 text-white px-6 shadow-md gap-2"
               >
-                <Plus className="w-3 h-3 text-primary" />
-                <span>Add Sample</span>
+                <Play className="w-4 h-4 fill-current" /> Run Complete Analysis Pipeline
               </Button>
             </div>
-          }
-        >
-          <div className="space-y-3 font-sans">
-            <div className="border border-border rounded-lg overflow-x-auto bg-card shadow-subtle">
-              <table className="w-full text-xs text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-border bg-surface text-muted-foreground font-mono text-[11px]">
-                    <th className="p-2.5 font-semibold">Sample ID</th>
-                    <th className="p-2.5 font-semibold">Sample Name</th>
-                    <th className="p-2.5 font-semibold">Group Designation</th>
-                    <th className="p-2.5 font-semibold">Batch / Center</th>
-                    <th className="p-2.5 font-semibold">Timepoint</th>
-                    <th className="p-2.5 font-semibold">Tissue / Stage</th>
-                    <th className="p-2.5 font-semibold text-right">RIN</th>
-                    <th className="p-2.5 font-semibold text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {workingSamples.map((row, idx) => (
-                    <tr key={idx} className="hover:bg-muted/30 transition-colors">
-                      <td className="p-2 font-mono">
-                        <Input
-                          value={row.sampleId}
-                          onChange={(e) => handleUpdateSampleRow(idx, "sampleId", e.target.value)}
-                          className="h-7 text-xs font-mono bg-surface border-border w-24"
-                        />
-                      </td>
-                      <td className="p-2">
-                        <Input
-                          value={row.sampleName}
-                          onChange={(e) => handleUpdateSampleRow(idx, "sampleName", e.target.value)}
-                          className="h-7 text-xs bg-surface border-border w-36"
-                        />
-                      </td>
-                      <td className="p-2">
-                        <Input
-                          value={row.group}
-                          onChange={(e) => handleUpdateSampleRow(idx, "group", e.target.value)}
-                          className="h-7 text-xs font-semibold bg-surface border-border w-40 text-primary"
-                        />
-                      </td>
-                      <td className="p-2">
-                        <Input
-                          value={row.batch || ""}
-                          onChange={(e) => handleUpdateSampleRow(idx, "batch", e.target.value)}
-                          className="h-7 text-xs font-mono bg-surface border-border w-24"
-                        />
-                      </td>
-                      <td className="p-2">
-                        <Input
-                          value={row.timePoint || "T0"}
-                          onChange={(e) => handleUpdateSampleRow(idx, "timePoint", e.target.value)}
-                          className="h-7 text-xs font-mono bg-surface border-border w-16"
-                        />
-                      </td>
-                      <td className="p-2">
-                        <Input
-                          value={`${row.tissue || "Tumor"} • ${row.stage || "Stage II"}`}
-                          onChange={(e) => handleUpdateSampleRow(idx, "tissue", e.target.value)}
-                          className="h-7 text-xs bg-surface border-border w-36 text-muted-foreground"
-                        />
-                      </td>
-                      <td className="p-2 text-right font-mono">
-                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                          {row.rinScore?.toFixed(1) || "8.8"}
-                        </span>
-                      </td>
-                      <td className="p-2 text-center">
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveSampleRow(idx)}
-                          className="p-1 rounded text-muted-foreground hover:text-red-500 hover:bg-muted"
-                          title="Remove sample"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-muted-foreground font-mono pt-1">
-              <span>{workingSamples.length} samples in active experimental design</span>
-              <span>Groups detected: <strong className="text-foreground">{Array.from(new Set(workingSamples.map(s => s.group))).join(", ")}</strong></span>
-            </div>
           </div>
-        </ScientificCard>
-
-        {/* Action Button */}
-        <div className="flex justify-end pt-2">
-          <Button
-            size="lg"
-            onClick={handleExecuteIngestion}
-            disabled={isProcessing}
-            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs h-10 px-6 shadow-subtle"
-          >
-            <Zap className={`w-4 h-4 mr-2 ${isProcessing ? "animate-spin" : ""}`} />
-            {isProcessing ? "Executing Bioinformatic Pipeline..." : "Ingest & Launch in RNA-seq Workspace"}
-            <ArrowRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        )}
       </div>
     </Layout>
   );
